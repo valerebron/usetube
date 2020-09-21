@@ -1,0 +1,46 @@
+{
+  "name": "usetube",
+  "version": "1.0.0",
+  "description": "crawl youtube without api key (search videos, search channels, get all channel's videos)",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "axios": "^0.20.0",
+    "moment": "^2.28.0",
+    "follow-redirects": "^1.13.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/valerebron/usetube.git"
+  },
+  "keywords": [
+    "youtube",
+    "crawler",
+    "scrapper",
+    "api",
+    "no",
+    "key",
+    "simple",
+    "javascript",
+    "youtube api",
+    "youtube search",
+    "youtube api no key",
+    "youtube crawler",
+    "youtube scrapper",
+    "youtube open api",
+    "youtube open source",
+    "youtube simple"
+  ],
+  "author": "valerebron",
+  "license": "gpl-3.0",
+  "bugs": {
+    "url": "https://github.com/valerebron/usetube/issues"
+  },
+  "homepage": "https://github.com/valerebron/usetube#readme"
+}
