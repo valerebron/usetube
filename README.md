@@ -7,13 +7,13 @@
 <br>
 
 # install
-```
+```shell
 npm install usetube
 ```
 
 # usage
 
-```
+```js
 const usetube = require('usetube')
 
 usetube.searchChannel('usetube is great').then(channels => { console.log(channels) })
@@ -32,7 +32,7 @@ usetube.getVideoDate('1Bix44C1EzY').then(date => { console.log(date) })
 - each function return a **Promise**
 
 # types definitions
-```
+```js
 searchVideo(terms: String, full_date: false): [video]
 
 searchChannel(terms: String): [channel]
@@ -44,7 +44,7 @@ getChannelDesc(channel_id: String): String
 getVideoDate(video_id: String): Date
 ```
 
-```
+```js
 video {
   id:  String(11),
   original_title: String,
@@ -54,7 +54,7 @@ video {
   publishedAt: full_date ? Date : String,
 }
 ```
-```
+```js
 channel {
   name:                  String,
   channel_id:            String,
