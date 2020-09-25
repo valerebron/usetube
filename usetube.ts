@@ -1,15 +1,13 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import * as moment from 'moment'
 
-const usetube = {
+export = {
   getVideoDate,
   getChannelDesc,
   searchVideo,
   searchChannel,
   getChannelVideos,
 }
-
-export default usetube
 
 const headers: AxiosRequestConfig = {headers: {
   'x-youtube-client-name': 1,

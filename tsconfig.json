@@ -2,8 +2,8 @@
     "compilerOptions": {                 
       "target": "es6",
       "module": "commonjs",
-      "outDir": "./out",                      
-      "rootDirs": ["./lib"],                  
+      "outDir": "./dist",                      
+      "rootDirs": ["./"],                  
       "inlineSourceMap": true,
       "inlineSources": true,
       "forceConsistentCasingInFileNames": true
