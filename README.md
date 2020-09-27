@@ -33,15 +33,15 @@ usetube.getVideoDate('1Bix44C1EzY').then(date => { console.log(date) })
 
 # types definitions
 ```js
-searchVideo(terms: String, full_date: false): [video]
+searchVideo(terms: String!, full_date: Boolean?): [video]
 
-searchChannel(terms: String): [channel]
+searchChannel(terms: String!): [channel]
 
-getChannelVideos(channel_id: String, published_after: Date): [video]
+getChannelVideos(channel_id: String!, published_after: Date?): [video]
 
-getChannelDesc(channel_id: String): String
+getChannelDesc(channel_id: String!): String
 
-getVideoDate(video_id: String): Date
+getVideoDate(video_id: String!): Date
 ```
 
 ```js
