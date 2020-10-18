@@ -174,7 +174,7 @@ async function getChannelVideos(id: string, published_after?: Date) {
     }
     while(token !== '') {
       try {
-        wait(Math.floor(Math.random() * 500))
+        wait(Math.floor(Math.random() * 300))
         let data = (await axios.get('https://youtube.com/browse_ajax?ctoken='+token, headersAJAX)).data
         let newVideos: any = data[1]?.response?.continuationContents?.gridContinuation?.items || ''
         token = data[1].response.continuationContents?.gridContinuation?.continuations?.[0]?.nextContinuationData?.continuation || ''
@@ -216,7 +216,6 @@ async function formatVideo(video: any, speedDate?: boolean) {
       }
       // title formating
       video.original_title = video.title
-      video.title = cleanTitle(video.title)
 
       if(video.title.split('-').length === 1) {
         video.artist = ''
@@ -242,9 +241,9 @@ async function formatVideo(video: any, speedDate?: boolean) {
       let publishedAt = !speedDate ? await getVideoDate(id) : video.publishedTimeText?.runs[0].text || ''
       return {
         id:  id,
-        original_title: video.original_title,
-        title:	video.title,
-        artist: video.artist,
+        original_title: video.original_title.trim(),
+        title:	video.title.trim(),
+        artist: video.artist.trim(),
         duration:	minutes+seconds,
         publishedAt: publishedAt,
       }
@@ -262,15 +261,4 @@ async function formatVideo(video: any, speedDate?: boolean) {
   } catch(e) {
     console.log(e)
   }
-}
-
-function cleanTitle(title) {
-  const braketsRegex = /\[[^)]*\]/
-  let forbidenTerms = ['(full album)', '(official ep)', '(official video)', '(radio edit)',]
-  title = title.replace(braketsRegex, '')
-  forbidenTerms.forEach(forbidenTerm => {
-    title = title.replace(new RegExp(forbidenTerm, 'ig'), '')
-    title = title.replace('()', '')
-  })
-  return title
 }
