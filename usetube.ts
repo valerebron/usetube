@@ -26,12 +26,25 @@ const headersAJAX: AxiosRequestConfig = {headers: {
 const videoRegex = /ytInitialPlayerConfig\ \=\ (.*)\;\n\ \ \ \ \ \ setTimeout/
 const mobileRegex  = /id\=\"initial\-data\"\>\<\!\-\-\ (.*)\ \-\-\>\<\/div\>\<script\ \>if/
 
-function wait(ms){
-  var start = new Date().getTime();
-  var end = start;
+function wait(ms) {
+  var start = new Date().getTime()
+  var end = start
   while(end < start + ms) {
-    end = new Date().getTime();
+    end = new Date().getTime()
  }
+}
+
+function formatYoutubeCount(raw) {
+  const isMill = raw?.includes('M')
+  const isKilo = raw?.includes('k')
+  let nbSubscriber = raw?.replace(/[^0-9,.]/g, '').replace(',', '.')
+  if(isMill) {
+    nbSubscriber *= 1000000
+  }
+  else if(isKilo) {
+    nbSubscriber *= 1000
+  }
+  return parseInt(nbSubscriber) || 0
 }
 
 async function getVideoDate(id: string) {
@@ -113,11 +126,15 @@ async function searchChannel(terms: string, token?: string) {
         let avatarBig   = item.thumbnail?.thumbnails[1].url || ''
         avatarSmall = (avatarSmall.startsWith('//') ? 'https:'+avatarSmall : avatarSmall)
         avatarBig = (avatarBig.startsWith('//') ? 'https:'+avatarBig : avatarBig)
+        
+        const nbSubscriber = formatYoutubeCount(item.subscriberCountText?.runs[0].text)
+        const nbVideo = formatYoutubeCount(item.videoCountText?.runs[0].text)
+
         channels.push({
           name:                  item.title.runs[0].text,
           channel_id:            item.channelId,
-          nb_videos:             item.videoCountText?.runs[0].text.replace(/[^0-9k]/g, '').replace('k', '000') || 0,
-          nb_subscriber:         item.subscriberCountText?.runs[0].text.replace(/[^0-9k]/g, '').replace('k', '000') || 0,
+          nb_videos:             nbVideo,
+          nb_subscriber:         nbSubscriber,
           official:              (item.ownerBadges ? true : false),
           channel_avatar_small:  avatarSmall,
           channel_avatar_medium: avatarBig,

@@ -1,11 +1,10 @@
 {
-    "compilerOptions": {                 
-      "target": "es6",
-      "module": "commonjs",
-      "outDir": "./dist",                      
-      "rootDirs": ["./"],                  
-      "inlineSourceMap": true,
-      "inlineSources": true,
-      "forceConsistentCasingInFileNames": true
-    }
+  "compilerOptions": {                 
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./dist",                      
+    "rootDirs": ["./"],                  
+    "inlineSourceMap": false,
+    "allowJs": true
+  }
 }

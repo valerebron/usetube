@@ -1,8 +1,8 @@
 {
   "name": "usetube",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "crawl youtube without api key (search videos, search channels, get all channel's videos)",
-  "main": "dist/usetube.js",
+  "main": "dist/usetube.min.js",
   "directories": {
     "test": "test"
   },
@@ -12,13 +12,15 @@
     "typescript": "^4.0.3"
   },
   "devDependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1"
   },
   "scripts": {
-    "build": "npx tsc",
+    "build": "npx tsc --build && npx minify dist/usetube.js > dist/usetube.min.js && cp dist/usetube.min.js test/usetube.min.js",
     "watch": "npx tsc --watch",
-    "test": "node test/test2.js"
+    "test": "node test/back.js"
   },
   "repository": {
     "type": "git",
