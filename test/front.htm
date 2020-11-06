@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usetube.js front test</title>
+</head>
+<body>
+  <code>hey</code>
+  <script src="bundle.js"></script>
+  <script>
+    const test = async function() {
+      let res = await usetube.searchChannel('pokimane')
+      document.querySelector('code').append(res)
+      console.log(res)
+    }
+    window.onload = function() {
+      test()
+    }
+  </script>
+</body>
+</html>

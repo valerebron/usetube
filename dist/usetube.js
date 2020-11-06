@@ -199,7 +199,7 @@ function getChannelVideos(id, published_after) {
             }
             while (token !== '') {
                 try {
-                    wait(Math.floor(Math.random() * 500));
+                    wait(Math.floor(Math.random() * 300));
                     let data = (yield axios_1.default.get('https://youtube.com/browse_ajax?ctoken=' + token, headersAJAX)).data;
                     let newVideos = ((_p = (_o = (_m = (_l = data[1]) === null || _l === void 0 ? void 0 : _l.response) === null || _m === void 0 ? void 0 : _m.continuationContents) === null || _o === void 0 ? void 0 : _o.gridContinuation) === null || _p === void 0 ? void 0 : _p.items) || '';
                     token = ((_u = (_t = (_s = (_r = (_q = data[1].response.continuationContents) === null || _q === void 0 ? void 0 : _q.gridContinuation) === null || _r === void 0 ? void 0 : _r.continuations) === null || _s === void 0 ? void 0 : _s[0]) === null || _t === void 0 ? void 0 : _t.nextContinuationData) === null || _u === void 0 ? void 0 : _u.continuation) || '';
@@ -245,7 +245,6 @@ function formatVideo(video, speedDate) {
                 }
                 // title formating
                 video.original_title = video.title;
-                video.title = cleanTitle(video.title);
                 if (video.title.split('-').length === 1) {
                     video.artist = '';
                 }
@@ -270,9 +269,9 @@ function formatVideo(video, speedDate) {
                 let publishedAt = !speedDate ? yield getVideoDate(id) : ((_e = video.publishedTimeText) === null || _e === void 0 ? void 0 : _e.runs[0].text) || '';
                 return {
                     id: id,
-                    original_title: video.original_title,
-                    title: video.title,
-                    artist: video.artist,
+                    original_title: video.original_title.trim(),
+                    title: video.title.trim(),
+                    artist: video.artist.trim(),
                     duration: minutes + seconds,
                     publishedAt: publishedAt,
                 };
@@ -292,16 +291,6 @@ function formatVideo(video, speedDate) {
             console.log(e);
         }
     });
-}
-function cleanTitle(title) {
-    const braketsRegex = /\[[^)]*\]/;
-    let forbidenTerms = ['(full album)', '(official ep)', '(official video)', '(radio edit)',];
-    title = title.replace(braketsRegex, '');
-    forbidenTerms.forEach(forbidenTerm => {
-        title = title.replace(new RegExp(forbidenTerm, 'ig'), '');
-        title = title.replace('()', '');
-    });
-    return title;
 }
 module.exports = {
     getVideoDate,
