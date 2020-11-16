@@ -44,18 +44,18 @@ function formatYoutubeCount(raw) {
     return parseInt(nbSubscriber) || 0;
 }
 function getVideoDate(id) {
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const body = (yield axios_1.default.get('https://m.youtube.com/watch?v=' + id, headers)).data;
             const raw = ((_a = videoRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
             const datas = JSON.parse(raw);
-            let publishText = (_c = (_b = JSON.parse(datas.args.player_response).microformat) === null || _b === void 0 ? void 0 : _b.playerMicroformatRenderer) === null || _c === void 0 ? void 0 : _c.publishDate;
+            let publishText = (_d = (_c = JSON.parse((_b = datas.args) === null || _b === void 0 ? void 0 : _b.player_response).microformat) === null || _c === void 0 ? void 0 : _c.playerMicroformatRenderer) === null || _d === void 0 ? void 0 : _d.publishDate;
             publishText += ' ' + Math.floor(Math.random() * 24) + '-' + Math.floor(Math.random() * 60) + '-' + Math.floor(Math.random() * 60);
             return moment(publishText, 'YYYY-MM-DD H-m-s').toDate();
         }
         catch (e) {
-            console.log('get date error for ' + id + ', try again', e);
+            // console.log('cannot get date for '+id+', try again')
             getVideoDate(id);
         }
     });
@@ -71,7 +71,7 @@ function getChannelDesc(id) {
             return description;
         }
         catch (e) {
-            console.log('channel desc error for ' + id, e);
+            // console.log('channel desc error for '+id, e)
         }
     });
 }
@@ -81,6 +81,7 @@ function searchVideo(terms, token) {
         try {
             let items = [];
             let videos = [];
+            let didyoumean = '';
             // initial videos search
             if (!token) {
                 let body = (yield axios_1.default.get('https://m.youtube.com/results?sp=EgIQAQ%253D%253D&videoEmbeddable=true&search_query=' + terms, headers)).data;
@@ -96,15 +97,22 @@ function searchVideo(terms, token) {
                 token = ((_l = (_k = (_j = (_h = (_g = data[1].response.continuationContents) === null || _g === void 0 ? void 0 : _g.gridContinuation) === null || _h === void 0 ? void 0 : _h.continuations) === null || _j === void 0 ? void 0 : _j[0]) === null || _k === void 0 ? void 0 : _k.nextContinuationData) === null || _l === void 0 ? void 0 : _l.continuation) || '';
             }
             for (let i = 0; i < items.length; i++) {
-                videos.push(yield formatVideo(items[i], true));
+                let formated = yield formatVideo(items[i], true);
+                if (formated.id === 'didyoumean') {
+                    didyoumean = formated.title;
+                }
+                else {
+                    videos.push(formated);
+                }
             }
             return {
                 tracks: videos,
+                didyoumean: didyoumean,
                 token: token,
             };
         }
         catch (e) {
-            console.log('search videos error, terms: ' + terms, e);
+            // console.log('search videos error, terms: '+terms, e)
         }
     });
 }
@@ -114,6 +122,7 @@ function searchChannel(terms, token) {
         try {
             let items = [];
             let channels = [];
+            let didyoumean = '';
             if (!token) {
                 const body = (yield axios_1.default.get('https://m.youtube.com/results?sp=CAASAhAC&search_query=' + encodeURI(terms), headers)).data;
                 const raw = ((_a = mobileRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
@@ -153,56 +162,46 @@ function searchChannel(terms, token) {
                     else {
                         item = items[i].showingResultsForRenderer;
                     }
-                    channels.push({
-                        name: item.correctedQuery.runs[0].text,
-                        channel_id: 'didyoumean',
-                        nb_videos: '0',
-                        nb_subscriber: '0',
-                        official: false,
-                        channel_avatar_small: '',
-                        channel_avatar_medium: '',
-                    });
-                    channels[i];
+                    didyoumean = item.correctedQuery.runs[0].text;
                 }
             }
             return {
                 channels: channels,
+                didyoumean: didyoumean,
                 token: token,
             };
         }
         catch (e) {
-            console.log('search channel error, terms: ' + terms, e);
+            // console.log('search channel error, terms: '+terms, e)
         }
     });
 }
 function getChannelVideos(id, published_after) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const body = (yield axios_1.default.get('https://m.youtube.com/channel/' + encodeURI(id) + '/videos', headers)).data;
+            const body = (yield axios_1.default.get('https://m.youtube.com/channel/' + id + '/videos', headers)).data;
             const raw = ((_a = mobileRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
+            // writeFile('channelVideos.json', raw, err=>{console.log(err)})
             const data = JSON.parse(raw);
-            const items = (_g = (_f = (_e = (_d = (_c = (_b = data.contents.singleColumnBrowseResultsRenderer) === null || _b === void 0 ? void 0 : _b.tabs[1]) === null || _c === void 0 ? void 0 : _c.tabRenderer) === null || _d === void 0 ? void 0 : _d.content) === null || _e === void 0 ? void 0 : _e.sectionListRenderer) === null || _f === void 0 ? void 0 : _f.contents[0]) === null || _g === void 0 ? void 0 : _g.itemSectionRenderer;
-            let token = ((_k = (_j = (_h = items.continuations) === null || _h === void 0 ? void 0 : _h[0]) === null || _j === void 0 ? void 0 : _j.nextContinuationData) === null || _k === void 0 ? void 0 : _k.continuation) || '';
+            const items = (_h = (_g = (_f = (_e = (_d = (_c = (_b = data.contents) === null || _b === void 0 ? void 0 : _b.singleColumnBrowseResultsRenderer) === null || _c === void 0 ? void 0 : _c.tabs[1]) === null || _d === void 0 ? void 0 : _d.tabRenderer) === null || _e === void 0 ? void 0 : _e.content) === null || _f === void 0 ? void 0 : _f.sectionListRenderer) === null || _g === void 0 ? void 0 : _g.contents[0]) === null || _h === void 0 ? void 0 : _h.itemSectionRenderer;
+            let token = ((_l = (_k = (_j = items.continuations) === null || _j === void 0 ? void 0 : _j[0]) === null || _k === void 0 ? void 0 : _k.nextContinuationData) === null || _l === void 0 ? void 0 : _l.continuation) || '';
             let videos = [];
             for (let i = 0; i < items.contents.length; i++) {
                 let video = yield formatVideo(items.contents[i]);
-                if (!published_after) {
-                    videos.push(video);
-                }
-                else if (moment(video.publishedAt).isAfter(published_after) && published_after) {
-                    videos.push(video);
+                if (moment(video.publishedAt).isBefore(published_after) && published_after) {
+                    return videos;
                 }
                 else {
-                    return videos;
+                    videos.push(video);
                 }
             }
             while (token !== '') {
                 try {
                     wait(Math.floor(Math.random() * 300));
                     let data = (yield axios_1.default.get('https://youtube.com/browse_ajax?ctoken=' + token, headersAJAX)).data;
-                    let newVideos = ((_p = (_o = (_m = (_l = data[1]) === null || _l === void 0 ? void 0 : _l.response) === null || _m === void 0 ? void 0 : _m.continuationContents) === null || _o === void 0 ? void 0 : _o.gridContinuation) === null || _p === void 0 ? void 0 : _p.items) || '';
-                    token = ((_u = (_t = (_s = (_r = (_q = data[1].response.continuationContents) === null || _q === void 0 ? void 0 : _q.gridContinuation) === null || _r === void 0 ? void 0 : _r.continuations) === null || _s === void 0 ? void 0 : _s[0]) === null || _t === void 0 ? void 0 : _t.nextContinuationData) === null || _u === void 0 ? void 0 : _u.continuation) || '';
+                    let newVideos = ((_q = (_p = (_o = (_m = data[1]) === null || _m === void 0 ? void 0 : _m.response) === null || _o === void 0 ? void 0 : _o.continuationContents) === null || _p === void 0 ? void 0 : _p.gridContinuation) === null || _q === void 0 ? void 0 : _q.items) || '';
+                    token = ((_v = (_u = (_t = (_s = (_r = data[1].response.continuationContents) === null || _r === void 0 ? void 0 : _r.gridContinuation) === null || _s === void 0 ? void 0 : _s.continuations) === null || _t === void 0 ? void 0 : _t[0]) === null || _u === void 0 ? void 0 : _u.nextContinuationData) === null || _v === void 0 ? void 0 : _v.continuation) || '';
                     for (let i = 0; i < newVideos.length; i++) {
                         let video = yield formatVideo(newVideos[i]);
                         if (moment(video.publishedAt).isBefore(published_after) && published_after) {
@@ -214,14 +213,16 @@ function getChannelVideos(id, published_after) {
                     }
                 }
                 catch (e) {
-                    console.log(e);
+                    // console.log('getChannelVideos failed')
+                    // console.log(e)
                     token = '';
                 }
             }
             return videos;
         }
         catch (e) {
-            console.log('channel videos error for id: ' + id, e);
+            // console.log('cannot get channel videos for id: '+id+', try again')
+            getChannelVideos(id, published_after);
         }
     });
 }
@@ -288,7 +289,8 @@ function formatVideo(video, speedDate) {
             }
         }
         catch (e) {
-            console.log(e);
+            // console.log('format video failed')
+            // console.log(e)
         }
     });
 }
@@ -299,3 +301,14 @@ module.exports = {
     searchChannel,
     getChannelVideos,
 };
+// async function test() {
+// let wow = await getChannelVideos('UCp5KUL1Mb7Kpfw10SGyPumQ', new Date('2020-11-10T23:35:38.000Z')) // dunes
+// let wow = await getChannelVideos('UCcdNy_FqMi0z1VU6kanOvFQ', new Date('2019-11-10T23:35:38.000Z')) // duploc
+// let wow = await getChannelDesc('UCp5KUL1Mb7Kpfw10SGyPumQ')
+// let wow = await searchChannel('noisia')
+// let wow = await searchVideo('noisia')
+// if(wow) {
+//   console.log(wow)
+// }
+// }
+// test()

@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import * as moment from 'moment'
+// import { writeFile, readFileSync } from 'fs'
 
 export = {
   getVideoDate,
@@ -52,11 +53,11 @@ async function getVideoDate(id: string) {
     const body: any = (await axios.get('https://m.youtube.com/watch?v='+id, headers)).data as string
     const raw: any = videoRegex.exec(body) ?.[1] || '{}'
     const datas: any = JSON.parse(raw)
-    let publishText: any = JSON.parse(datas.args.player_response).microformat?.playerMicroformatRenderer?.publishDate
+    let publishText: any = JSON.parse(datas.args?.player_response).microformat?.playerMicroformatRenderer?.publishDate
     publishText += ' '+Math.floor(Math.random() * 24)+'-'+Math.floor(Math.random() * 60)+'-'+Math.floor(Math.random() * 60)
     return moment(publishText, 'YYYY-MM-DD H-m-s').toDate()
   } catch(e) {
-    console.log('get date error for '+id+', try again', e)
+    // console.log('cannot get date for '+id+', try again')
     getVideoDate(id)
   }
 }
@@ -69,7 +70,7 @@ async function getChannelDesc(id: string) {
     let description: string = data.metadata?.channelMetadataRenderer?.description || ''
     return description
   } catch(e) {
-    console.log('channel desc error for '+id, e)
+    // console.log('channel desc error for '+id, e)
   }
 }
 
@@ -77,6 +78,7 @@ async function searchVideo(terms: string, token?: string) {
   try {
     let items: any = []
     let videos: any = []
+    let didyoumean: String = ''
     // initial videos search
     if(!token) {
       let body: any = (await axios.get('https://m.youtube.com/results?sp=EgIQAQ%253D%253D&videoEmbeddable=true&search_query='+terms, headers)).data as string
@@ -92,14 +94,21 @@ async function searchVideo(terms: string, token?: string) {
       token = data[1].response.continuationContents?.gridContinuation?.continuations?.[0]?.nextContinuationData?.continuation || ''
     }
     for(let i = 0; i < items.length; i++) {
-      videos.push(await formatVideo(items[i], true))
+      let formated = await formatVideo(items[i], true)
+      if(formated.id === 'didyoumean') {
+        didyoumean = formated.title
+      }
+      else {
+        videos.push(formated)
+      }
     }
     return {
       tracks: videos,
+      didyoumean: didyoumean,
       token: token,
     }
   } catch(e) {
-    console.log('search videos error, terms: '+terms, e)
+    // console.log('search videos error, terms: '+terms, e)
   }
 }
 
@@ -107,6 +116,7 @@ async function searchChannel(terms: string, token?: string) {
   try {
     let items: any = []
     let channels: any = []
+    let didyoumean: String = ''
     if(!token) {
       const body: any = (await axios.get('https://m.youtube.com/results?sp=CAASAhAC&search_query='+encodeURI(terms), headers)).data as string
       const raw: any = mobileRegex.exec(body) ?.[1] || '{}'
@@ -148,45 +158,35 @@ async function searchChannel(terms: string, token?: string) {
         else {
           item = items[i].showingResultsForRenderer
         }
-        channels.push({
-          name:                  item.correctedQuery.runs[0].text,
-          channel_id:            'didyoumean',
-          nb_videos:             '0',
-          nb_subscriber:         '0',
-          official:              false,
-          channel_avatar_small:  '',
-          channel_avatar_medium: '',
-        })
-        channels[i]
+        didyoumean = item.correctedQuery.runs[0].text
       }
     }
     return {
       channels: channels,
+      didyoumean: didyoumean,
       token: token,
     }
   } catch(e) {
-    console.log('search channel error, terms: '+terms, e)
+    // console.log('search channel error, terms: '+terms, e)
   }
 }
 
 async function getChannelVideos(id: string, published_after?: Date) {
   try {
-    const body: any = (await axios.get('https://m.youtube.com/channel/'+encodeURI(id)+'/videos', headers)).data as string
+    const body: any = (await axios.get('https://m.youtube.com/channel/'+id+'/videos', headers)).data as string
     const raw: any = mobileRegex.exec(body) ?.[1] || '{}'
+    // writeFile('channelVideos.json', raw, err=>{console.log(err)})
     const data: any = JSON.parse(raw)
-    const items: any = data.contents.singleColumnBrowseResultsRenderer?.tabs[1]?.tabRenderer?.content?.sectionListRenderer?.contents[0]?.itemSectionRenderer
+    const items: any = data.contents?.singleColumnBrowseResultsRenderer?.tabs[1]?.tabRenderer?.content?.sectionListRenderer?.contents[0]?.itemSectionRenderer
     let token: string = items.continuations?.[0]?.nextContinuationData?.continuation || ''
     let videos: any = []
     for(let i = 0; i < items.contents.length; i++) {
       let video = await formatVideo(items.contents[i])
-      if(!published_after) {
-        videos.push(video)
-      }
-      else if(moment(video.publishedAt).isAfter(published_after) && published_after) {
-        videos.push(video)
+      if(moment(video.publishedAt).isBefore(published_after) && published_after) {
+        return videos
       }
       else {
-        return videos
+        videos.push(video)
       }
     }
     while(token !== '') {
@@ -205,13 +205,15 @@ async function getChannelVideos(id: string, published_after?: Date) {
           }
         }
       } catch(e) {
-        console.log(e)
+        // console.log('getChannelVideos failed')
+        // console.log(e)
         token = ''
       }
     }
     return videos
   } catch(e) {
-    console.log('channel videos error for id: '+id, e)
+    // console.log('cannot get channel videos for id: '+id+', try again')
+    getChannelVideos(id, published_after)
   }
 }
 
@@ -276,6 +278,20 @@ async function formatVideo(video: any, speedDate?: boolean) {
       }
     }
   } catch(e) {
-    console.log(e)
+    // console.log('format video failed')
+    // console.log(e)
   }
 }
+
+// async function test() {
+  // let wow = await getChannelVideos('UCp5KUL1Mb7Kpfw10SGyPumQ', new Date('2020-11-10T23:35:38.000Z')) // dunes
+  // let wow = await getChannelVideos('UCcdNy_FqMi0z1VU6kanOvFQ', new Date('2019-11-10T23:35:38.000Z')) // duploc
+  // let wow = await getChannelDesc('UCp5KUL1Mb7Kpfw10SGyPumQ')
+  // let wow = await searchChannel('noisia')
+  // let wow = await searchVideo('noisia')
+  // if(wow) {
+  //   console.log(wow)
+  // }
+// }
+
+// test()

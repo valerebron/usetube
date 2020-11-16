@@ -28,14 +28,13 @@ usetube.getVideoDate('1Bix44C1EzY').then(date => { console.log(date) })
 ```
 
 ### notes:
-- searchVideo() return **time from now** date format. If you want the javascript **Date() format**, pass ```full_date = true``` (the query will take more time for that)
 - each function return a **Promise**
 
 # types definitions
 ```js
-searchVideo(terms: String!, full_date: Boolean?): [video]
+searchVideo(terms: String!, token: String?): [video], didyoumean, token
 
-searchChannel(terms: String!): [channel]
+searchChannel(terms: String!, token: String?): [channel], didyoumean, token
 
 getChannelVideos(channel_id: String!, published_after: Date?): [video]
 
@@ -46,12 +45,12 @@ getVideoDate(video_id: String!): Date
 
 ```js
 video {
-  id:  String(11),
-  original_title: String,
-  title:	String,
-  artist: String,
-  duration:	Int,
-  publishedAt: full_date ? Date : String,
+  id:                    String(11),
+  original_title:        String,
+  title:                 String,
+  artist:                String,
+  duration:              Int,
+  publishedAt:           Date,
 }
 ```
 ```js
@@ -65,8 +64,24 @@ channel {
   channel_avatar_medium: String,
 }
 ```
+```js
+didyoumean:              String, // spelling proposal
+```
+```js
+token:                   String, // key to get more data (next/prev page result)
+```
 # dependencies
 
 [Axios](https://github.com/axios/axios)
 
 [Moment.js](https://github.com/moment/moment/)
+
+# TODO
+
+1. make it work for front end javascript
+2. get rid of axios, try fetch
+3. FIX: get date error for mszV8N3ACyk, try again TypeError: Cannot read property 'player_response' of undefined
+    at /home/ricardo/massivemusic2/back/node_modules/usetube/usetube.ts:42:50
+    at Generator.next (<anonymous>)
+    at fulfilled (/home/ricardo/massivemusic2/back/node_modules/usetube/dist/usetube.js:5:58)
+    at process._tickCallback (internal/process/next_tick.js:68:7)

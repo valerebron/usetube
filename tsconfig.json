@@ -1,10 +1,10 @@
 {
-  "compilerOptions": {                 
+  "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "outDir": "./dist",                      
-    "rootDirs": ["./"],                  
-    "inlineSourceMap": false,
+    "outDir": "./dist",
+    "rootDirs": ["./"],
+    "sourceMap": false,
     "allowJs": true
   }
 }
