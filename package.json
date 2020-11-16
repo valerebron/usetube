@@ -1,6 +1,6 @@
 {
   "name": "usetube",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "crawl youtube without api key (search videos, search channels, get all channel's videos)",
   "main": "dist/usetube.min.js",
   "directories": {
