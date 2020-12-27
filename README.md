@@ -3,7 +3,9 @@
 
 ### This script is **google api key free** (so you don't need google account :))
 
-### This script is **google Quota free** (you can retrieve all videos a channel can give you :))  
+### This script is **google Quota free** (you can retrieve all videos a channel can give you :))
+
+### Youtube update its code, so do I with usetube, so don't forget to update the last version of usetube to get it works.
 <br>
 
 # install
@@ -75,13 +77,3 @@ token:                   String, // key to get more data (next/prev page result)
 [Axios](https://github.com/axios/axios)
 
 [Moment.js](https://github.com/moment/moment/)
-
-# TODO
-
-1. make it work for front end javascript
-2. get rid of axios, try fetch
-3. FIX: get date error for mszV8N3ACyk, try again TypeError: Cannot read property 'player_response' of undefined
-    at /home/ricardo/massivemusic2/back/node_modules/usetube/usetube.ts:42:50
-    at Generator.next (<anonymous>)
-    at fulfilled (/home/ricardo/massivemusic2/back/node_modules/usetube/dist/usetube.js:5:58)
-    at process._tickCallback (internal/process/next_tick.js:68:7)

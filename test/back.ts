@@ -1,4 +1,4 @@
-console.log('get out of my');
+console.log('get out of my')
 // const usetube = require('../dist/usetube.min.js')
 // let test = async function() {
 //   // let wow = await usetube.getChannelVideos('UCp5KUL1Mb7Kpfw10SGyPumQ')
@@ -8,4 +8,5 @@ console.log('get out of my');
 //   let wow = await usetube.searchVideo('noisiaa')
 //   console.log(wow)
 // }
+
 // test()

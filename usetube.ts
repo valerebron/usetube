@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import * as moment from 'moment'
-// import { writeFile, readFileSync } from 'fs'
 
 export = {
   getVideoDate,
@@ -24,8 +23,12 @@ const headersAJAX: AxiosRequestConfig = {headers: {
   'x-youtube-client-version': '2.20200731.02.01'
 }}
 
-const videoRegex = /ytInitialPlayerConfig\ \=\ (.*)\;\n\ \ \ \ \ \ setTimeout/
-const mobileRegex  = /id\=\"initial\-data\"\>\<\!\-\-\ (.*)\ \-\-\>\<\/div\>\<script\ \>if/
+const mobileRegex  = /var\ ytInitialData\ \=\ \'(.*)\'\;<\/script>/
+const dateRegex  = /publishDate":"(.*)","ownerChannelName/
+
+function decodeHex(hex) {
+  return hex.replace(/\\x22/g, '"').replace(/\\x7b/g, '{').replace(/\\x7d/g, '}').replace(/\\x5b/g, '[').replace(/\\x5d/g, ']').replace(/\\x3b/g, ';').replace(/\\x3d/g, '=').replace(/\\x27/g, '\'').replace(/\\\\/g, 'doubleAntiSlash').replace(/\\/g, '').replace(/doubleAntiSlash/g, '\\')
+}
 
 function wait(ms) {
   var start = new Date().getTime()
@@ -51,9 +54,7 @@ function formatYoutubeCount(raw) {
 async function getVideoDate(id: string) {
   try {
     const body: any = (await axios.get('https://m.youtube.com/watch?v='+id, headers)).data as string
-    const raw: any = videoRegex.exec(body) ?.[1] || '{}'
-    const datas: any = JSON.parse(raw)
-    let publishText: any = JSON.parse(datas.args?.player_response).microformat?.playerMicroformatRenderer?.publishDate
+    let publishText: any = dateRegex.exec(body) ?.[1] || '{}'
     publishText += ' '+Math.floor(Math.random() * 24)+'-'+Math.floor(Math.random() * 60)+'-'+Math.floor(Math.random() * 60)
     return moment(publishText, 'YYYY-MM-DD H-m-s').toDate()
   } catch(e) {
@@ -66,7 +67,7 @@ async function getChannelDesc(id: string) {
   try {
     const body: any = (await axios.get('https://m.youtube.com/channel/'+encodeURI(id)+'/videos', headers)).data as string
     const raw: any = mobileRegex.exec(body) ?.[1] || '{}'
-    const data: any = JSON.parse(raw)
+    const data: any = JSON.parse(decodeHex(raw))
     let description: string = data.metadata?.channelMetadataRenderer?.description || ''
     return description
   } catch(e) {
@@ -83,7 +84,8 @@ async function searchVideo(terms: string, token?: string) {
     if(!token) {
       let body: any = (await axios.get('https://m.youtube.com/results?sp=EgIQAQ%253D%253D&videoEmbeddable=true&search_query='+terms, headers)).data as string
       let raw: any = mobileRegex.exec(body) ?.[1] || '{}'
-      let datas: any = JSON.parse(raw).contents.sectionListRenderer
+      // let fs = require('fs'); fs.writeFile('wow.json', decodeHex(raw), (e)=>{console.log(e)})
+      let datas: any = JSON.parse(decodeHex(raw)).contents.sectionListRenderer
       items = datas.contents[0].itemSectionRenderer.contents
       token = datas.continuations?.[0]?.reloadContinuationData?.continuation || ''
     }
@@ -120,7 +122,7 @@ async function searchChannel(terms: string, token?: string) {
     if(!token) {
       const body: any = (await axios.get('https://m.youtube.com/results?sp=CAASAhAC&search_query='+encodeURI(terms), headers)).data as string
       const raw: any = mobileRegex.exec(body) ?.[1] || '{}'
-      const data: any = JSON.parse(raw)
+      const data: any = JSON.parse(decodeHex(raw))
       items = data.contents.sectionListRenderer?.contents[0]?.itemSectionRenderer?.contents  
       token = data.continuations?.[0]?.reloadContinuationData?.continuation || ''
     }
@@ -175,8 +177,8 @@ async function getChannelVideos(id: string, published_after?: Date) {
   try {
     const body: any = (await axios.get('https://m.youtube.com/channel/'+id+'/videos', headers)).data as string
     const raw: any = mobileRegex.exec(body) ?.[1] || '{}'
-    // writeFile('channelVideos.json', raw, err=>{console.log(err)})
-    const data: any = JSON.parse(raw)
+    // let fs = require('fs'); fs.writeFile('wow.json', decodeHex(raw), (e)=>{console.log(e)})
+    const data: any = JSON.parse(decodeHex(raw))
     const items: any = data.contents?.singleColumnBrowseResultsRenderer?.tabs[1]?.tabRenderer?.content?.sectionListRenderer?.contents[0]?.itemSectionRenderer
     let token: string = items.continuations?.[0]?.nextContinuationData?.continuation || ''
     let videos: any = []
@@ -282,16 +284,3 @@ async function formatVideo(video: any, speedDate?: boolean) {
     // console.log(e)
   }
 }
-
-// async function test() {
-  // let wow = await getChannelVideos('UCp5KUL1Mb7Kpfw10SGyPumQ', new Date('2020-11-10T23:35:38.000Z')) // dunes
-  // let wow = await getChannelVideos('UCcdNy_FqMi0z1VU6kanOvFQ', new Date('2019-11-10T23:35:38.000Z')) // duploc
-  // let wow = await getChannelDesc('UCp5KUL1Mb7Kpfw10SGyPumQ')
-  // let wow = await searchChannel('noisia')
-  // let wow = await searchVideo('noisia')
-  // if(wow) {
-  //   console.log(wow)
-  // }
-// }
-
-// test()

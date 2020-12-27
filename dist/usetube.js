@@ -22,8 +22,11 @@ const headersAJAX = { headers: {
         'x-youtube-client-name': 1,
         'x-youtube-client-version': '2.20200731.02.01'
     } };
-const videoRegex = /ytInitialPlayerConfig\ \=\ (.*)\;\n\ \ \ \ \ \ setTimeout/;
-const mobileRegex = /id\=\"initial\-data\"\>\<\!\-\-\ (.*)\ \-\-\>\<\/div\>\<script\ \>if/;
+const mobileRegex = /var\ ytInitialData\ \=\ \'(.*)\'\;<\/script>/;
+const dateRegex = /publishDate":"(.*)","ownerChannelName/;
+function decodeHex(hex) {
+    return hex.replace(/\\x22/g, '"').replace(/\\x7b/g, '{').replace(/\\x7d/g, '}').replace(/\\x5b/g, '[').replace(/\\x5d/g, ']').replace(/\\x3b/g, ';').replace(/\\x3d/g, '=').replace(/\\x27/g, '\'').replace(/\\\\/g, 'doubleAntiSlash').replace(/\\/g, '').replace(/doubleAntiSlash/g, '\\');
+}
 function wait(ms) {
     var start = new Date().getTime();
     var end = start;
@@ -44,13 +47,11 @@ function formatYoutubeCount(raw) {
     return parseInt(nbSubscriber) || 0;
 }
 function getVideoDate(id) {
-    var _a, _b, _c, _d;
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const body = (yield axios_1.default.get('https://m.youtube.com/watch?v=' + id, headers)).data;
-            const raw = ((_a = videoRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
-            const datas = JSON.parse(raw);
-            let publishText = (_d = (_c = JSON.parse((_b = datas.args) === null || _b === void 0 ? void 0 : _b.player_response).microformat) === null || _c === void 0 ? void 0 : _c.playerMicroformatRenderer) === null || _d === void 0 ? void 0 : _d.publishDate;
+            let publishText = ((_a = dateRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
             publishText += ' ' + Math.floor(Math.random() * 24) + '-' + Math.floor(Math.random() * 60) + '-' + Math.floor(Math.random() * 60);
             return moment(publishText, 'YYYY-MM-DD H-m-s').toDate();
         }
@@ -66,7 +67,7 @@ function getChannelDesc(id) {
         try {
             const body = (yield axios_1.default.get('https://m.youtube.com/channel/' + encodeURI(id) + '/videos', headers)).data;
             const raw = ((_a = mobileRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
-            const data = JSON.parse(raw);
+            const data = JSON.parse(decodeHex(raw));
             let description = ((_c = (_b = data.metadata) === null || _b === void 0 ? void 0 : _b.channelMetadataRenderer) === null || _c === void 0 ? void 0 : _c.description) || '';
             return description;
         }
@@ -86,7 +87,8 @@ function searchVideo(terms, token) {
             if (!token) {
                 let body = (yield axios_1.default.get('https://m.youtube.com/results?sp=EgIQAQ%253D%253D&videoEmbeddable=true&search_query=' + terms, headers)).data;
                 let raw = ((_a = mobileRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
-                let datas = JSON.parse(raw).contents.sectionListRenderer;
+                // let fs = require('fs'); fs.writeFile('wow.json', decodeHex(raw), (e)=>{console.log(e)})
+                let datas = JSON.parse(decodeHex(raw)).contents.sectionListRenderer;
                 items = datas.contents[0].itemSectionRenderer.contents;
                 token = ((_d = (_c = (_b = datas.continuations) === null || _b === void 0 ? void 0 : _b[0]) === null || _c === void 0 ? void 0 : _c.reloadContinuationData) === null || _d === void 0 ? void 0 : _d.continuation) || '';
             }
@@ -126,7 +128,7 @@ function searchChannel(terms, token) {
             if (!token) {
                 const body = (yield axios_1.default.get('https://m.youtube.com/results?sp=CAASAhAC&search_query=' + encodeURI(terms), headers)).data;
                 const raw = ((_a = mobileRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
-                const data = JSON.parse(raw);
+                const data = JSON.parse(decodeHex(raw));
                 items = (_d = (_c = (_b = data.contents.sectionListRenderer) === null || _b === void 0 ? void 0 : _b.contents[0]) === null || _c === void 0 ? void 0 : _c.itemSectionRenderer) === null || _d === void 0 ? void 0 : _d.contents;
                 token = ((_g = (_f = (_e = data.continuations) === null || _e === void 0 ? void 0 : _e[0]) === null || _f === void 0 ? void 0 : _f.reloadContinuationData) === null || _g === void 0 ? void 0 : _g.continuation) || '';
             }
@@ -182,8 +184,8 @@ function getChannelVideos(id, published_after) {
         try {
             const body = (yield axios_1.default.get('https://m.youtube.com/channel/' + id + '/videos', headers)).data;
             const raw = ((_a = mobileRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
-            // writeFile('channelVideos.json', raw, err=>{console.log(err)})
-            const data = JSON.parse(raw);
+            // let fs = require('fs'); fs.writeFile('wow.json', decodeHex(raw), (e)=>{console.log(e)})
+            const data = JSON.parse(decodeHex(raw));
             const items = (_h = (_g = (_f = (_e = (_d = (_c = (_b = data.contents) === null || _b === void 0 ? void 0 : _b.singleColumnBrowseResultsRenderer) === null || _c === void 0 ? void 0 : _c.tabs[1]) === null || _d === void 0 ? void 0 : _d.tabRenderer) === null || _e === void 0 ? void 0 : _e.content) === null || _f === void 0 ? void 0 : _f.sectionListRenderer) === null || _g === void 0 ? void 0 : _g.contents[0]) === null || _h === void 0 ? void 0 : _h.itemSectionRenderer;
             let token = ((_l = (_k = (_j = items.continuations) === null || _j === void 0 ? void 0 : _j[0]) === null || _k === void 0 ? void 0 : _k.nextContinuationData) === null || _l === void 0 ? void 0 : _l.continuation) || '';
             let videos = [];
@@ -301,14 +303,3 @@ module.exports = {
     searchChannel,
     getChannelVideos,
 };
-// async function test() {
-// let wow = await getChannelVideos('UCp5KUL1Mb7Kpfw10SGyPumQ', new Date('2020-11-10T23:35:38.000Z')) // dunes
-// let wow = await getChannelVideos('UCcdNy_FqMi0z1VU6kanOvFQ', new Date('2019-11-10T23:35:38.000Z')) // duploc
-// let wow = await getChannelDesc('UCp5KUL1Mb7Kpfw10SGyPumQ')
-// let wow = await searchChannel('noisia')
-// let wow = await searchVideo('noisia')
-// if(wow) {
-//   console.log(wow)
-// }
-// }
-// test()

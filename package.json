@@ -1,6 +1,6 @@
 {
   "name": "usetube",
-  "version": "1.1.5",
+  "version": "1.2",
   "description": "crawl youtube without api key (search videos, search channels, get all channel's videos)",
   "main": "dist/usetube.min.js",
   "directories": {
@@ -19,9 +19,9 @@
     "chai-as-promised": "^7.1.1"
   },
   "scripts": {
-    "watch": "npx tsc --watch",
     "test": "node test/back.js",
     "build": "npx tsc --build && npx minify dist/usetube.js > dist/usetube.min.js && cp dist/usetube.min.js test/usetube.min.js",
+    "dev": "npx nodemon -e ts --exec 'yarn build && yarn test'",
     "push": "npm publish"
   },
   "repository": {
