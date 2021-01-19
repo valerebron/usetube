@@ -5,7 +5,8 @@
 
 ### This script is **google Quota free** (you can retrieve all videos a channel can give you :))
 
-### Youtube update its code, so do I with usetube, so don't forget to update the last version of usetube to get it works.
+### Youtube update regulary its code, so do I with usetube.
+### So don't forget to update the lastest version of usetube to get it works.
 <br>
 
 # install
@@ -22,9 +23,13 @@ usetube.searchChannel('usetube is great').then(channels => { console.log(channel
 
 usetube.searchVideo('use usetube').then(videos => { console.log(videos) })
 
-usetube.getChannelVideos('PLAbeRqyTx1rIGWY13HgPyh0VF0LdoTQFp').then(videos => { console.log(videos) })
+usetube.getChannelVideos('UCp5KUL1Mb7Kpfw10SGyPumQ', '2020-11-10T23:35:38.000Z').then(videos => { console.log(videos) })
 
-usetube.getChannelDesc('PLAbeRqyTx1rIGWY13HgPyh0VF0LdoTQFp').then(desc => { console.log(desc) })
+usetube.getPlaylistVideos('PLKuN-WEIzl_pwo3US7XyZJe1oVCD7NLwF').then(videos => { console.log(videos) })
+
+usetube.getChannelDesc('UCp5KUL1Mb7Kpfw10SGyPumQ').then(desc => { console.log(desc) })
+
+usetube.getVideoDesc('1Bix44C1EzY').then(desc => { console.log(desc) })
 
 usetube.getVideoDate('1Bix44C1EzY').then(date => { console.log(date) })
 ```
@@ -40,7 +45,11 @@ searchChannel(terms: String!, token: String?): [channel], didyoumean, token
 
 getChannelVideos(channel_id: String!, published_after: Date?): [video]
 
+getPlaylistVideos(playlist_id: String!): [video]
+
 getChannelDesc(channel_id: String!): String
+
+getVideoDesc(video_id: String!): String
 
 getVideoDate(video_id: String!): Date
 ```

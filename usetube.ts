@@ -3,10 +3,12 @@ import * as moment from 'moment'
 
 export = {
   getVideoDate,
+  getVideoDesc,
   getChannelDesc,
   searchVideo,
   searchChannel,
   getChannelVideos,
+  getPlaylistVideos,
 }
 
 const headers: AxiosRequestConfig = {headers: {
@@ -30,9 +32,10 @@ function decodeHex(hex) {
   return hex.replace(/\\x22/g, '"').replace(/\\x7b/g, '{').replace(/\\x7d/g, '}').replace(/\\x5b/g, '[').replace(/\\x5d/g, ']').replace(/\\x3b/g, ';').replace(/\\x3d/g, '=').replace(/\\x27/g, '\'').replace(/\\\\/g, 'doubleAntiSlash').replace(/\\/g, '').replace(/doubleAntiSlash/g, '\\')
 }
 
-function wait(ms) {
-  var start = new Date().getTime()
-  var end = start
+function wait() {
+  let ms = Math.floor(Math.random() * 300)
+  let start = new Date().getTime()
+  let end = start
   while(end < start + ms) {
     end = new Date().getTime()
  }
@@ -59,7 +62,19 @@ async function getVideoDate(id: string) {
     return moment(publishText, 'YYYY-MM-DD H-m-s').toDate()
   } catch(e) {
     // console.log('cannot get date for '+id+', try again')
-    getVideoDate(id)
+    // console.log(e)
+  }
+}
+
+async function getVideoDesc(id: string) {
+  try {
+    const body: any = (await axios.get('https://m.youtube.com/watch?v='+encodeURI(id), headers)).data as string
+    const raw: any = mobileRegex.exec(body) ?.[1] || '{}'
+    const data: any = JSON.parse(decodeHex(raw))
+    let description: string = data.contents?.singleColumnWatchNextResults?.results?.results?.contents[1]?.itemSectionRenderer?.contents[0]?.slimVideoMetadataRenderer?.description?.runs || ''
+    return description
+  } catch(e) {
+    // console.log('video desc error for '+id, e)
   }
 }
 
@@ -193,7 +208,7 @@ async function getChannelVideos(id: string, published_after?: Date) {
     }
     while(token !== '') {
       try {
-        wait(Math.floor(Math.random() * 300))
+        wait()
         let data = (await axios.get('https://youtube.com/browse_ajax?ctoken='+token, headersAJAX)).data
         let newVideos: any = data[1]?.response?.continuationContents?.gridContinuation?.items || ''
         token = data[1].response.continuationContents?.gridContinuation?.continuations?.[0]?.nextContinuationData?.continuation || ''
@@ -207,22 +222,70 @@ async function getChannelVideos(id: string, published_after?: Date) {
           }
         }
       } catch(e) {
-        // console.log('getChannelVideos failed')
-        // console.log(e)
+        console.log('getChannelVideos failed')
+        console.log(e)
         token = ''
       }
     }
     return videos
   } catch(e) {
-    // console.log('cannot get channel videos for id: '+id+', try again')
-    getChannelVideos(id, published_after)
+    console.log('cannot get channel videos for id: '+id+', try again')
+    // getChannelVideos(id, published_after)
+  }
+}
+
+async function getPlaylistVideos(id: string, speedDate?: boolean) {
+  try {
+    const body: any = (await axios.get('https://m.youtube.com/playlist?list='+id, headers)).data as string
+    const raw: any = mobileRegex.exec(body) ?.[1] || '{}'
+    const data: any = JSON.parse(decodeHex(raw))
+    const items: any = data.contents?.singleColumnBrowseResultsRenderer?.tabs[0]?.tabRenderer?.content?.sectionListRenderer?.contents[0]?.itemSectionRenderer?.contents[0]?.playlistVideoListRenderer || ''
+    let token: string = items.continuations[0]?.nextContinuationData.continuation || ''
+    let videos: any = []
+    for(let i = 0; i < items.contents.length; i++) {
+      videos.push(await formatVideo(items.contents[i]), speedDate)
+    }
+    while(token !== '') {
+      try {
+        wait()
+        const body: any = (await axios.get('https://m.youtube.com/playlist?ctoken='+token, headers)).data as string
+        let nextRaw: any = mobileRegex.exec(body) ?.[1] || '{}'
+        let nextData: any = JSON.parse(decodeHex(nextRaw)).continuationContents.playlistVideoListContinuation
+        let nextVideos: any = nextData.contents
+        if(nextData.continuations) {
+          token = nextData.continuations[0]?.nextContinuationData.continuation
+        }
+        else {
+          token = ''
+        }
+        for(let i = 0; i < nextVideos.length; i++) {
+          videos.push(await formatVideo(nextVideos[i]), speedDate)
+        }
+      } catch(e) {
+        console.log('getPlaylistVideos failed')
+        console.log(e)
+        token = ''
+      }
+    }
+    return videos
+  } catch(e) {
+    console.log('cannot get playlist '+id+', try again')
+    console.log(e)
   }
 }
 
 async function formatVideo(video: any, speedDate?: boolean) {
   try{
-    if(video.compactVideoRenderer || video.gridVideoRenderer) {
-      video = video.compactVideoRenderer ? video.compactVideoRenderer : video.gridVideoRenderer
+    if(video.compactVideoRenderer || video.gridVideoRenderer || video.playlistVideoRenderer ) {
+      if(video.compactVideoRenderer) {
+        video = video.compactVideoRenderer
+      }
+      else if(video.gridVideoRenderer) {
+        video = video.gridVideoRenderer
+      }
+      else if(video.playlistVideoRenderer ) {
+        video = video.playlistVideoRenderer
+      }
       let id: string = video.videoId
       let durationDatas: any = 0
       // get title
@@ -280,7 +343,7 @@ async function formatVideo(video: any, speedDate?: boolean) {
       }
     }
   } catch(e) {
-    // console.log('format video failed')
+    console.log('format video failed')
     // console.log(e)
   }
 }
