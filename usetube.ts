@@ -97,7 +97,7 @@ async function searchVideo(terms: string, token?: string) {
     let didyoumean: String = ''
     // initial videos search
     if(!token) {
-      let body: any = (await axios.get('https://m.youtube.com/results?sp=EgIQAQ%253D%253D&videoEmbeddable=true&search_query='+terms, headers)).data as string
+      let body: any = (await axios.get('https://m.youtube.com/results?sp=EgIQAQ%253D%253D&videoEmbeddable=true&search_query='+encodeURI(terms), headers)).data as string
       let raw: any = mobileRegex.exec(body) ?.[1] || '{}'
       // let fs = require('fs'); fs.writeFile('wow.json', decodeHex(raw), (e)=>{console.log(e)})
       let datas: any = JSON.parse(decodeHex(raw)).contents.sectionListRenderer

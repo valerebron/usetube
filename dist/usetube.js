@@ -101,7 +101,7 @@ function searchVideo(terms, token) {
             let didyoumean = '';
             // initial videos search
             if (!token) {
-                let body = (yield axios_1.default.get('https://m.youtube.com/results?sp=EgIQAQ%253D%253D&videoEmbeddable=true&search_query=' + terms, headers)).data;
+                let body = (yield axios_1.default.get('https://m.youtube.com/results?sp=EgIQAQ%253D%253D&videoEmbeddable=true&search_query=' + encodeURI(terms), headers)).data;
                 let raw = ((_a = mobileRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
                 // let fs = require('fs'); fs.writeFile('wow.json', decodeHex(raw), (e)=>{console.log(e)})
                 let datas = JSON.parse(decodeHex(raw)).contents.sectionListRenderer;

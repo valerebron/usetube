@@ -1,12 +1,10 @@
 # **Usetube.js**
 ### with usetube you Crawl youtube so you can **search videos** or **channels**, you can also **grab all channel's videos** at once
 
-### This script is **google api key free** (so you don't need google account :))
+### This script is **google api key free** (so you don't need google account)
 
-### This script is **google Quota free** (you can retrieve all videos a channel can give you :))
+### This script is **google Quota free** (you can retrieve all videos a channel can give you)
 
-### Youtube update regulary its code, so do I with usetube.
-### So don't forget to update the lastest version of usetube to get it works.
 <br>
 
 # install
