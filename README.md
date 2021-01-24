@@ -30,6 +30,8 @@ usetube.getChannelDesc('UCp5KUL1Mb7Kpfw10SGyPumQ').then(desc => { console.log(de
 usetube.getVideoDesc('1Bix44C1EzY').then(desc => { console.log(desc) })
 
 usetube.getVideoDate('1Bix44C1EzY').then(date => { console.log(date) })
+
+usetube.getVideosFromDesc('W6NKM2PcPdI').then(videos => { console.log(videos) })
 ```
 
 ### notes:
@@ -50,6 +52,8 @@ getChannelDesc(channel_id: String!): String
 getVideoDesc(video_id: String!): String
 
 getVideoDate(video_id: String!): Date
+
+getVideosFromDesc(video_id: String!): [video]
 ```
 
 ```js
