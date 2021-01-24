@@ -8,10 +8,10 @@ let test = async function() {
 //   let wow = await usetube.getChannelDesc('UCp5KUL1Mb7Kpfw10SGyPumQ')
 //   let wow = await usetube.searchChannel('noisiaa')
   // let wow = await usetube.searchVideo('IMANU - Music To Stay In Your House To (Buunshin’s Go Outside Remix)')
-  let wow = await usetube.getVideoDate('i0Q0HIpvkhU')
+  // let wow = await usetube.getVideoDate('i0Q0HIpvkhU')
   // let wow = await usetube.getPlaylistVideos('PLKuN-WEIzl_pwo3US7XyZJe1oVCD7NLwF', true)
   // let wow = await usetube.getTracksFromDesc('ip_ght29b_A')
-  // let wow = await usetube.getVideosFromDesc('W6NKM2PcPdI')
+  let wow = await usetube.getVideosFromDesc('W6NKM2PcPdI')
   console.log(wow)
   console.log(wow.length)
 }

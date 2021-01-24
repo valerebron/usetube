@@ -302,28 +302,30 @@ function getPlaylistVideos(id, speedDate) {
 function getVideosFromDesc(yt_id) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            let desc = yield getVideoDesc(yt_id);
-            let trackList = desc.pop().text.split('\n').filter(Boolean);
             let tracks = [];
-            trackList = trackList.filter(title => !title.includes('00:00'));
-            trackList = trackList.filter(title => !title.startsWith(' '));
-            loop1: for (let i = 0; i < trackList.length; i++) {
-                let elt = cleanTitle(trackList[i]).replace(/[0-9]?[0-9]?:[0-9]?[0-9]?/, '');
-                let title = elt.split('-')[1].trim();
-                let artist = elt.split('-')[0].trim();
-                let tracksSearched = yield searchVideo(title + ' ' + artist);
-                loop2: for (let y = 0; y < tracksSearched.tracks.length; y++) {
-                    let track = tracksSearched.tracks[y];
-                    let original_title_lower = track.original_title.toLowerCase();
-                    if (original_title_lower.includes(artist.split(' ')[0].toLowerCase()) && original_title_lower.includes(title.split(' ')[0].toLowerCase())) {
-                        track.publishedAt = yield getVideoDate(track.id);
-                        track.title = title;
-                        track.artist = artist;
-                        tracks.push(track);
-                        break loop2;
-                    }
-                    else {
-                        continue loop2;
+            let desc = yield getVideoDesc(yt_id);
+            if (desc) {
+                let trackList = desc.pop().text.split('\n').filter(Boolean);
+                trackList = trackList.filter(title => !title.includes('00:00'));
+                trackList = trackList.filter(title => !title.startsWith(' '));
+                loop1: for (let i = 0; i < trackList.length; i++) {
+                    let elt = cleanTitle(trackList[i]).replace(/[0-9]?[0-9]?:[0-9]?[0-9]?/, '');
+                    let title = elt.split('-')[1].trim();
+                    let artist = elt.split('-')[0].trim();
+                    let tracksSearched = yield searchVideo(title + ' ' + artist);
+                    loop2: for (let y = 0; y < tracksSearched.tracks.length; y++) {
+                        let track = tracksSearched.tracks[y];
+                        let original_title_lower = track.original_title.toLowerCase();
+                        if (original_title_lower.includes(artist.split(' ')[0].toLowerCase()) && original_title_lower.includes(title.split(' ')[0].toLowerCase())) {
+                            track.publishedAt = yield getVideoDate(track.id);
+                            track.title = title;
+                            track.artist = artist;
+                            tracks.push(track);
+                            break loop2;
+                        }
+                        else {
+                            continue loop2;
+                        }
                     }
                 }
             }
