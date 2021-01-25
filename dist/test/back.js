@@ -7,7 +7,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const fetch = require('node-fetch');
 const usetube = require('../dist/usetube.min.js');
 let test = function () {
     return __awaiter(this, void 0, void 0, function* () {
@@ -17,11 +16,11 @@ let test = function () {
         // let wow = await usetube.getVideoDesc('TupbkwAkRb8')
         //   let wow = await usetube.getChannelDesc('UCp5KUL1Mb7Kpfw10SGyPumQ')
         //   let wow = await usetube.searchChannel('noisiaa')
-        // let wow = await usetube.searchVideo('IMANU - Music To Stay In Your House To (Buunshin’s Go Outside Remix)')
+        let wow = yield usetube.searchVideo('IMANU - Music To Stay In Your House To (Buunshin’s Go Outside Remix)');
         // let wow = await usetube.getVideoDate('i0Q0HIpvkhU')
         // let wow = await usetube.getPlaylistVideos('PLKuN-WEIzl_pwo3US7XyZJe1oVCD7NLwF', true)
         // let wow = await usetube.getTracksFromDesc('ip_ght29b_A')
-        let wow = yield usetube.getVideosFromDesc('W6NKM2PcPdI');
+        // let wow = await usetube.getVideosFromDesc('W6NKM2PcPdI')
         console.log(wow);
         console.log(wow.length);
     });

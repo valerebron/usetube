@@ -1,4 +1,9 @@
 # **Usetube.js**
+
+[![Version](https://img.shields.io/npm/v/usetube.svg)](https://www.npmjs.com/package/usetube)
+[![Downloads](https://img.shields.io/npm/dt/usetube.svg)](https://www.npmjs.com/package/usetube)
+[![Downloads](https://img.shields.io/npm/dw/usetube)](https://www.npmjs.com/package/usetube)
+
 ### with usetube you Crawl youtube so you can **search videos** or **channels**, you can also **grab all channel's videos** at once
 
 ### This script is **google api key free** (so you don't need google account)
@@ -16,26 +21,8 @@ npm install usetube
 
 ```js
 const usetube = require('usetube')
-
-usetube.searchChannel('usetube is great').then(channels => { console.log(channels) })
-
-usetube.searchVideo('use usetube').then(videos => { console.log(videos) })
-
-usetube.getChannelVideos('UCp5KUL1Mb7Kpfw10SGyPumQ', '2020-11-10T23:35:38.000Z').then(videos => { console.log(videos) })
-
 usetube.getPlaylistVideos('PLKuN-WEIzl_pwo3US7XyZJe1oVCD7NLwF').then(videos => { console.log(videos) })
-
-usetube.getChannelDesc('UCp5KUL1Mb7Kpfw10SGyPumQ').then(desc => { console.log(desc) })
-
-usetube.getVideoDesc('1Bix44C1EzY').then(desc => { console.log(desc) })
-
-usetube.getVideoDate('1Bix44C1EzY').then(date => { console.log(date) })
-
-usetube.getVideosFromDesc('W6NKM2PcPdI').then(videos => { console.log(videos) })
 ```
-
-### notes:
-- each function return a **Promise**
 
 # types definitions
 ```js
@@ -83,8 +70,3 @@ didyoumean:              String, // spelling proposal
 ```js
 token:                   String, // key to get more data (next/prev page result)
 ```
-# dependencies
-
-[Axios](https://github.com/axios/axios)
-
-[Moment.js](https://github.com/moment/moment/)
