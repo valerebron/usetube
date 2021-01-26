@@ -1,6 +1,6 @@
 {
   "name": "usetube",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "crawl youtube without api key (search videos, search channels, get all channel/playlist's videos)",
   "main": "dist/usetube.min.js",
   "directories": {
@@ -17,8 +17,7 @@
   "scripts": {
     "test": "node test/back.js",
     "build": "npx tsc --build && npx minify dist/usetube.js > dist/usetube.min.js && cp dist/usetube.min.js test/usetube.min.js",
-    "dev": "npx nodemon -e ts --exec 'yarn build && yarn test'",
-    "push": "npm publish"
+    "dev": "npx nodemon -e ts --exec 'yarn build && yarn test'"
   },
   "repository": {
     "type": "git",

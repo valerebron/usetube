@@ -58,7 +58,7 @@ function formatYoutubeCount(raw) {
   const isMill = raw?.includes('M')
   const isKilo = raw?.includes('k')
   let nbSubscriber = raw?.replace(/[^0-9,.]/g, '').replace(',', '.')
-  if(isMill) {
+  if(isMill) { 
     nbSubscriber *= 1000000
   }
   else if(isKilo) {
@@ -74,32 +74,32 @@ async function getVideoDate(id: string) {
     publishText += ' '+Math.floor(Math.random() * 24)+'-'+Math.floor(Math.random() * 60)+'-'+Math.floor(Math.random() * 60)
     return moment(publishText, 'YYYY-MM-DD H-m-s').toDate()
   } catch(e) {
-    // console.log('cannot get date for '+id+', try again')
-    // console.log(e)
+    console.log('cannot get date for '+id+', try again')
+    console.log(e)
   }
 }
 
 async function getVideoDesc(id: string) {
   try {
-    const body: any = (await axios.get('https://m.youtube.com/watch?v='+encodeURI(id), headers)).data as string
+    const body: any = (await axios.get('https://m.youtube.com/watch?v='+id, headers)).data as string
     const raw: any = mobileRegex.exec(body) ?.[1] || '{}'
     const data: any = JSON.parse(decodeHex(raw))
     let description: string = data.contents?.singleColumnWatchNextResults?.results?.results?.contents[1]?.itemSectionRenderer?.contents[0]?.slimVideoMetadataRenderer?.description?.runs || ''
     return description
   } catch(e) {
-    // console.log('video desc error for '+id, e)
+    console.log('video desc error for '+id, e)
   }
 }
 
 async function getChannelDesc(id: string) {
   try {
-    const body: any = (await axios.get('https://m.youtube.com/channel/'+encodeURI(id)+'/videos', headers)).data as string
+    const body: any = (await axios.get('https://m.youtube.com/channel/'+id+'/videos', headers)).data as string
     const raw: any = mobileRegex.exec(body) ?.[1] || '{}'
     const data: any = JSON.parse(decodeHex(raw))
     let description: string = data.metadata?.channelMetadataRenderer?.description || ''
     return description
   } catch(e) {
-    // console.log('channel desc error for '+id, e)
+    console.log('channel desc error for '+id, e)
   }
 }
 
@@ -138,7 +138,7 @@ async function searchVideo(terms: string, token?: string) {
       token: token,
     }
   } catch(e) {
-    // console.log('search videos error, terms: '+terms, e)
+    console.log('search videos error, terms: '+terms, e)
   }
 }
 
@@ -197,7 +197,7 @@ async function searchChannel(terms: string, token?: string) {
       token: token,
     }
   } catch(e) {
-    // console.log('search channel error, terms: '+terms, e)
+    console.log('search channel error, terms: '+terms, e)
   }
 }
 
@@ -211,7 +211,7 @@ async function getChannelVideos(id: string, published_after?: Date) {
     let token: string = items.continuations?.[0]?.nextContinuationData?.continuation || ''
     let videos: any = []
     for(let i = 0; i < items.contents.length; i++) {
-      let video = await formatVideo(items.contents[i])
+      let video = await formatVideo(items.contents[i], false)
       if(moment(video.publishedAt).isBefore(published_after) && published_after) {
         return videos
       }
@@ -226,7 +226,7 @@ async function getChannelVideos(id: string, published_after?: Date) {
         let newVideos: any = data[1]?.response?.continuationContents?.gridContinuation?.items || ''
         token = data[1].response.continuationContents?.gridContinuation?.continuations?.[0]?.nextContinuationData?.continuation || ''
         for(let i = 0; i < newVideos.length; i++) {
-          let video = await formatVideo(newVideos[i])
+          let video = await formatVideo(newVideos[i], false)
           if(moment(video.publishedAt).isBefore(published_after) && published_after) {
             return videos
           }

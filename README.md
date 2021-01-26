@@ -21,7 +21,7 @@ npm install usetube
 
 ```js
 const usetube = require('usetube')
-usetube.getPlaylistVideos('PLKuN-WEIzl_pwo3US7XyZJe1oVCD7NLwF').then(videos => { console.log(videos) })
+await usetube.searchVideo('IMANU')
 ```
 
 # types definitions

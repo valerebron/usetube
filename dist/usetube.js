@@ -68,8 +68,8 @@ function getVideoDate(id) {
             return moment(publishText, 'YYYY-MM-DD H-m-s').toDate();
         }
         catch (e) {
-            // console.log('cannot get date for '+id+', try again')
-            // console.log(e)
+            console.log('cannot get date for ' + id + ', try again');
+            console.log(e);
         }
     });
 }
@@ -77,14 +77,14 @@ function getVideoDesc(id) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const body = (yield axios_1.default.get('https://m.youtube.com/watch?v=' + encodeURI(id), headers)).data;
+            const body = (yield axios_1.default.get('https://m.youtube.com/watch?v=' + id, headers)).data;
             const raw = ((_a = mobileRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
             const data = JSON.parse(decodeHex(raw));
             let description = ((_k = (_j = (_h = (_g = (_f = (_e = (_d = (_c = (_b = data.contents) === null || _b === void 0 ? void 0 : _b.singleColumnWatchNextResults) === null || _c === void 0 ? void 0 : _c.results) === null || _d === void 0 ? void 0 : _d.results) === null || _e === void 0 ? void 0 : _e.contents[1]) === null || _f === void 0 ? void 0 : _f.itemSectionRenderer) === null || _g === void 0 ? void 0 : _g.contents[0]) === null || _h === void 0 ? void 0 : _h.slimVideoMetadataRenderer) === null || _j === void 0 ? void 0 : _j.description) === null || _k === void 0 ? void 0 : _k.runs) || '';
             return description;
         }
         catch (e) {
-            // console.log('video desc error for '+id, e)
+            console.log('video desc error for ' + id, e);
         }
     });
 }
@@ -92,14 +92,14 @@ function getChannelDesc(id) {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const body = (yield axios_1.default.get('https://m.youtube.com/channel/' + encodeURI(id) + '/videos', headers)).data;
+            const body = (yield axios_1.default.get('https://m.youtube.com/channel/' + id + '/videos', headers)).data;
             const raw = ((_a = mobileRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
             const data = JSON.parse(decodeHex(raw));
             let description = ((_c = (_b = data.metadata) === null || _b === void 0 ? void 0 : _b.channelMetadataRenderer) === null || _c === void 0 ? void 0 : _c.description) || '';
             return description;
         }
         catch (e) {
-            // console.log('channel desc error for '+id, e)
+            console.log('channel desc error for ' + id, e);
         }
     });
 }
@@ -141,7 +141,7 @@ function searchVideo(terms, token) {
             };
         }
         catch (e) {
-            // console.log('search videos error, terms: '+terms, e)
+            console.log('search videos error, terms: ' + terms, e);
         }
     });
 }
@@ -201,7 +201,7 @@ function searchChannel(terms, token) {
             };
         }
         catch (e) {
-            // console.log('search channel error, terms: '+terms, e)
+            console.log('search channel error, terms: ' + terms, e);
         }
     });
 }
@@ -217,7 +217,7 @@ function getChannelVideos(id, published_after) {
             let token = ((_l = (_k = (_j = items.continuations) === null || _j === void 0 ? void 0 : _j[0]) === null || _k === void 0 ? void 0 : _k.nextContinuationData) === null || _l === void 0 ? void 0 : _l.continuation) || '';
             let videos = [];
             for (let i = 0; i < items.contents.length; i++) {
-                let video = yield formatVideo(items.contents[i]);
+                let video = yield formatVideo(items.contents[i], false);
                 if (moment(video.publishedAt).isBefore(published_after) && published_after) {
                     return videos;
                 }
@@ -232,7 +232,7 @@ function getChannelVideos(id, published_after) {
                     let newVideos = ((_q = (_p = (_o = (_m = data[1]) === null || _m === void 0 ? void 0 : _m.response) === null || _o === void 0 ? void 0 : _o.continuationContents) === null || _p === void 0 ? void 0 : _p.gridContinuation) === null || _q === void 0 ? void 0 : _q.items) || '';
                     token = ((_v = (_u = (_t = (_s = (_r = data[1].response.continuationContents) === null || _r === void 0 ? void 0 : _r.gridContinuation) === null || _s === void 0 ? void 0 : _s.continuations) === null || _t === void 0 ? void 0 : _t[0]) === null || _u === void 0 ? void 0 : _u.nextContinuationData) === null || _v === void 0 ? void 0 : _v.continuation) || '';
                     for (let i = 0; i < newVideos.length; i++) {
-                        let video = yield formatVideo(newVideos[i]);
+                        let video = yield formatVideo(newVideos[i], false);
                         if (moment(video.publishedAt).isBefore(published_after) && published_after) {
                             return videos;
                         }
