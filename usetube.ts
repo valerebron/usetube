@@ -75,7 +75,7 @@ async function getVideoDate(id: string) {
     return moment(publishText, 'YYYY-MM-DD H-m-s').toDate()
   } catch(e) {
     console.log('cannot get date for '+id+', try again')
-    console.log(e)
+    // console.log(e)
   }
 }
 
@@ -87,7 +87,8 @@ async function getVideoDesc(id: string) {
     let description: string = data.contents?.singleColumnWatchNextResults?.results?.results?.contents[1]?.itemSectionRenderer?.contents[0]?.slimVideoMetadataRenderer?.description?.runs || ''
     return description
   } catch(e) {
-    console.log('video desc error for '+id, e)
+    console.log('video desc error for '+id)
+    // console.log(e)
   }
 }
 
@@ -99,7 +100,8 @@ async function getChannelDesc(id: string) {
     let description: string = data.metadata?.channelMetadataRenderer?.description || ''
     return description
   } catch(e) {
-    console.log('channel desc error for '+id, e)
+    console.log('channel desc error for '+id)
+    // console.log(e)
   }
 }
 
@@ -138,7 +140,8 @@ async function searchVideo(terms: string, token?: string) {
       token: token,
     }
   } catch(e) {
-    console.log('search videos error, terms: '+terms, e)
+    console.log('search videos error, terms: '+terms)
+    // console.log(e)
   }
 }
 
@@ -197,7 +200,8 @@ async function searchChannel(terms: string, token?: string) {
       token: token,
     }
   } catch(e) {
-    console.log('search channel error, terms: '+terms, e)
+    console.log('search channel error, terms: '+terms)
+    // console.log(e)
   }
 }
 
@@ -236,7 +240,7 @@ async function getChannelVideos(id: string, published_after?: Date) {
         }
       } catch(e) {
         console.log('getChannelVideos failed')
-        console.log(e)
+        // console.log(e)
         token = ''
       }
     }
@@ -276,14 +280,14 @@ async function getPlaylistVideos(id: string, speedDate?: boolean) {
         }
       } catch(e) {
         console.log('getPlaylistVideos failed')
-        console.log(e)
+        // console.log(e)
         token = ''
       }
     }
     return videos
   } catch(e) {
     console.log('cannot get playlist '+id+', try again')
-    console.log(e)
+    // console.log(e)
   }
 }
 
@@ -325,7 +329,8 @@ async function getVideosFromDesc(yt_id) {
     }
     return tracks
   } catch(e) {
-    console.log(e)
+    console.log('getVideosFromDesc error, maybe captcha to resolve')
+    // console.log(e)
   }
 }
 
