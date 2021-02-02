@@ -6,13 +6,14 @@
   <title>Usetube.js front test</title>
 </head>
 <body>
-  <code>hey</code>
-  <script src="bundle.js"></script>
+  <code>wait ...</code>
+  <script src="./usetube.vanilla.js"></script>
   <script>
     const test = async function() {
-      let res = await usetube.searchChannel('noisia')
-      document.querySelector('code').append(res)
-      console.log(res)
+      console.log(await getChannelDesc('UCcdNy_FqMi0z1VU6kanOvFQ'))
+      // let res = await usetube.searchChannel('noisia')
+      // document.querySelector('code').append(res)
+      // console.log(res)
     }
     window.onload = function() {
       test()
