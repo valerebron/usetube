@@ -5,7 +5,8 @@
     "sourceMap": true,
     "module": "commonjs",
     "esModuleInterop": false,
-    "target": "es6",
+    "target": "es5",
+    "lib": ["es5", "es2015.promise", "DOM", "ScriptHost"],
     "moduleResolution": "node"
   },
   "include": ["src/**/*"],

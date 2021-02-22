@@ -2,17 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 function nodeFetch(url, options) {
     if (typeof window === 'undefined') {
-        return new Promise((resolve, reject) => {
-            const lib = url.startsWith('https') ? require('https') : require('http');
-            const request = lib.get(url, options, (response) => {
+        return new Promise(function (resolve, reject) {
+            var lib = url.startsWith('https') ? require('https') : require('http');
+            var request = lib.get(url, options, function (response) {
                 if (response.statusCode < 200 || response.statusCode > 299) {
                     reject(new Error('Failed to load page, status code: ' + response.statusCode));
                 }
-                const body = [];
-                response.on('data', (chunk) => body.push(chunk));
-                response.on('end', () => resolve(body.join('')));
+                var body = [];
+                response.on('data', function (chunk) { return body.push(chunk); });
+                response.on('end', function () { return resolve(body.join('')); });
             });
-            request.on('error', (err) => reject(err));
+            request.on('error', function (err) { return reject(err); });
         });
     }
 }

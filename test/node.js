@@ -13,10 +13,10 @@ let launchTest = async function() {
   // test = await usetube.getVideoDesc('P7pxZ01MmUU')
   // test = await usetube.getChannelDesc('UCp5KUL1Mb7Kpfw10SGyPumQ')
   // test = await usetube.searchChannel('noisiaa')
-  test = await usetube.searchVideo('Lorn')
+  // test = await usetube.searchVideo('Lorn')
   // test = await usetube.getVideoDate('i0Q0HIpvkhU')
   // test = await usetube.getPlaylistVideos('PLKuN-WEIzl_pwo3US7XyZJe1oVCD7NLwF', true)
-  // test = await usetube.getVideosFromDesc('mTNfHrUwQkE')
+  test = await usetube.getVideosFromDesc('mTNfHrUwQkE')
   if(test) {
     console.log(test)
     if(test.length) {

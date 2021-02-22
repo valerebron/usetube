@@ -1,5 +1,4 @@
 import Video from './types/video'
-import SearchResult from './types/searchResult'
 import getData from './helpers/getData'
 import formatVideo from './helpers/formatVideo'
 

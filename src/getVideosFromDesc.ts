@@ -10,16 +10,11 @@ export default async function getVideosFromDesc(yt_id) {
     let videos: Video[] = []
     let desc: any = await getVideoDesc(yt_id)
     if(desc) {
-      let trackList = desc.pop().text.split('\n').filter(Boolean)
-      trackList = trackList.filter(title => !title.includes('00:00'))
-      trackList = trackList.filter(title => !title.startsWith(' '))
-      if(trackList.length !== 0) {
-        loop1:
-        for(let i = 0; i < trackList.length; i++) {
-          let elt = cleanTitle(trackList[i]).replace(/[0-9]?[0-9]?:[0-9]?[0-9]?/,'')
-          if(!elt || !elt.includes('-')) {
-            break loop1
-          }
+      loop1:
+      for(let i = 0; i < desc.length; i++) {
+        let content = desc[i].text
+        if(content.includes('-') && content.length < 100) {
+          let elt = cleanTitle(content)
           let title = elt.split('-')[1].trim()
           let artist = elt.split('-')[0].trim() 
           let videosSearched: SearchResult = await searchVideo(title+' '+artist)

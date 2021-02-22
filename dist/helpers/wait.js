@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function wait() {
-    let ms = Math.floor(Math.random() * 300);
-    let start = new Date().getTime();
-    let end = start;
+    var ms = Math.floor(Math.random() * 300);
+    var start = new Date().getTime();
+    var end = start;
     while (end < start + ms) {
         end = new Date().getTime();
     }
