@@ -24,9 +24,7 @@ export default async function getVideosFromDesc(yt_id) {
             let original_title_lower = track.original_title.toLowerCase()
             if(original_title_lower.includes(artist.split(' ')[0].toLowerCase()) && original_title_lower.includes(title.split(' ')[0].toLowerCase())) {
               track.publishedAt = await getVideoDate(track.id)
-              track.title = title
-              track.artist = artist
-              videos.push(track)
+              videos.push(track) 
               break loop2
             }
             else {

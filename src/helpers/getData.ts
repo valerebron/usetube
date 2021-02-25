@@ -8,7 +8,7 @@ export default async function getData(urlstring: string) {
   let isAjax = false
   let isDate = false
   let body
-  if(url.searchParams.get('ctoken')) {
+  if(url.searchParams.get('key')) {
     isAjax = true
   }
   if(url.searchParams.get('type') === 'date') {

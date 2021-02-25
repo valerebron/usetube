@@ -3,10 +3,11 @@
 [![Version](https://img.shields.io/npm/v/usetube.svg)](https://www.npmjs.com/package/usetube)
 [![Downloads](https://img.shields.io/npm/dt/usetube.svg)](https://www.npmjs.com/package/usetube)
 
+### Youtube Crawler
+
+### search & get datas from youtube
 
 ### no google account needed
-
-### retrieve all videos a channel can give you
 
 <br>
 

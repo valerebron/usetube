@@ -50,7 +50,7 @@ function getData(urlstring) {
                     url = new URL(urlstring);
                     isAjax = false;
                     isDate = false;
-                    if (url.searchParams.get('ctoken')) {
+                    if (url.searchParams.get('key')) {
                         isAjax = true;
                     }
                     if (url.searchParams.get('type') === 'date') {

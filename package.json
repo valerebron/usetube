@@ -13,7 +13,7 @@
   "scripts": {
     "test": "node test/node",
     "build": "tsc -p tsconfig.json",
-    "dev": "tsc --watch"
+    "dev": "npx nodemon -e ts --exec 'yarn build && yarn test'"
   },
   "repository": {
     "type": "git",

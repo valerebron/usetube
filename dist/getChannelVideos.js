@@ -38,82 +38,69 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var getData_1 = require("./helpers/getData");
 var formatVideo_1 = require("./helpers/formatVideo");
-var wait_1 = require("./helpers/wait");
+var findVal_1 = require("./helpers/findVal");
 function getChannelVideos(id, published_after) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     return __awaiter(this, void 0, void 0, function () {
-        var data, channel, token, videos, i, video, data_1, newVideos, i, video, e_1, e_2;
-        return __generator(this, function (_l) {
-            switch (_l.label) {
+        var data, channel, token, videos, i, video, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _l.trys.push([0, 15, , 16]);
+                    _a.trys.push([0, 6, , 7]);
                     return [4 /*yield*/, getData_1.default('https://m.youtube.com/channel/' + id + '/videos')];
                 case 1:
-                    data = _l.sent();
-                    channel = (_g = (_f = (_e = (_d = (_c = (_b = (_a = data.contents) === null || _a === void 0 ? void 0 : _a.singleColumnBrowseResultsRenderer) === null || _b === void 0 ? void 0 : _b.tabs[1]) === null || _c === void 0 ? void 0 : _c.tabRenderer) === null || _d === void 0 ? void 0 : _d.content) === null || _e === void 0 ? void 0 : _e.sectionListRenderer) === null || _f === void 0 ? void 0 : _f.contents[0]) === null || _g === void 0 ? void 0 : _g.itemSectionRenderer;
-                    token = ((_k = (_j = (_h = channel.continuations) === null || _h === void 0 ? void 0 : _h[0]) === null || _j === void 0 ? void 0 : _j.nextContinuationData) === null || _k === void 0 ? void 0 : _k.continuation) || '';
+                    data = _a.sent();
+                    channel = findVal_1.default(data, 'itemSectionRenderer');
+                    token = findVal_1.default(data, 'token');
                     videos = [];
                     i = 0;
-                    _l.label = 2;
+                    _a.label = 2;
                 case 2:
                     if (!(i < channel.contents.length)) return [3 /*break*/, 5];
                     return [4 /*yield*/, formatVideo_1.default(channel.contents[i], false)];
                 case 3:
-                    video = _l.sent();
-                    if ((published_after && video.publishedAt.getTime() > published_after.getTime()) || !published_after) {
+                    video = _a.sent();
+                    if (((published_after && video.publishedAt.getTime() > published_after.getTime()) || !published_after) && video) {
                         videos.push(video);
                     }
                     else {
+                        console.log('exit');
                         return [2 /*return*/, videos];
                     }
-                    _l.label = 4;
+                    _a.label = 4;
                 case 4:
                     i++;
                     return [3 /*break*/, 2];
-                case 5:
-                    if (!(token !== '')) return [3 /*break*/, 14];
-                    _l.label = 6;
+                case 5: 
+                // while(token !== '') {
+                //   try {
+                //     wait()
+                //     let data = await getData('https://www.youtube.com/youtubei/v1/browse?key='+token)
+                //     let newVideos: any = data.items
+                //     token = data.token
+                //     for(let i = 0; i < newVideos.length; i++) {
+                //       let video: Video = await formatVideo(newVideos[i], false)
+                //       if(published_after) {
+                //         if(video.publishedAt.getTime() > published_after.getTime()) {
+                //           videos.push(video)
+                //         }
+                //       }
+                //       else {
+                //         return videos
+                //       }
+                //     }
+                //   } catch(e) {
+                //     console.log('getChannelVideos failed')
+                //     console.log(e)
+                //     token = ''
+                //   }
+                // }
+                return [2 /*return*/, videos];
                 case 6:
-                    _l.trys.push([6, 12, , 13]);
-                    wait_1.default();
-                    return [4 /*yield*/, getData_1.default('https://youtube.com/browse_ajax?ctoken=' + token)];
-                case 7:
-                    data_1 = _l.sent();
-                    newVideos = data_1.items;
-                    token = data_1.token;
-                    i = 0;
-                    _l.label = 8;
-                case 8:
-                    if (!(i < newVideos.length)) return [3 /*break*/, 11];
-                    return [4 /*yield*/, formatVideo_1.default(newVideos[i], false)];
-                case 9:
-                    video = _l.sent();
-                    if (published_after) {
-                        if (video.publishedAt.getTime() > published_after.getTime()) {
-                            videos.push(video);
-                        }
-                    }
-                    else {
-                        return [2 /*return*/, videos];
-                    }
-                    _l.label = 10;
-                case 10:
-                    i++;
-                    return [3 /*break*/, 8];
-                case 11: return [3 /*break*/, 13];
-                case 12:
-                    e_1 = _l.sent();
-                    console.log('getChannelVideos failed');
-                    // console.log(e)
-                    token = '';
-                    return [3 /*break*/, 13];
-                case 13: return [3 /*break*/, 5];
-                case 14: return [2 /*return*/, videos];
-                case 15:
-                    e_2 = _l.sent();
+                    e_1 = _a.sent();
                     console.log('cannot get channel videos for id: ' + id + ', try again');
-                    return [3 /*break*/, 16];
-                case 16: return [2 /*return*/];
+                    console.log(e_1);
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
         });
     });

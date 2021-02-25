@@ -75,8 +75,6 @@ function getVideosFromDesc(yt_id) {
                     return [4 /*yield*/, getVideoDate_1.default(track.id)];
                 case 5:
                     _a.publishedAt = _b.sent();
-                    track.title = title;
-                    track.artist = artist;
                     videos.push(track);
                     return [3 /*break*/, 8];
                 case 6: return [3 /*break*/, 7];

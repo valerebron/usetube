@@ -37,76 +37,60 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var getData_1 = require("./helpers/getData");
-var wait_1 = require("./helpers/wait");
 var formatVideo_1 = require("./helpers/formatVideo");
 function getPlaylistVideos(id, speedDate) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     return __awaiter(this, void 0, void 0, function () {
-        var data, items, token, videos, i, _m, _o, nextData, nextVideos, i, _p, _q, e_1, e_2;
-        return __generator(this, function (_r) {
-            switch (_r.label) {
+        var data, items, token, videos, i, _l, _m, e_1;
+        return __generator(this, function (_o) {
+            switch (_o.label) {
                 case 0:
-                    _r.trys.push([0, 15, , 16]);
+                    _o.trys.push([0, 6, , 7]);
                     return [4 /*yield*/, getData_1.default('https://m.youtube.com/playlist?list=' + id)];
                 case 1:
-                    data = _r.sent();
+                    data = _o.sent();
                     items = ((_j = (_h = (_g = (_f = (_e = (_d = (_c = (_b = (_a = data.contents) === null || _a === void 0 ? void 0 : _a.singleColumnBrowseResultsRenderer) === null || _b === void 0 ? void 0 : _b.tabs[0]) === null || _c === void 0 ? void 0 : _c.tabRenderer) === null || _d === void 0 ? void 0 : _d.content) === null || _e === void 0 ? void 0 : _e.sectionListRenderer) === null || _f === void 0 ? void 0 : _f.contents[0]) === null || _g === void 0 ? void 0 : _g.itemSectionRenderer) === null || _h === void 0 ? void 0 : _h.contents[0]) === null || _j === void 0 ? void 0 : _j.playlistVideoListRenderer) || '';
                     token = ((_k = items.continuations[0]) === null || _k === void 0 ? void 0 : _k.nextContinuationData.continuation) || '';
                     videos = [];
                     i = 0;
-                    _r.label = 2;
+                    _o.label = 2;
                 case 2:
                     if (!(i < items.contents.length)) return [3 /*break*/, 5];
-                    _o = (_m = videos).push;
+                    _m = (_l = videos).push;
                     return [4 /*yield*/, formatVideo_1.default(items.contents[i], speedDate)];
                 case 3:
-                    _o.apply(_m, [_r.sent()]);
-                    _r.label = 4;
+                    _m.apply(_l, [_o.sent()]);
+                    _o.label = 4;
                 case 4:
                     i++;
                     return [3 /*break*/, 2];
-                case 5:
-                    if (!(token !== '')) return [3 /*break*/, 14];
-                    _r.label = 6;
+                case 5: 
+                // while(token !== '') {
+                //   try {
+                //     wait()
+                //     let nextData: any = await getData('https://m.youtube.com/playlist?ctoken='+token)
+                //     let nextVideos: any = nextData.continuationContents.playlistVideoListContinuation.contents
+                //     if(nextData.continuations) {
+                //       token = nextData.continuations[0]?.nextContinuationData.continuation
+                //     }
+                //     else {
+                //       token = ''
+                //     }
+                //     for(let i = 0; i < nextVideos.length; i++) {
+                //       videos.push(await formatVideo(nextVideos[i], speedDate))
+                //     }
+                //   } catch(e) {
+                //     console.log('getPlaylistVideos failed')
+                //     // console.log(e)
+                //     token = ''
+                //   }
+                // }
+                return [2 /*return*/, videos];
                 case 6:
-                    _r.trys.push([6, 12, , 13]);
-                    wait_1.default();
-                    return [4 /*yield*/, getData_1.default('https://m.youtube.com/playlist?ctoken=' + token)];
-                case 7:
-                    nextData = _r.sent();
-                    nextVideos = nextData.continuationContents.playlistVideoListContinuation.contents;
-                    if (nextData.continuations) {
-                        token = (_l = nextData.continuations[0]) === null || _l === void 0 ? void 0 : _l.nextContinuationData.continuation;
-                    }
-                    else {
-                        token = '';
-                    }
-                    i = 0;
-                    _r.label = 8;
-                case 8:
-                    if (!(i < nextVideos.length)) return [3 /*break*/, 11];
-                    _q = (_p = videos).push;
-                    return [4 /*yield*/, formatVideo_1.default(nextVideos[i], speedDate)];
-                case 9:
-                    _q.apply(_p, [_r.sent()]);
-                    _r.label = 10;
-                case 10:
-                    i++;
-                    return [3 /*break*/, 8];
-                case 11: return [3 /*break*/, 13];
-                case 12:
-                    e_1 = _r.sent();
-                    console.log('getPlaylistVideos failed');
-                    // console.log(e)
-                    token = '';
-                    return [3 /*break*/, 13];
-                case 13: return [3 /*break*/, 5];
-                case 14: return [2 /*return*/, videos];
-                case 15:
-                    e_2 = _r.sent();
+                    e_1 = _o.sent();
                     console.log('cannot get playlist ' + id + ', try again');
-                    return [3 /*break*/, 16];
-                case 16: return [2 /*return*/];
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
         });
     });

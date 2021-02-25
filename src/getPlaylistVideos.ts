@@ -12,26 +12,26 @@ export default async function getPlaylistVideos(id: string, speedDate?: boolean)
     for(let i = 0; i < items.contents.length; i++) {
       videos.push(await formatVideo(items.contents[i], speedDate))
     }
-    while(token !== '') {
-      try {
-        wait()
-        let nextData: any = await getData('https://m.youtube.com/playlist?ctoken='+token)
-        let nextVideos: any = nextData.continuationContents.playlistVideoListContinuation.contents
-        if(nextData.continuations) {
-          token = nextData.continuations[0]?.nextContinuationData.continuation
-        }
-        else {
-          token = ''
-        }
-        for(let i = 0; i < nextVideos.length; i++) {
-          videos.push(await formatVideo(nextVideos[i], speedDate))
-        }
-      } catch(e) {
-        console.log('getPlaylistVideos failed')
-        // console.log(e)
-        token = ''
-      }
-    }
+    // while(token !== '') {
+    //   try {
+    //     wait()
+    //     let nextData: any = await getData('https://m.youtube.com/playlist?ctoken='+token)
+    //     let nextVideos: any = nextData.continuationContents.playlistVideoListContinuation.contents
+    //     if(nextData.continuations) {
+    //       token = nextData.continuations[0]?.nextContinuationData.continuation
+    //     }
+    //     else {
+    //       token = ''
+    //     }
+    //     for(let i = 0; i < nextVideos.length; i++) {
+    //       videos.push(await formatVideo(nextVideos[i], speedDate))
+    //     }
+    //   } catch(e) {
+    //     console.log('getPlaylistVideos failed')
+    //     // console.log(e)
+    //     token = ''
+    //   }
+    // }
     return videos
   } catch(e) {
     console.log('cannot get playlist '+id+', try again')
