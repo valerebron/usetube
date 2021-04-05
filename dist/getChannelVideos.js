@@ -41,66 +41,82 @@ var formatVideo_1 = require("./helpers/formatVideo");
 var findVal_1 = require("./helpers/findVal");
 function getChannelVideos(id, published_after) {
     return __awaiter(this, void 0, void 0, function () {
-        var data, channel, token, videos, i, video, e_1;
+        var data, apikey, channel, token, videos, i, video, data_1, newVideos, i, video, e_1, e_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 6, , 7]);
+                    _a.trys.push([0, 15, , 16]);
                     return [4 /*yield*/, getData_1.default('https://m.youtube.com/channel/' + id + '/videos')];
                 case 1:
                     data = _a.sent();
-                    channel = findVal_1.default(data, 'itemSectionRenderer');
+                    apikey = data.apikey;
+                    channel = findVal_1.default(data, 'itemSectionRenderer').contents;
                     token = findVal_1.default(data, 'token');
                     videos = [];
                     i = 0;
                     _a.label = 2;
                 case 2:
-                    if (!(i < channel.contents.length)) return [3 /*break*/, 5];
-                    return [4 /*yield*/, formatVideo_1.default(channel.contents[i], false)];
+                    if (!(i < channel.length)) return [3 /*break*/, 5];
+                    return [4 /*yield*/, formatVideo_1.default(channel[i], false)];
                 case 3:
                     video = _a.sent();
-                    if (((published_after && video.publishedAt.getTime() > published_after.getTime()) || !published_after) && video) {
-                        videos.push(video);
-                    }
-                    else {
-                        console.log('exit');
-                        return [2 /*return*/, videos];
+                    if (video && video.publishedAt) {
+                        if ((published_after && video.publishedAt.getTime() > published_after.getTime()) || !published_after) {
+                            videos.push(video);
+                        }
                     }
                     _a.label = 4;
                 case 4:
                     i++;
                     return [3 /*break*/, 2];
-                case 5: 
-                // while(token !== '') {
-                //   try {
-                //     wait()
-                //     let data = await getData('https://www.youtube.com/youtubei/v1/browse?key='+token)
-                //     let newVideos: any = data.items
-                //     token = data.token
-                //     for(let i = 0; i < newVideos.length; i++) {
-                //       let video: Video = await formatVideo(newVideos[i], false)
-                //       if(published_after) {
-                //         if(video.publishedAt.getTime() > published_after.getTime()) {
-                //           videos.push(video)
-                //         }
-                //       }
-                //       else {
-                //         return videos
-                //       }
-                //     }
-                //   } catch(e) {
-                //     console.log('getChannelVideos failed')
-                //     console.log(e)
-                //     token = ''
-                //   }
-                // }
-                return [2 /*return*/, videos];
+                case 5:
+                    if (!token) return [3 /*break*/, 14];
+                    _a.label = 6;
                 case 6:
+                    _a.trys.push([6, 12, , 13]);
+                    return [4 /*yield*/, getData_1.default('https://www.youtube.com/youtubei/v1/browse?key=' + apikey + '&token=' + token)];
+                case 7:
+                    data_1 = _a.sent();
+                    newVideos = data_1.items;
+                    token = data_1.token;
+                    i = 0;
+                    _a.label = 8;
+                case 8:
+                    if (!(i < newVideos.length)) return [3 /*break*/, 11];
+                    return [4 /*yield*/, formatVideo_1.default(newVideos[i], false)];
+                case 9:
+                    video = _a.sent();
+                    if (video) {
+                        if (published_after) {
+                            if (video.publishedAt.getTime() > published_after.getTime()) {
+                                videos.push(video);
+                            }
+                            else {
+                                token = '';
+                            }
+                        }
+                        else {
+                            videos.push(video);
+                        }
+                    }
+                    _a.label = 10;
+                case 10:
+                    i++;
+                    return [3 /*break*/, 8];
+                case 11: return [3 /*break*/, 13];
+                case 12:
                     e_1 = _a.sent();
+                    console.log('getChannelVideos failed');
+                    token = '';
+                    return [3 /*break*/, 13];
+                case 13: return [3 /*break*/, 5];
+                case 14: return [2 /*return*/, videos];
+                case 15:
+                    e_2 = _a.sent();
                     console.log('cannot get channel videos for id: ' + id + ', try again');
-                    console.log(e_1);
-                    return [3 /*break*/, 7];
-                case 7: return [2 /*return*/];
+                    console.log(e_2);
+                    return [3 /*break*/, 16];
+                case 16: return [2 /*return*/];
             }
         });
     });

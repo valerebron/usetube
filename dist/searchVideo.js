@@ -38,45 +38,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var getData_1 = require("./helpers/getData");
 var formatVideo_1 = require("./helpers/formatVideo");
-function searchVideo(terms, token) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+var findVal_1 = require("./helpers/findVal");
+function searchVideo(terms, token, apikey) {
     return __awaiter(this, void 0, void 0, function () {
         var items, videos, didyoumean, data, data, i, formated, e_1;
-        return __generator(this, function (_l) {
-            switch (_l.label) {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _l.trys.push([0, 9, , 10]);
+                    _a.trys.push([0, 9, , 10]);
                     items = [];
                     videos = [];
                     didyoumean = '';
                     if (!!token) return [3 /*break*/, 2];
-                    return [4 /*yield*/, getData_1.default('https://m.youtube.com/results?sp=EgIQAQ%253D%253D&videoEmbeddable=true&search_query=' + encodeURI(terms))];
+                    return [4 /*yield*/, getData_1.default('https://m.youtube.com/results?videoEmbeddable=true&search_query=' + encodeURI(terms))];
                 case 1:
-                    data = _l.sent();
-                    items = data.contents.sectionListRenderer.contents[0].itemSectionRenderer.contents;
-                    token = ((_c = (_b = (_a = data.continuations) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.reloadContinuationData) === null || _c === void 0 ? void 0 : _c.continuation) || '';
+                    data = _a.sent();
+                    apikey = data.apikey;
+                    token = findVal_1.default(data, 'token');
+                    items = findVal_1.default(data, 'itemSectionRenderer').contents;
                     return [3 /*break*/, 4];
-                case 2: return [4 /*yield*/, getData_1.default('https://youtube.com/browse_ajax?ctoken=' + token)];
+                case 2: return [4 /*yield*/, getData_1.default('https://www.youtube.com/youtubei/v1/search?key=' + apikey + '&token=' + token)];
                 case 3:
-                    data = _l.sent();
-                    items = ((_e = (_d = data[1].response.continuationContents) === null || _d === void 0 ? void 0 : _d.gridContinuation) === null || _e === void 0 ? void 0 : _e.items) || '';
-                    token = ((_k = (_j = (_h = (_g = (_f = data[1].response.continuationContents) === null || _f === void 0 ? void 0 : _f.gridContinuation) === null || _g === void 0 ? void 0 : _g.continuations) === null || _h === void 0 ? void 0 : _h[0]) === null || _j === void 0 ? void 0 : _j.nextContinuationData) === null || _k === void 0 ? void 0 : _k.continuation) || '';
-                    _l.label = 4;
+                    data = _a.sent();
+                    items = findVal_1.default(data.items, 'contents');
+                    token = data.token;
+                    _a.label = 4;
                 case 4:
                     i = 0;
-                    _l.label = 5;
+                    _a.label = 5;
                 case 5:
                     if (!(i < items.length)) return [3 /*break*/, 8];
                     return [4 /*yield*/, formatVideo_1.default(items[i], true)];
                 case 6:
-                    formated = _l.sent();
-                    if (formated.id === 'didyoumean') {
-                        didyoumean = formated.title;
+                    formated = _a.sent();
+                    if (formated) {
+                        if (formated.id === 'didyoumean') {
+                            didyoumean = formated.title;
+                        }
+                        else {
+                            videos.push(formated);
+                        }
                     }
-                    else {
-                        videos.push(formated);
-                    }
-                    _l.label = 7;
+                    _a.label = 7;
                 case 7:
                     i++;
                     return [3 /*break*/, 5];
@@ -84,10 +87,12 @@ function searchVideo(terms, token) {
                         videos: videos,
                         didyoumean: didyoumean,
                         token: token,
+                        apikey: apikey,
                     }];
                 case 9:
-                    e_1 = _l.sent();
+                    e_1 = _a.sent();
                     console.log('search videos error, terms: ' + terms);
+                    console.log(e_1);
                     return [3 /*break*/, 10];
                 case 10: return [2 /*return*/];
             }

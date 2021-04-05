@@ -36,84 +36,62 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var fetch_1 = require("./fetch");
+var axios_1 = require("axios");
 var decodeHex_1 = require("./decodeHex");
+var findVal_1 = require("./findVal");
 function getData(urlstring) {
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var dataRegex, dateRegex, url, isAjax, isDate, body, headers, e_1, json, ajaxData, raw, raw;
-        return __generator(this, function (_g) {
-            switch (_g.label) {
+        var dataRegex, dateRegex, apiRegex, url, isAjax, isDate, body, headers, data, raw, raw, apikey, fs, data;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     dataRegex = /var\ ytInitialData\ \=\ \'(.*)\'\;<\/script>/;
                     dateRegex = /publishDate":"(.*)","ownerChannelName/;
+                    apiRegex = /"innertubeApiKey":"(.*?)"/;
                     url = new URL(urlstring);
                     isAjax = false;
                     isDate = false;
-                    if (url.searchParams.get('key')) {
+                    if (url.searchParams.get('token')) {
                         isAjax = true;
                     }
                     if (url.searchParams.get('type') === 'date') {
                         isDate = true;
                     }
-                    if (isAjax) {
-                        headers = {
-                            'Access-Control-Allow-Origin': '*',
-                            'User-Agent': 'hellobiczes',
-                            'x-youtube-client-name': 1,
-                            'x-youtube-client-version': '2.20200731.02.01'
-                        };
-                    }
-                    else {
-                        headers = {
+                    if (!isAjax) return [3 /*break*/, 2];
+                    data = { context: { client: { clientName: 'WEB', clientVersion: '2.20210401.08.00' } }, continuation: url.searchParams.get('token') };
+                    return [4 /*yield*/, axios_1.default({ method: 'post', url: urlstring, data: data })];
+                case 1:
+                    body = (_c.sent()).data;
+                    // let fs = require('fs'); fs.writeFile('raw.json', JSON.stringify(body), (e)=>{console.log(e)})
+                    return [2 /*return*/, { items: findVal_1.default(body, 'continuationItems'), token: findVal_1.default(body, 'token') }];
+                case 2:
+                    headers = {
+                        headers: {
                             'Access-Control-Allow-Origin': '*',
                             'x-youtube-client-name': 1,
                             'x-youtube-client-version': '2.20200911.04.00',
                             'User-Agent': 'Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Mobile Safari/537.36',
-                        };
-                    }
-                    if (!(typeof window === 'undefined')) return [3 /*break*/, 2];
-                    return [4 /*yield*/, fetch_1.default(urlstring, {
-                            mode: 'no-cors',
-                            headers: headers
-                        })];
-                case 1:
-                    body = _g.sent();
-                    return [3 /*break*/, 6];
-                case 2:
-                    _g.trys.push([2, 5, , 6]);
-                    return [4 /*yield*/, fetch(urlstring, {
-                            mode: 'no-cors',
-                            headers: headers,
-                        })];
+                        }
+                    };
+                    return [4 /*yield*/, axios_1.default.get(urlstring, headers)];
                 case 3:
-                    body = _g.sent();
-                    return [4 /*yield*/, body.text()];
-                case 4:
-                    body = _g.sent();
-                    return [3 /*break*/, 6];
-                case 5:
-                    e_1 = _g.sent();
-                    console.log(e_1);
-                    return [3 /*break*/, 6];
-                case 6:
-                    if (isAjax) {
-                        json = JSON.parse(body);
-                        ajaxData = (_a = json[1].response.continuationContents) === null || _a === void 0 ? void 0 : _a.gridContinuation;
-                        return [2 /*return*/, { items: ajaxData.items, token: ((_d = (_c = (_b = ajaxData.continuations) === null || _b === void 0 ? void 0 : _b[0]) === null || _c === void 0 ? void 0 : _c.nextContinuationData) === null || _d === void 0 ? void 0 : _d.continuation) || '' }];
+                    body = (_c.sent()).data;
+                    if (isDate) {
+                        raw = ((_a = dateRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
+                        return [2 /*return*/, raw];
                     }
                     else {
-                        if (isDate) {
-                            raw = ((_e = dateRegex.exec(body)) === null || _e === void 0 ? void 0 : _e[1]) || '{}';
-                            return [2 /*return*/, raw];
-                        }
-                        else {
-                            raw = ((_f = dataRegex.exec(body)) === null || _f === void 0 ? void 0 : _f[1]) || '{}';
-                            // let fs = require('fs'); fs.writeFile('raw.json', decodeHex(raw), (e)=>{console.log(e)})
-                            return [2 /*return*/, JSON.parse(decodeHex_1.default(raw))];
-                        }
+                        raw = ((_b = dataRegex.exec(body)) === null || _b === void 0 ? void 0 : _b[1]) || '{}';
+                        apikey = apiRegex.exec(body)[1] || '';
+                        fs = require('fs');
+                        fs.writeFile('raw.json', decodeHex_1.default(raw), function (e) { console.log(e); });
+                        data = JSON.parse(decodeHex_1.default(raw));
+                        data.apikey = apikey;
+                        return [2 /*return*/, data];
                     }
-                    return [2 /*return*/];
+                    _c.label = 4;
+                case 4: return [2 /*return*/];
             }
         });
     });

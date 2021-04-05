@@ -38,42 +38,44 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var getData_1 = require("./helpers/getData");
 var formatYoutubeCount_1 = require("./helpers/formatYoutubeCount");
-function searchChannel(terms, token) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
+var findVal_1 = require("./helpers/findVal");
+function searchChannel(terms, token, apikey) {
+    var _a, _b, _c, _d, _e;
     return __awaiter(this, void 0, void 0, function () {
         var items, channels, didyoumean, data, data, i, item, avatarSmall, avatarBig, nbSubscriber, nbVideo, item, e_1;
-        return __generator(this, function (_p) {
-            switch (_p.label) {
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0:
-                    _p.trys.push([0, 5, , 6]);
+                    _f.trys.push([0, 5, , 6]);
                     items = [];
                     channels = [];
                     didyoumean = '';
                     if (!!token) return [3 /*break*/, 2];
-                    return [4 /*yield*/, getData_1.default('https://m.youtube.com/results?sp=CAASAhAC&search_query=' + encodeURI(terms))];
+                    return [4 /*yield*/, getData_1.default('https://m.youtube.com/results?sp=EgIQAg%253D%253D&search_query=' + encodeURI(terms))];
                 case 1:
-                    data = _p.sent();
-                    items = (_c = (_b = (_a = data.contents.sectionListRenderer) === null || _a === void 0 ? void 0 : _a.contents[0]) === null || _b === void 0 ? void 0 : _b.itemSectionRenderer) === null || _c === void 0 ? void 0 : _c.contents;
-                    token = ((_f = (_e = (_d = data.continuations) === null || _d === void 0 ? void 0 : _d[0]) === null || _e === void 0 ? void 0 : _e.reloadContinuationData) === null || _f === void 0 ? void 0 : _f.continuation) || '';
+                    data = _f.sent();
+                    apikey = data.apikey;
+                    token = findVal_1.default(data, 'token');
+                    items = findVal_1.default(data, 'itemSectionRenderer').contents;
                     return [3 /*break*/, 4];
-                case 2: return [4 /*yield*/, getData_1.default('https://youtube.com/browse_ajax?ctoken=' + token)];
+                case 2: return [4 /*yield*/, getData_1.default('https://www.youtube.com/youtubei/v1/search?key=' + apikey + '&token=' + token)];
                 case 3:
-                    data = _p.sent();
-                    items = data.items || '';
-                    token = ((_j = (_h = (_g = data.continuations) === null || _g === void 0 ? void 0 : _g[0]) === null || _h === void 0 ? void 0 : _h.nextContinuationData) === null || _j === void 0 ? void 0 : _j.continuation) || '';
-                    _p.label = 4;
+                    data = _f.sent();
+                    items = findVal_1.default(data.items, 'contents');
+                    token = data.token;
+                    _f.label = 4;
                 case 4:
                     for (i = 0; i < items.length; i++) {
-                        if (items[i].compactChannelRenderer) {
-                            item = items[i].compactChannelRenderer;
-                            avatarSmall = ((_k = item.thumbnail) === null || _k === void 0 ? void 0 : _k.thumbnails[0].url) || '';
-                            avatarBig = ((_l = item.thumbnail) === null || _l === void 0 ? void 0 : _l.thumbnails[1].url) || '';
+                        if (items[i].compactChannelRenderer || items[i].channelRenderer) {
+                            item = (items[i].compactChannelRenderer) ? items[i].compactChannelRenderer : items[i].channelRenderer;
+                            avatarSmall = ((_a = item.thumbnail) === null || _a === void 0 ? void 0 : _a.thumbnails[0].url) || '';
+                            avatarBig = ((_b = item.thumbnail) === null || _b === void 0 ? void 0 : _b.thumbnails[1].url) || '';
                             avatarSmall = (avatarSmall.startsWith('//') ? 'https:' + avatarSmall : avatarSmall);
                             avatarBig = (avatarBig.startsWith('//') ? 'https:' + avatarBig : avatarBig);
-                            nbSubscriber = formatYoutubeCount_1.default((_m = item.subscriberCountText) === null || _m === void 0 ? void 0 : _m.runs[0].text);
-                            nbVideo = formatYoutubeCount_1.default((_o = item.videoCountText) === null || _o === void 0 ? void 0 : _o.runs[0].text);
+                            nbSubscriber = formatYoutubeCount_1.default(((_c = item.subscriberCountText) === null || _c === void 0 ? void 0 : _c.accessibility.accessibilityData.label) || '0');
+                            nbVideo = formatYoutubeCount_1.default(((_e = (_d = item.videoCountText) === null || _d === void 0 ? void 0 : _d.runs[0]) === null || _e === void 0 ? void 0 : _e.text) || '0');
                             channels.push({
-                                name: item.title.runs[0].text,
+                                name: item.title.simpleText,
                                 channel_id: item.channelId,
                                 nb_videos: nbVideo,
                                 nb_subscriber: nbSubscriber,
@@ -97,9 +99,10 @@ function searchChannel(terms, token) {
                             channels: channels,
                             didyoumean: didyoumean,
                             token: token,
+                            apikey: apikey,
                         }];
                 case 5:
-                    e_1 = _p.sent();
+                    e_1 = _f.sent();
                     console.log('search channel error, terms: ' + terms);
                     console.log(e_1);
                     return [3 /*break*/, 6];

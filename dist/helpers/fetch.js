@@ -18,6 +18,7 @@ function nodeFetch(url, options) {
         }
     }
     catch (e) {
+        console.log('nodeFetch error');
         console.log(e);
     }
 }

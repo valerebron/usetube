@@ -38,16 +38,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var getVideoDate_1 = require("../getVideoDate");
 var getDateFromText_1 = require("./getDateFromText");
+var findVal_1 = require("./findVal");
 function formatVideo(video, speedDate) {
-    var _a, _b, _c, _d, _e;
+    var _a;
     if (speedDate === void 0) { speedDate = false; }
     return __awaiter(this, void 0, void 0, function () {
-        var id, durationDatas, splited, minutes, seconds, publishedAt, _f, e_1;
-        return __generator(this, function (_g) {
-            switch (_g.label) {
+        var id, durationDatas, splited, minutes, seconds, publishedAt, _b, e_1;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
-                    _g.trys.push([0, 6, , 7]);
-                    if (!(video.compactVideoRenderer || video.gridVideoRenderer || video.playlistVideoRenderer)) return [3 /*break*/, 4];
+                    _c.trys.push([0, 6, , 7]);
+                    if (!(video.compactVideoRenderer || video.gridVideoRenderer || video.videoRenderer || video.playlistVideoRenderer)) return [3 /*break*/, 4];
                     if (video.compactVideoRenderer) {
                         video = video.compactVideoRenderer;
                     }
@@ -56,6 +57,9 @@ function formatVideo(video, speedDate) {
                     }
                     else if (video.playlistVideoRenderer) {
                         video = video.playlistVideoRenderer;
+                    }
+                    else if (video.videoRenderer) {
+                        video = video.videoRenderer;
                     }
                     id = video.videoId;
                     durationDatas = 0;
@@ -81,10 +85,13 @@ function formatVideo(video, speedDate) {
                     }
                     // duration formating
                     if (video.lengthText) {
-                        durationDatas = video.lengthText.runs[0].text.split(':');
+                        durationDatas = findVal_1.default(video.lengthText, 'label').match(/\d+/g);
                     }
-                    else if ((_b = (_a = video.thumbnailOverlays[0]) === null || _a === void 0 ? void 0 : _a.thumbnailOverlayTimeStatusRenderer) === null || _b === void 0 ? void 0 : _b.text.simpleText) {
-                        durationDatas = ((_d = (_c = video.thumbnailOverlays[0]) === null || _c === void 0 ? void 0 : _c.thumbnailOverlayTimeStatusRenderer) === null || _d === void 0 ? void 0 : _d.text.simpleText.split(':')) || '';
+                    else if (video.thumbnailOverlays) {
+                        durationDatas = findVal_1.default(video.thumbnailOverlays, 'simpleText');
+                        if (durationDatas) {
+                            durationDatas = durationDatas.split(':');
+                        }
                     }
                     else {
                         durationDatas = [0, 0];
@@ -92,14 +99,14 @@ function formatVideo(video, speedDate) {
                     minutes = parseInt(durationDatas[0]) * 60;
                     seconds = parseInt(durationDatas[1]);
                     if (!speedDate) return [3 /*break*/, 1];
-                    _f = getDateFromText_1.default(((_e = video.publishedTimeText) === null || _e === void 0 ? void 0 : _e.runs[0].text) || '');
+                    _b = getDateFromText_1.default(((_a = video.publishedTimeText) === null || _a === void 0 ? void 0 : _a.simpleText) || '');
                     return [3 /*break*/, 3];
                 case 1: return [4 /*yield*/, getVideoDate_1.default(id)];
                 case 2:
-                    _f = _g.sent();
-                    _g.label = 3;
+                    _b = _c.sent();
+                    _c.label = 3;
                 case 3:
-                    publishedAt = _f;
+                    publishedAt = _b;
                     return [2 /*return*/, {
                             id: id,
                             original_title: video.original_title.trim(),
@@ -120,11 +127,12 @@ function formatVideo(video, speedDate) {
                                 publishedAt: new Date(Date.now()),
                             }];
                     }
-                    _g.label = 5;
+                    _c.label = 5;
                 case 5: return [3 /*break*/, 7];
                 case 6:
-                    e_1 = _g.sent();
+                    e_1 = _c.sent();
                     console.log('format video failed');
+                    console.log(e_1);
                     return [3 /*break*/, 7];
                 case 7: return [2 /*return*/];
             }

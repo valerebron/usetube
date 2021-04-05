@@ -1,40 +1,42 @@
 import Video from './types/video'
 import getData from './helpers/getData'
-import wait from './helpers/wait'
+import findVal from './helpers/findVal'
 import formatVideo from './helpers/formatVideo'
 
 export default async function getPlaylistVideos(id: string, speedDate?: boolean) {
   try {
     const data: any = await getData('https://m.youtube.com/playlist?list='+id)
-    const items: any = data.contents?.singleColumnBrowseResultsRenderer?.tabs[0]?.tabRenderer?.content?.sectionListRenderer?.contents[0]?.itemSectionRenderer?.contents[0]?.playlistVideoListRenderer || ''
-    let token: string = items.continuations[0]?.nextContinuationData.continuation || ''
+    const apikey = data.apikey
+    const items: any = findVal(data, 'playlistVideoListRenderer').contents
+    let token: string = findVal(data, 'token')
     let videos: Video[] = []
-    for(let i = 0; i < items.contents.length; i++) {
-      videos.push(await formatVideo(items.contents[i], speedDate))
+    for(let i = 0; i < items.length; i++) {
+      if(items[i]) {
+        videos.push(await formatVideo(items[i], speedDate))
+      }
     }
-    // while(token !== '') {
-    //   try {
-    //     wait()
-    //     let nextData: any = await getData('https://m.youtube.com/playlist?ctoken='+token)
-    //     let nextVideos: any = nextData.continuationContents.playlistVideoListContinuation.contents
-    //     if(nextData.continuations) {
-    //       token = nextData.continuations[0]?.nextContinuationData.continuation
-    //     }
-    //     else {
-    //       token = ''
-    //     }
-    //     for(let i = 0; i < nextVideos.length; i++) {
-    //       videos.push(await formatVideo(nextVideos[i], speedDate))
-    //     }
-    //   } catch(e) {
-    //     console.log('getPlaylistVideos failed')
-    //     // console.log(e)
-    //     token = ''
-    //   }
-    // }
+    while(token) {
+      try {
+        let nextData: any = await getData('https://www.youtube.com/youtubei/v1/browse?key='+apikey+'&token='+token)
+        let nextVideos: any = nextData.items
+        token = nextData.token
+        for(let i = 0; i < nextVideos.length; i++) {
+          if(nextVideos[i]) {
+            const formated = await formatVideo(nextVideos[i], speedDate)
+            if(formated) {
+              videos.push(formated)
+            }
+          }
+        }
+      } catch(e) {
+        console.log('getPlaylistVideos failed')
+        console.log(e)
+        token = ''
+      }
+    }
     return videos
   } catch(e) {
     console.log('cannot get playlist '+id+', try again')
-    // console.log(e)
+    console.log(e)
   }
 }

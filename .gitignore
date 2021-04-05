@@ -9,6 +9,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+raw.json
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
@@ -76,9 +77,6 @@ typings/
 # next.js build output
 .next
 
-# nuxt.js build output
-.nuxt
-
 # vuepress build output
 .vuepress/dist
 
@@ -94,5 +92,5 @@ typings/
 # database excluding
 *.db
 
-# fuck package lock
+# package lock
 package-lock.json

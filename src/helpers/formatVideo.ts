@@ -1,9 +1,10 @@
 import getVideoDate from '../getVideoDate'
 import getDateFromText from './getDateFromText'
+import findVal from './findVal'
 
 export default async function formatVideo(video: any, speedDate: boolean = false) {
   try{
-    if(video.compactVideoRenderer || video.gridVideoRenderer || video.playlistVideoRenderer ) {
+    if(video.compactVideoRenderer || video.gridVideoRenderer || video.videoRenderer || video.playlistVideoRenderer ) {
       if(video.compactVideoRenderer) {
         video = video.compactVideoRenderer
       }
@@ -12,6 +13,9 @@ export default async function formatVideo(video: any, speedDate: boolean = false
       }
       else if(video.playlistVideoRenderer ) {
         video = video.playlistVideoRenderer
+      }
+      else if(video.videoRenderer ) {
+        video = video.videoRenderer
       }
       let id: string = video.videoId
       let durationDatas: any = 0
@@ -38,10 +42,13 @@ export default async function formatVideo(video: any, speedDate: boolean = false
       }
       // duration formating
       if(video.lengthText) {
-        durationDatas = video.lengthText.runs[0].text.split(':')
+        durationDatas = findVal(video.lengthText, 'label').match(/\d+/g)
       }
-      else if(video.thumbnailOverlays[0]?.thumbnailOverlayTimeStatusRenderer?.text.simpleText) {
-        durationDatas = video.thumbnailOverlays[0]?.thumbnailOverlayTimeStatusRenderer?.text.simpleText.split(':')  || ''
+      else if(video.thumbnailOverlays) {
+        durationDatas = findVal(video.thumbnailOverlays, 'simpleText')
+        if(durationDatas) {
+          durationDatas = durationDatas.split(':')
+        }
       }
       else {
         durationDatas = [0,0]
@@ -49,7 +56,7 @@ export default async function formatVideo(video: any, speedDate: boolean = false
       let minutes: number = parseInt(durationDatas[0]) * 60
       let seconds: number = parseInt(durationDatas[1])
       // Date formating
-      let publishedAt: Date = speedDate ? getDateFromText(video.publishedTimeText?.runs[0].text || '') : await getVideoDate(id)
+      let publishedAt: Date = speedDate ? getDateFromText(video.publishedTimeText?.simpleText || '') : await getVideoDate(id)
       return {
         id:  id,
         original_title: video.original_title.trim(),
@@ -72,6 +79,6 @@ export default async function formatVideo(video: any, speedDate: boolean = false
     }
   } catch(e) {
     console.log('format video failed')
-    // console.log(e)
+    console.log(e)
   }
 }

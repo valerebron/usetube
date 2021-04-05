@@ -1,35 +1,35 @@
 import Channel from './types/channel'
 import getData from './helpers/getData'
 import formatYoutubeCount from './helpers/formatYoutubeCount'
+import findVal from './helpers/findVal'
 
-export default async function searchChannel(terms: string, token?: string) {
+export default async function searchChannel(terms: string, token?: string, apikey?: string) {
   try {
     let items: any = []
     let channels: Channel[] = []
     let didyoumean: string = ''
     if(!token) {
-      const data = await getData('https://m.youtube.com/results?sp=CAASAhAC&search_query='+encodeURI(terms))
-      items = data.contents.sectionListRenderer?.contents[0]?.itemSectionRenderer?.contents  
-      token = data.continuations?.[0]?.reloadContinuationData?.continuation || ''
+      const data = await getData('https://m.youtube.com/results?sp=EgIQAg%253D%253D&search_query='+encodeURI(terms))
+      apikey = data.apikey
+      token = findVal(data, 'token')
+      items = findVal(data, 'itemSectionRenderer').contents
     }
     else {
-      let data = await getData('https://youtube.com/browse_ajax?ctoken='+token)
-      items = data.items || ''
-      token = data.continuations?.[0]?.nextContinuationData?.continuation || ''
+      let data = await getData('https://www.youtube.com/youtubei/v1/search?key='+apikey+'&token='+token)
+      items = findVal(data.items, 'contents')
+      token = data.token
     }
     for(let i = 0; i < items.length; i++) {
-      if(items[i].compactChannelRenderer) {
-        const item = items[i].compactChannelRenderer
+      if(items[i].compactChannelRenderer || items[i].channelRenderer) {
+        const item = (items[i].compactChannelRenderer) ? items[i].compactChannelRenderer : items[i].channelRenderer
         let avatarSmall = item.thumbnail?.thumbnails[0].url || ''
         let avatarBig   = item.thumbnail?.thumbnails[1].url || ''
         avatarSmall = (avatarSmall.startsWith('//') ? 'https:'+avatarSmall : avatarSmall)
         avatarBig = (avatarBig.startsWith('//') ? 'https:'+avatarBig : avatarBig)
-        
-        const nbSubscriber: number = formatYoutubeCount(item.subscriberCountText?.runs[0].text)
-        const nbVideo: number = formatYoutubeCount(item.videoCountText?.runs[0].text)
-
+        const nbSubscriber: number = formatYoutubeCount(item.subscriberCountText?.accessibility.accessibilityData.label || '0')
+        const nbVideo: number = formatYoutubeCount(item.videoCountText?.runs[0]?.text || '0')
         channels.push({
-          name:                  item.title.runs[0].text,
+          name:                  item.title.simpleText,
           channel_id:            item.channelId,
           nb_videos:             nbVideo,
           nb_subscriber:         nbSubscriber,
@@ -53,6 +53,7 @@ export default async function searchChannel(terms: string, token?: string) {
       channels: channels,
       didyoumean: didyoumean,
       token: token,
+      apikey: apikey,
     }
   } catch(e) {
     console.log('search channel error, terms: '+terms)
