@@ -40,7 +40,7 @@ export default async function getData(urlstring: string) {
     else {
       const raw = dataRegex.exec(body) ?.[1] || '{}'
       const apikey = apiRegex.exec(body)[1] || ''
-      let fs = require('fs'); fs.writeFile('raw.json', decodeHex(raw), (e)=>{console.log(e)})
+      // let fs = require('fs'); fs.writeFile('raw.json', decodeHex(raw), (e)=>{console.log(e)})
       let data = JSON.parse(decodeHex(raw))
       data.apikey = apikey
       return data
