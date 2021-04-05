@@ -22,6 +22,7 @@ export default async function searchChannel(terms: string, token?: string, apike
     for(let i = 0; i < items.length; i++) {
       if(items[i].compactChannelRenderer || items[i].channelRenderer) {
         const item = (items[i].compactChannelRenderer) ? items[i].compactChannelRenderer : items[i].channelRenderer
+        item.name = (items[i].compactChannelRenderer) ? item.title.runs[0].text : item.title.simpleText
         let avatarSmall = item.thumbnail?.thumbnails[0].url || ''
         let avatarBig   = item.thumbnail?.thumbnails[1].url || ''
         avatarSmall = (avatarSmall.startsWith('//') ? 'https:'+avatarSmall : avatarSmall)
@@ -29,7 +30,7 @@ export default async function searchChannel(terms: string, token?: string, apike
         const nbSubscriber: number = formatYoutubeCount(item.subscriberCountText?.accessibility.accessibilityData.label || '0')
         const nbVideo: number = formatYoutubeCount(item.videoCountText?.runs[0]?.text || '0')
         channels.push({
-          name:                  item.title.simpleText,
+          name:                  item.name,
           channel_id:            item.channelId,
           nb_videos:             nbVideo,
           nb_subscriber:         nbSubscriber,

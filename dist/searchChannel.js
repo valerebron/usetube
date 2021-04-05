@@ -68,6 +68,7 @@ function searchChannel(terms, token, apikey) {
                     for (i = 0; i < items.length; i++) {
                         if (items[i].compactChannelRenderer || items[i].channelRenderer) {
                             item = (items[i].compactChannelRenderer) ? items[i].compactChannelRenderer : items[i].channelRenderer;
+                            item.name = (items[i].compactChannelRenderer) ? item.title.runs[0].text : item.title.simpleText;
                             avatarSmall = ((_a = item.thumbnail) === null || _a === void 0 ? void 0 : _a.thumbnails[0].url) || '';
                             avatarBig = ((_b = item.thumbnail) === null || _b === void 0 ? void 0 : _b.thumbnails[1].url) || '';
                             avatarSmall = (avatarSmall.startsWith('//') ? 'https:' + avatarSmall : avatarSmall);
@@ -75,7 +76,7 @@ function searchChannel(terms, token, apikey) {
                             nbSubscriber = formatYoutubeCount_1.default(((_c = item.subscriberCountText) === null || _c === void 0 ? void 0 : _c.accessibility.accessibilityData.label) || '0');
                             nbVideo = formatYoutubeCount_1.default(((_e = (_d = item.videoCountText) === null || _d === void 0 ? void 0 : _d.runs[0]) === null || _e === void 0 ? void 0 : _e.text) || '0');
                             channels.push({
-                                name: item.title.simpleText,
+                                name: item.name,
                                 channel_id: item.channelId,
                                 nb_videos: nbVideo,
                                 nb_subscriber: nbSubscriber,
