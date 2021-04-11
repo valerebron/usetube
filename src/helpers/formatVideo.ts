@@ -56,7 +56,7 @@ export default async function formatVideo(video: any, speedDate: boolean = false
       let minutes: number = parseInt(durationDatas[0]) * 60
       let seconds: number = parseInt(durationDatas[1])
       // Date formating
-      let publishedAt: Date = speedDate ? getDateFromText(video.publishedTimeText?.simpleText || '') : await getVideoDate(id)
+      let publishedAt: Date = speedDate ? getDateFromText(video.publishedTimeText.runs[0].text || '') : await getVideoDate(id)
       return {
         id:  id,
         original_title: video.original_title.trim(),
