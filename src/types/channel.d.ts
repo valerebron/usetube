@@ -6,4 +6,5 @@ export default interface Channel {
   official:              boolean,
   channel_avatar_small:  string,
   channel_avatar_medium: string,
+  channel_avatar_large:  string,
 }

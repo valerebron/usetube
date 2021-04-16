@@ -40,49 +40,48 @@ var getData_1 = require("./helpers/getData");
 var formatYoutubeCount_1 = require("./helpers/formatYoutubeCount");
 var findVal_1 = require("./helpers/findVal");
 function searchChannel(terms, token, apikey) {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d;
     return __awaiter(this, void 0, void 0, function () {
-        var items, channels, didyoumean, data, data, i, item, avatarSmall, avatarBig, nbSubscriber, nbVideo, item, e_1;
-        return __generator(this, function (_f) {
-            switch (_f.label) {
+        var items, channels, didyoumean, data, data, i, item, avatar, avatarId, nbSubscriber, nbVideo, item, e_1;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
-                    _f.trys.push([0, 5, , 6]);
+                    _e.trys.push([0, 5, , 6]);
                     items = [];
                     channels = [];
                     didyoumean = '';
                     if (!!token) return [3 /*break*/, 2];
                     return [4 /*yield*/, getData_1.default('https://m.youtube.com/results?sp=EgIQAg%253D%253D&search_query=' + encodeURI(terms))];
                 case 1:
-                    data = _f.sent();
+                    data = _e.sent();
                     apikey = data.apikey;
                     token = findVal_1.default(data, 'token');
                     items = findVal_1.default(data, 'itemSectionRenderer').contents;
                     return [3 /*break*/, 4];
                 case 2: return [4 /*yield*/, getData_1.default('https://www.youtube.com/youtubei/v1/search?key=' + apikey + '&token=' + token)];
                 case 3:
-                    data = _f.sent();
+                    data = _e.sent();
                     items = findVal_1.default(data.items, 'contents');
                     token = data.token;
-                    _f.label = 4;
+                    _e.label = 4;
                 case 4:
                     for (i = 0; i < items.length; i++) {
                         if (items[i].compactChannelRenderer || items[i].channelRenderer) {
                             item = (items[i].compactChannelRenderer) ? items[i].compactChannelRenderer : items[i].channelRenderer;
                             item.name = (items[i].compactChannelRenderer) ? item.title.runs[0].text : item.title.simpleText;
-                            avatarSmall = ((_a = item.thumbnail) === null || _a === void 0 ? void 0 : _a.thumbnails[0].url) || '';
-                            avatarBig = ((_b = item.thumbnail) === null || _b === void 0 ? void 0 : _b.thumbnails[1].url) || '';
-                            avatarSmall = (avatarSmall.startsWith('//') ? 'https:' + avatarSmall : avatarSmall);
-                            avatarBig = (avatarBig.startsWith('//') ? 'https:' + avatarBig : avatarBig);
-                            nbSubscriber = formatYoutubeCount_1.default(((_c = item.subscriberCountText) === null || _c === void 0 ? void 0 : _c.accessibility.accessibilityData.label) || '0');
-                            nbVideo = formatYoutubeCount_1.default(((_e = (_d = item.videoCountText) === null || _d === void 0 ? void 0 : _d.runs[0]) === null || _e === void 0 ? void 0 : _e.text) || '0');
+                            avatar = ((_a = item.thumbnail) === null || _a === void 0 ? void 0 : _a.thumbnails[0].url) || '';
+                            avatarId = avatar.substring(avatar.lastIndexOf('ytc/') + 4, avatar.lastIndexOf('=s'));
+                            nbSubscriber = formatYoutubeCount_1.default(((_b = item.subscriberCountText) === null || _b === void 0 ? void 0 : _b.accessibility.accessibilityData.label) || '0');
+                            nbVideo = formatYoutubeCount_1.default(((_d = (_c = item.videoCountText) === null || _c === void 0 ? void 0 : _c.runs[0]) === null || _d === void 0 ? void 0 : _d.text) || '0');
                             channels.push({
                                 name: item.name,
                                 channel_id: item.channelId,
                                 nb_videos: nbVideo,
                                 nb_subscriber: nbSubscriber,
                                 official: (item.ownerBadges ? true : false),
-                                channel_avatar_small: avatarSmall,
-                                channel_avatar_medium: avatarBig,
+                                channel_avatar_small: 'https://yt3.ggpht.com/ytc/' + avatarId + '=s80',
+                                channel_avatar_medium: 'https://yt3.ggpht.com/ytc/' + avatarId + '=s200',
+                                channel_avatar_large: 'https://yt3.ggpht.com/ytc/' + avatarId + '=s800',
                             });
                         }
                         else if (items[i].didYouMeanRenderer || items[i].showingResultsForRenderer) {

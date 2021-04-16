@@ -50,5 +50,6 @@ channel {
   official
   channel_avatar_small
   channel_avatar_medium
+  channel_avatar_large
 }
 ```

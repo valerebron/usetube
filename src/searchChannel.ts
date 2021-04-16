@@ -23,10 +23,8 @@ export default async function searchChannel(terms: string, token?: string, apike
       if(items[i].compactChannelRenderer || items[i].channelRenderer) {
         const item = (items[i].compactChannelRenderer) ? items[i].compactChannelRenderer : items[i].channelRenderer
         item.name = (items[i].compactChannelRenderer) ? item.title.runs[0].text : item.title.simpleText
-        let avatarSmall = item.thumbnail?.thumbnails[0].url || ''
-        let avatarBig   = item.thumbnail?.thumbnails[1].url || ''
-        avatarSmall = (avatarSmall.startsWith('//') ? 'https:'+avatarSmall : avatarSmall)
-        avatarBig = (avatarBig.startsWith('//') ? 'https:'+avatarBig : avatarBig)
+        let avatar = item.thumbnail?.thumbnails[0].url || ''
+        let avatarId = avatar.substring(avatar.lastIndexOf('ytc/')+4, avatar.lastIndexOf('=s'))
         const nbSubscriber: number = formatYoutubeCount(item.subscriberCountText?.accessibility.accessibilityData.label || '0')
         const nbVideo: number = formatYoutubeCount(item.videoCountText?.runs[0]?.text || '0')
         channels.push({
@@ -35,8 +33,9 @@ export default async function searchChannel(terms: string, token?: string, apike
           nb_videos:             nbVideo,
           nb_subscriber:         nbSubscriber,
           official:              (item.ownerBadges ? true : false),
-          channel_avatar_small:  avatarSmall,
-          channel_avatar_medium: avatarBig,
+          channel_avatar_small:  'https://yt3.ggpht.com/ytc/'+avatarId+'=s80',
+          channel_avatar_medium: 'https://yt3.ggpht.com/ytc/'+avatarId+'=s200',
+          channel_avatar_large: 'https://yt3.ggpht.com/ytc/'+avatarId+'=s800',
         })
       }
       else if(items[i].didYouMeanRenderer || items[i].showingResultsForRenderer) {
