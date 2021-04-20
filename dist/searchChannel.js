@@ -102,7 +102,7 @@ function searchChannel(terms, token, apikey) {
                             apikey: apikey,
                         }];
                 case 5:
-                    e_1 = _f.sent();
+                    e_1 = _e.sent();
                     console.log('search channel error, terms: ' + terms);
                     console.log(e_1);
                     return [3 /*break*/, 6];

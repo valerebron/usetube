@@ -4,11 +4,14 @@ import findVal from './findVal'
 
 export default async function getData(urlstring: string) {
   const dataRegex  = /var\ ytInitialData\ \=\ \'(.*)\'\;<\/script>/
+  const playerRegex  = /var\ ytInitialPlayerResponse\ \=\ (.*)id\=\"player\"/s
+  
   const dateRegex  = /publishDate":"(.*)","ownerChannelName/
   const apiRegex  = /"innertubeApiKey":"(.*?)"/
   let url = new URL(urlstring)
   let isAjax = false
   let isDate = false
+  let isSubtitles = false
   let body
   if(url.searchParams.get('token')) {
     isAjax = true
@@ -16,12 +19,24 @@ export default async function getData(urlstring: string) {
   if(url.searchParams.get('type') === 'date') {
     isDate = true
   }
+  if(url.searchParams.get('type') === 'subtitles') {
+    isSubtitles = true
+  }
   let headers: any
-  if(isAjax) {
+  if(isAjax || isSubtitles) {
     const data = { context: { client: { clientName: 'WEB', clientVersion: '2.20210401.08.00' } }, continuation: url.searchParams.get('token') }
     body = (await axios({ method: 'post', url: urlstring, data: data })).data
-    // let fs = require('fs'); fs.writeFile('raw.json', JSON.stringify(body), (e)=>{console.log(e)})
-    return { items: findVal(body, 'continuationItems'), token: findVal(body, 'token')}
+    if(isSubtitles) {
+      let raw = playerRegex.exec(body) ?.[0] || '{}'
+      raw = raw.replace(';</script><div id="player"', '').replace('var ytInitialPlayerResponse = ', '')
+      raw = JSON.parse(raw)
+      let  urlSubtitles = findVal(raw, 'captionTracks')
+      urlSubtitles = urlSubtitles[0].baseUrl
+      return await axios({ method: 'post', url: urlSubtitles+'&fmt=json3', data: data })
+    }
+    else {
+      return { items: findVal(body, 'continuationItems'), token: findVal(body, 'token')}
+    }
   }
   else {
     headers = {

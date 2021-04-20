@@ -28,6 +28,7 @@ getChannelDesc(channel_id)
 getVideoDesc(video_id)
 getVideoDate(video_id)
 getVideosFromDesc(video_id)
+getVideoSubtitles(video_id)
 ```
 
 # returned datas

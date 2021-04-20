@@ -6,6 +6,7 @@ import getVideoDesc from './getVideoDesc'
 import getVideosFromDesc from './getVideosFromDesc'
 import searchChannel from './searchChannel'
 import searchVideo from './searchVideo'
+import getVideoSubtitles from './getVideoSubtitles'
 
 export {
   getChannelDesc,
@@ -16,4 +17,5 @@ export {
   getVideosFromDesc,
   searchChannel,
   searchVideo,
+  getVideoSubtitles,
 }
