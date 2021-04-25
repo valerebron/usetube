@@ -40,6 +40,6 @@ export default async function searchVideo(terms: string, token?: string, apikey?
     }
   } catch(e) {
     console.log('search videos error, terms: '+terms)
-    console.log(e)
+    // console.log(e)
   }
 }

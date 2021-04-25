@@ -40,14 +40,13 @@ var getVideoDate_1 = require("../getVideoDate");
 var getDateFromText_1 = require("./getDateFromText");
 var findVal_1 = require("./findVal");
 function formatVideo(video, speedDate) {
-    var _a;
     if (speedDate === void 0) { speedDate = false; }
     return __awaiter(this, void 0, void 0, function () {
-        var id, durationDatas, splited, minutes, seconds, publishedAt, _b, e_1;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var id, durationDatas, splited, hour, minute, second, publishedAt, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _c.trys.push([0, 6, , 7]);
+                    _a.trys.push([0, 6, , 7]);
                     if (!(video.compactVideoRenderer || video.gridVideoRenderer || video.videoRenderer || video.playlistVideoRenderer)) return [3 /*break*/, 4];
                     if (video.compactVideoRenderer) {
                         video = video.compactVideoRenderer;
@@ -85,36 +84,62 @@ function formatVideo(video, speedDate) {
                     }
                     // duration formating
                     if (video.lengthText) {
-                        durationDatas = findVal_1.default(video.lengthText, 'label').match(/\d+/g);
-                    }
-                    else if (video.thumbnailOverlays) {
-                        durationDatas = findVal_1.default(video.thumbnailOverlays, 'simpleText');
+                        if (durationDatas === undefined) {
+                            findVal_1.default(video.lengthText, 'simpleText');
+                        }
+                        else {
+                            durationDatas = findVal_1.default(video.lengthText, 'text');
+                        }
                         if (durationDatas) {
                             durationDatas = durationDatas.split(':');
                         }
                     }
-                    else {
-                        durationDatas = [0, 0];
+                    else if (video.thumbnailOverlays) {
+                        durationDatas = findVal_1.default(video, 'lengthText');
+                        if (durationDatas) {
+                            durationDatas = durationDatas.split(':');
+                        }
                     }
-                    minutes = parseInt(durationDatas[0]) * 60;
-                    seconds = parseInt(durationDatas[1]);
-                    if (!speedDate) return [3 /*break*/, 1];
-                    _b = getDateFromText_1.default(((_a = video.publishedTimeText) === null || _a === void 0 ? void 0 : _a.simpleText) || '');
+                    hour = 0;
+                    minute = 0;
+                    second = 0;
+                    if (durationDatas) {
+                        switch (durationDatas.length) {
+                            case 3:
+                                hour = parseInt(durationDatas[0]) * 60 * 60;
+                                minute = parseInt(durationDatas[1]) * 60;
+                                second = parseInt(durationDatas[2]);
+                                break;
+                            case 2:
+                                minute = parseInt(durationDatas[0]) * 60;
+                                second = parseInt(durationDatas[1]);
+                                break;
+                            case 1:
+                                second = parseInt(durationDatas[0]);
+                                break;
+                        }
+                    }
+                    publishedAt = new Date(Date.now());
+                    if (!(speedDate && video.publishedTimeText)) return [3 /*break*/, 1];
+                    if (video.publishedTimeText.hasOwnProperty('simpleText')) {
+                        publishedAt = getDateFromText_1.default(video.publishedTimeText.simpleText);
+                    }
+                    else if (video.publishedTimeText.hasOwnProperty('runs')) {
+                        publishedAt = getDateFromText_1.default(video.publishedTimeText.runs[0].text);
+                    }
                     return [3 /*break*/, 3];
                 case 1: return [4 /*yield*/, getVideoDate_1.default(id)];
                 case 2:
-                    _b = _c.sent();
-                    _c.label = 3;
-                case 3:
-                    publishedAt = _b;
-                    return [2 /*return*/, {
-                            id: id,
-                            original_title: video.original_title.trim(),
-                            title: video.title.trim(),
-                            artist: video.artist.trim(),
-                            duration: minutes + seconds,
-                            publishedAt: publishedAt,
-                        }];
+                    publishedAt = _a.sent();
+                    _a.label = 3;
+                case 3: return [2 /*return*/, {
+                        id: id,
+                        original_title: video.original_title.trim(),
+                        title: video.title.trim(),
+                        artist: video.artist.trim(),
+                        duration: hour + minute + second,
+                        publishedAt: publishedAt,
+                    }];
                 case 4:
                     if (video.didYouMeanRenderer || video.showingResultsForRenderer) {
                         video = video.didYouMeanRenderer ? video.didYouMeanRenderer : video.showingResultsForRenderer;
@@ -127,12 +152,11 @@ function formatVideo(video, speedDate) {
                                 publishedAt: new Date(Date.now()),
                             }];
                     }
-                    _c.label = 5;
+                    _a.label = 5;
                 case 5: return [3 /*break*/, 7];
                 case 6:
-                    e_1 = _c.sent();
+                    e_1 = _a.sent();
                     console.log('format video failed');
-                    console.log(e_1);
                     return [3 /*break*/, 7];
                 case 7: return [2 /*return*/];
             }

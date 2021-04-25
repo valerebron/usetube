@@ -41,69 +41,70 @@ var findVal_1 = require("./helpers/findVal");
 var formatVideo_1 = require("./helpers/formatVideo");
 function getPlaylistVideos(id, speedDate) {
     return __awaiter(this, void 0, void 0, function () {
-        var data, apikey, items, token, videos, i, _a, _b, nextData, nextVideos, i, formated, e_1, e_2;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var data, apikey, items, token, videos, i, formated, nextData, nextVideos, i, formated, e_1, e_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _c.trys.push([0, 15, , 16]);
+                    _a.trys.push([0, 15, , 16]);
                     return [4 /*yield*/, getData_1.default('https://m.youtube.com/playlist?list=' + id)];
                 case 1:
-                    data = _c.sent();
+                    data = _a.sent();
                     apikey = data.apikey;
                     items = findVal_1.default(data, 'playlistVideoListRenderer').contents;
                     token = findVal_1.default(data, 'token');
                     videos = [];
                     i = 0;
-                    _c.label = 2;
+                    _a.label = 2;
                 case 2:
                     if (!(i < items.length)) return [3 /*break*/, 5];
                     if (!items[i]) return [3 /*break*/, 4];
-                    _b = (_a = videos).push;
                     return [4 /*yield*/, formatVideo_1.default(items[i], speedDate)];
                 case 3:
-                    _b.apply(_a, [_c.sent()]);
-                    _c.label = 4;
+                    formated = _a.sent();
+                    if (formated) {
+                        videos.push(formated);
+                    }
+                    _a.label = 4;
                 case 4:
                     i++;
                     return [3 /*break*/, 2];
                 case 5:
                     if (!token) return [3 /*break*/, 14];
-                    _c.label = 6;
+                    _a.label = 6;
                 case 6:
-                    _c.trys.push([6, 12, , 13]);
+                    _a.trys.push([6, 12, , 13]);
                     return [4 /*yield*/, getData_1.default('https://www.youtube.com/youtubei/v1/browse?key=' + apikey + '&token=' + token)];
                 case 7:
-                    nextData = _c.sent();
+                    nextData = _a.sent();
                     nextVideos = nextData.items;
                     token = nextData.token;
                     i = 0;
-                    _c.label = 8;
+                    _a.label = 8;
                 case 8:
                     if (!(i < nextVideos.length)) return [3 /*break*/, 11];
                     if (!nextVideos[i]) return [3 /*break*/, 10];
                     return [4 /*yield*/, formatVideo_1.default(nextVideos[i], speedDate)];
                 case 9:
-                    formated = _c.sent();
+                    formated = _a.sent();
                     if (formated) {
                         videos.push(formated);
                     }
-                    _c.label = 10;
+                    _a.label = 10;
                 case 10:
                     i++;
                     return [3 /*break*/, 8];
                 case 11: return [3 /*break*/, 13];
                 case 12:
-                    e_1 = _c.sent();
+                    e_1 = _a.sent();
                     console.log('getPlaylistVideos failed');
-                    console.log(e_1);
+                    // console.log(e)
                     token = '';
                     return [3 /*break*/, 13];
                 case 13: return [3 /*break*/, 5];
                 case 14: return [2 /*return*/, videos];
                 case 15:
-                    e_2 = _c.sent();
+                    e_2 = _a.sent();
                     console.log('cannot get playlist ' + id + ', try again');
-                    console.log(e_2);
                     return [3 /*break*/, 16];
                 case 16: return [2 /*return*/];
             }

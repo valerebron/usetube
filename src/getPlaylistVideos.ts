@@ -12,7 +12,10 @@ export default async function getPlaylistVideos(id: string, speedDate?: boolean)
     let videos: Video[] = []
     for(let i = 0; i < items.length; i++) {
       if(items[i]) {
-        videos.push(await formatVideo(items[i], speedDate))
+        const formated = await formatVideo(items[i], speedDate)
+        if(formated) {
+          videos.push(formated)
+        }
       }
     }
     while(token) {
@@ -30,13 +33,13 @@ export default async function getPlaylistVideos(id: string, speedDate?: boolean)
         }
       } catch(e) {
         console.log('getPlaylistVideos failed')
-        console.log(e)
+        // console.log(e)
         token = ''
       }
     }
     return videos
   } catch(e) {
     console.log('cannot get playlist '+id+', try again')
-    console.log(e)
+    // console.log(e)
   }
 }

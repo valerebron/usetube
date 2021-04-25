@@ -1,6 +1,6 @@
 {
   "name": "usetube",
-  "version": "2.0.5",
+  "version": "2.1.0",
   "description": "crawl youtube without api key (search videos channels or get all channel/playlist's videos)",
   "main": "dist/usetube",
   "directories": {
@@ -11,8 +11,8 @@
     "typescript": "^4.0.3"
   },
   "scripts": {
-    "test": "node test/node",
     "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node test/node",
     "dev": "npx nodemon -e ts --exec 'yarn build && yarn test'"
   },
   "repository": {

@@ -92,7 +92,6 @@ function searchVideo(terms, token, apikey) {
                 case 9:
                     e_1 = _a.sent();
                     console.log('search videos error, terms: ' + terms);
-                    console.log(e_1);
                     return [3 /*break*/, 10];
                 case 10: return [2 /*return*/];
             }

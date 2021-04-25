@@ -42,27 +42,60 @@ export default async function formatVideo(video: any, speedDate: boolean = false
       }
       // duration formating
       if(video.lengthText) {
-        durationDatas = findVal(video.lengthText, 'label').match(/\d+/g)
-      }
-      else if(video.thumbnailOverlays) {
-        durationDatas = findVal(video.thumbnailOverlays, 'simpleText')
+        if(durationDatas === undefined) {
+          findVal(video.lengthText, 'simpleText')
+        }
+        else {
+          durationDatas = findVal(video.lengthText, 'text')
+        }
         if(durationDatas) {
           durationDatas = durationDatas.split(':')
         }
       }
-      else {
-        durationDatas = [0,0]
+      else if(video.thumbnailOverlays) {
+        durationDatas = findVal(video, 'lengthText')
+        if(durationDatas) {
+          durationDatas = durationDatas.split(':')
+        }
       }
-      let minutes: number = parseInt(durationDatas[0]) * 60
-      let seconds: number = parseInt(durationDatas[1])
+      let hour: number = 0
+      let minute: number = 0
+      let second: number = 0
+      if(durationDatas) {
+        switch(durationDatas.length) {
+          case 3:
+            hour = parseInt(durationDatas[0]) * 60 * 60
+            minute = parseInt(durationDatas[1]) * 60
+            second = parseInt(durationDatas[2])
+            break
+          case 2:
+            minute = parseInt(durationDatas[0]) * 60
+            second = parseInt(durationDatas[1])
+            break
+          case 1:
+            second = parseInt(durationDatas[0])
+            break
+        }
+      }
       // Date formating
-      let publishedAt: Date = speedDate ? getDateFromText(video.publishedTimeText?.simpleText || '') : await getVideoDate(id)
+      let publishedAt: Date = new Date(Date.now())
+      if(speedDate && video.publishedTimeText) {
+        if(video.publishedTimeText.hasOwnProperty('simpleText')) {
+          publishedAt = getDateFromText(video.publishedTimeText.simpleText)
+        }
+        else if(video.publishedTimeText.hasOwnProperty('runs')) {
+          publishedAt = getDateFromText(video.publishedTimeText.runs[0].text)
+        }
+      }
+      else {
+        publishedAt = await getVideoDate(id)
+      }
       return {
         id:  id,
         original_title: video.original_title.trim(),
         title:	video.title.trim(),
         artist: video.artist.trim(),
-        duration:	minutes+seconds,
+        duration:	hour+minute+second,
         publishedAt: publishedAt,
       }
     }
@@ -79,6 +112,6 @@ export default async function formatVideo(video: any, speedDate: boolean = false
     }
   } catch(e) {
     console.log('format video failed')
-    console.log(e)
+    // console.log(e)
   }
 }
