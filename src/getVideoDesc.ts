@@ -7,6 +7,6 @@ export default async function getVideoDesc(id: string) {
     return description
   } catch(e) {
     console.log('video desc error for '+id)
-    // console.log(e)
+    console.log(e)
   }
 }

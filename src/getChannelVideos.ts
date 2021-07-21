@@ -46,6 +46,6 @@ export default async function getChannelVideos(id: string, published_after?: Dat
     return videos
   } catch(e) {
     console.log('cannot get channel videos for id: '+id+', try again')
-    console.log(e)
+    // console.log(e)
   }
 }

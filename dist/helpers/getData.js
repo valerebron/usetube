@@ -87,7 +87,7 @@ function getData(urlstring) {
                             'User-Agent': 'Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Mobile Safari/537.36',
                         }
                     };
-                    return [4 /*yield*/, axios_1.default.get(urlstring, headers)];
+                    return [4 /*yield*/, axios_1.default(urlstring, headers)];
                 case 6:
                     body = (_d.sent()).data;
                     if (isDate) {

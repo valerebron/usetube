@@ -24,8 +24,10 @@ export default async function getData(urlstring: string) {
   }
   let headers: any
   if(isAjax || isSubtitles) {
+    
     const data = { context: { client: { clientName: 'WEB', clientVersion: '2.20210401.08.00' } }, continuation: url.searchParams.get('token') }
     body = (await axios({ method: 'post', url: urlstring, data: data })).data
+    
     if(isSubtitles) {
       let raw = playerRegex.exec(body) ?.[0] || '{}'
       raw = raw.replace(';</script><div id="player"', '').replace('var ytInitialPlayerResponse = ', '')
@@ -35,7 +37,7 @@ export default async function getData(urlstring: string) {
       return await axios({ method: 'post', url: urlSubtitles+'&fmt=json3', data: data })
     }
     else {
-      return { items: findVal(body, 'continuationItems'), token: findVal(body, 'token')}
+      return { items: findVal(body, 'continuationItems'), token: findVal(body, 'token') }
     }
   }
   else {
@@ -47,7 +49,7 @@ export default async function getData(urlstring: string) {
         'User-Agent': 'Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Mobile Safari/537.36',
       }
     }
-    body = (await axios.get(urlstring, headers)).data
+    body = (await axios(urlstring, headers)).data
     if(isDate) {
       const raw = dateRegex.exec(body) ?.[1] || '{}'
       return raw
@@ -55,7 +57,9 @@ export default async function getData(urlstring: string) {
     else {
       const raw = dataRegex.exec(body) ?.[1] || '{}'
       const apikey = apiRegex.exec(body)[1] || ''
+      
       // let fs = require('fs'); fs.writeFile('raw.json', decodeHex(raw), (e)=>{console.log(e)})
+
       let data = JSON.parse(decodeHex(raw))
       data.apikey = apikey
       return data

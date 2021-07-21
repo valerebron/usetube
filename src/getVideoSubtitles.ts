@@ -6,6 +6,6 @@ export default async function getVideoSubtitles(id: string) {
     return data.data.events
   } catch(e) {
     console.log('video subtitle error for '+id)
-    console.log(e)
+    // console.log(e)
   }
 }

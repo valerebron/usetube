@@ -51,7 +51,6 @@ function getVideoSubtitles(id) {
                 case 2:
                     e_1 = _a.sent();
                     console.log('video subtitle error for ' + id);
-                    console.log(e_1);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

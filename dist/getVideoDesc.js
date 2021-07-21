@@ -53,6 +53,7 @@ function getVideoDesc(id) {
                 case 2:
                     e_1 = _k.sent();
                     console.log('video desc error for ' + id);
+                    console.log(e_1);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

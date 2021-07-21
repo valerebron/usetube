@@ -57,6 +57,6 @@ export default async function searchChannel(terms: string, token?: string, apike
     }
   } catch(e) {
     console.log('search channel error, terms: '+terms)
-    console.log(e)
+    // console.log(e)
   }
 }
