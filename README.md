@@ -11,7 +11,7 @@
 
 <br>
 
-This package is initially dev for the site [massivemusic.fr] (https://massivemusic.fr),
+This package is initially dev for the site https://massivemusic.fr,
 It's here for sharing & contribute.
 
 # usage
