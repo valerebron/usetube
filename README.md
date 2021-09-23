@@ -1,4 +1,6 @@
-# **Usetube.js**
+[![Usetube](logo.svg)](https://usetube.js.org) .js
+
+#
 
 [![Version](https://img.shields.io/npm/v/usetube.svg)](https://www.npmjs.com/package/usetube)
 [![Downloads](https://img.shields.io/npm/dt/usetube.svg)](https://www.npmjs.com/package/usetube)
