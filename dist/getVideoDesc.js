@@ -37,21 +37,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var getData_1 = require("./helpers/getData");
+var findVal_1 = require("./helpers/findVal");
 function getVideoDesc(id) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
     return __awaiter(this, void 0, void 0, function () {
         var data, description, e_1;
-        return __generator(this, function (_k) {
-            switch (_k.label) {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _k.trys.push([0, 2, , 3]);
+                    _a.trys.push([0, 2, , 3]);
                     return [4 /*yield*/, getData_1.default('https://m.youtube.com/watch?v=' + id)];
                 case 1:
-                    data = _k.sent();
-                    description = ((_j = (_h = (_g = (_f = (_e = (_d = (_c = (_b = (_a = data.contents) === null || _a === void 0 ? void 0 : _a.singleColumnWatchNextResults) === null || _b === void 0 ? void 0 : _b.results) === null || _c === void 0 ? void 0 : _c.results) === null || _d === void 0 ? void 0 : _d.contents[1]) === null || _e === void 0 ? void 0 : _e.itemSectionRenderer) === null || _f === void 0 ? void 0 : _f.contents[0]) === null || _g === void 0 ? void 0 : _g.slimVideoMetadataRenderer) === null || _h === void 0 ? void 0 : _h.description) === null || _j === void 0 ? void 0 : _j.runs) || '';
+                    data = _a.sent();
+                    description = findVal_1.default(data, 'descriptionBodyText').runs || '';
                     return [2 /*return*/, description];
                 case 2:
-                    e_1 = _k.sent();
+                    e_1 = _a.sent();
                     console.log('video desc error for ' + id);
                     console.log(e_1);
                     return [3 /*break*/, 3];

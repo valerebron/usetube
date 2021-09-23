@@ -9,7 +9,7 @@ export default async function searchVideo(terms: string, token?: string, apikey?
     let videos: Video[] = []
     let didyoumean: string = ''
     // initial videos search
-    if(!token) {
+    if (!token) {
       let data = await getData('https://m.youtube.com/results?videoEmbeddable=true&search_query='+encodeURI(terms))
       apikey = data.apikey
       token = findVal(data, 'token')
@@ -23,8 +23,8 @@ export default async function searchVideo(terms: string, token?: string, apikey?
     }
     for(let i = 0; i < items.length; i++) {
       let formated: Video = await formatVideo(items[i], true)
-      if(formated) {
-        if(formated.id === 'didyoumean') {
+      if (formated) {
+        if (formated.id === 'didyoumean') {
           didyoumean = formated.title
         }
         else {

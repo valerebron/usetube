@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && node test",
-    "dev": "npx nodemon -e ts --exec 'npm run build && npm run test'"
+    "dev": "npm install && npx nodemon -e ts --exec 'npm run build && npm run test'"
   },
   "repository": {
     "type": "git",

@@ -31,13 +31,13 @@ export default function getDateFromText(dateTxt: string) {
   }
   const digit = parseInt(dateTxt.replace(/\D/g,'')) || 0
 
-  if(!dateTxt || digit === 0) {
+  if (!dateTxt || digit === 0) {
     return new Date(Date.now())
   }
 
   for(let i in unit) {
     for(let y in unit[i].terms) {
-      if(dateTxt.includes(unit[i].terms[y])) {
+      if (dateTxt.includes(unit[i].terms[y])) {
         const secondsSince = unit[i].factor * digit
         return new Date(Date.now() - secondsSince)
       }

@@ -40,11 +40,11 @@ var axios_1 = require("axios");
 var decodeHex_1 = require("./decodeHex");
 var findVal_1 = require("./findVal");
 function getData(urlstring) {
-    var _a, _b, _c;
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var dataRegex, playerRegex, dateRegex, apiRegex, url, isAjax, isDate, isSubtitles, body, headers, data, raw, urlSubtitles, raw, raw, apikey, data;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var dataRegex, playerRegex, dateRegex, apiRegex, url, isAjax, isDate, isSubtitles, body, headers, data, raw, raw, apikey, data;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     dataRegex = /var\ ytInitialData\ \=\ \'(.*)\'\;<\/script>/;
                     playerRegex = /var\ ytInitialPlayerResponse\ \=\ (.*)id\=\"player\"/s;
@@ -63,22 +63,13 @@ function getData(urlstring) {
                     if (url.searchParams.get('type') === 'subtitles') {
                         isSubtitles = true;
                     }
-                    if (!(isAjax || isSubtitles)) return [3 /*break*/, 5];
+                    if (!isAjax) return [3 /*break*/, 2];
                     data = { context: { client: { clientName: 'WEB', clientVersion: '2.20210401.08.00' } }, continuation: url.searchParams.get('token') };
                     return [4 /*yield*/, axios_1.default({ method: 'post', url: urlstring, data: data })];
                 case 1:
-                    body = (_d.sent()).data;
-                    if (!isSubtitles) return [3 /*break*/, 3];
-                    raw = ((_a = playerRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[0]) || '{}';
-                    raw = raw.replace(';</script><div id="player"', '').replace('var ytInitialPlayerResponse = ', '');
-                    raw = JSON.parse(raw);
-                    urlSubtitles = findVal_1.default(raw, 'captionTracks');
-                    urlSubtitles = urlSubtitles[0].baseUrl;
-                    return [4 /*yield*/, axios_1.default({ method: 'post', url: urlSubtitles + '&fmt=json3', data: data })];
-                case 2: return [2 /*return*/, _d.sent()];
-                case 3: return [2 /*return*/, { items: findVal_1.default(body, 'continuationItems'), token: findVal_1.default(body, 'token') }];
-                case 4: return [3 /*break*/, 7];
-                case 5:
+                    body = (_c.sent()).data;
+                    return [2 /*return*/, { items: findVal_1.default(body, 'continuationItems'), token: findVal_1.default(body, 'token') }];
+                case 2:
                     headers = {
                         headers: {
                             'Access-Control-Allow-Origin': '*',
@@ -88,21 +79,21 @@ function getData(urlstring) {
                         }
                     };
                     return [4 /*yield*/, axios_1.default(urlstring, headers)];
-                case 6:
-                    body = (_d.sent()).data;
+                case 3:
+                    body = (_c.sent()).data;
                     if (isDate) {
-                        raw = ((_b = dateRegex.exec(body)) === null || _b === void 0 ? void 0 : _b[1]) || '{}';
+                        raw = ((_a = dateRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
                         return [2 /*return*/, raw];
                     }
                     else {
-                        raw = ((_c = dataRegex.exec(body)) === null || _c === void 0 ? void 0 : _c[1]) || '{}';
+                        raw = ((_b = dataRegex.exec(body)) === null || _b === void 0 ? void 0 : _b[1]) || '{}';
                         apikey = apiRegex.exec(body)[1] || '';
                         data = JSON.parse(decodeHex_1.default(raw));
                         data.apikey = apikey;
                         return [2 /*return*/, data];
                     }
-                    _d.label = 7;
-                case 7: return [2 /*return*/];
+                    _c.label = 4;
+                case 4: return [2 /*return*/];
             }
         });
     });

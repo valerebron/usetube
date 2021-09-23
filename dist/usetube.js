@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getVideoSubtitles = exports.searchVideo = exports.searchChannel = exports.getVideosFromDesc = exports.getVideoDesc = exports.getVideoDate = exports.getPlaylistVideos = exports.getChannelVideos = exports.getChannelDesc = void 0;
+exports.searchVideo = exports.searchChannel = exports.getVideosFromDesc = exports.getVideoDesc = exports.getVideoDate = exports.getPlaylistVideos = exports.getChannelVideos = exports.getChannelDesc = void 0;
 var getChannelDesc_1 = require("./getChannelDesc");
 exports.getChannelDesc = getChannelDesc_1.default;
 var getChannelVideos_1 = require("./getChannelVideos");
@@ -17,6 +17,4 @@ var searchChannel_1 = require("./searchChannel");
 exports.searchChannel = searchChannel_1.default;
 var searchVideo_1 = require("./searchVideo");
 exports.searchVideo = searchVideo_1.default;
-var getVideoSubtitles_1 = require("./getVideoSubtitles");
-exports.getVideoSubtitles = getVideoSubtitles_1.default;
 //# sourceMappingURL=usetube.js.map

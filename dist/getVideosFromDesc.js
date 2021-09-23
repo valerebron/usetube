@@ -51,6 +51,7 @@ function getVideosFromDesc(yt_id) {
                     return [4 /*yield*/, getVideoDesc_1.default(yt_id)];
                 case 1:
                     desc = _b.sent();
+                    console.log(desc);
                     if (!desc) return [3 /*break*/, 9];
                     i = 0;
                     _b.label = 2;

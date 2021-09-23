@@ -11,9 +11,9 @@ export default async function getPlaylistVideos(id: string, speedDate?: boolean)
     let token: string = findVal(data, 'token')
     let videos: Video[] = []
     for(let i = 0; i < items.length; i++) {
-      if(items[i]) {
+      if (items[i]) {
         const formated = await formatVideo(items[i], speedDate)
-        if(formated) {
+        if (formated) {
           videos.push(formated)
         }
       }
@@ -24,9 +24,9 @@ export default async function getPlaylistVideos(id: string, speedDate?: boolean)
         let nextVideos: any = nextData.items
         token = nextData.token
         for(let i = 0; i < nextVideos.length; i++) {
-          if(nextVideos[i]) {
+          if (nextVideos[i]) {
             const formated = await formatVideo(nextVideos[i], speedDate)
-            if(formated) {
+            if (formated) {
               videos.push(formated)
             }
           }

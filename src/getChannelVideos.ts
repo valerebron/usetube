@@ -12,8 +12,8 @@ export default async function getChannelVideos(id: string, published_after?: Dat
     let videos: Video[] = []
     for(let i = 0; i < channel.length; i++) {
       let video: Video = await formatVideo(channel[i], false)
-      if(video && video.publishedAt) {
-        if((published_after && video.publishedAt.getTime() > published_after.getTime())  || !published_after) {
+      if (video && video.publishedAt) {
+        if ((published_after && video.publishedAt.getTime() > published_after.getTime())  || !published_after) {
           videos.push(video)
         }
       }
@@ -25,9 +25,9 @@ export default async function getChannelVideos(id: string, published_after?: Dat
         token = data.token
         for(let i = 0; i < newVideos.length; i++) {
           let video: Video = await formatVideo(newVideos[i], false)
-          if(video) {
-            if(published_after) {
-              if(video.publishedAt.getTime() > published_after.getTime()) {
+          if (video) {
+            if (published_after) {
+              if (video.publishedAt.getTime() > published_after.getTime()) {
                 videos.push(video)
               } else {
                 token = ''

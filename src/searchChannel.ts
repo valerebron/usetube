@@ -8,7 +8,7 @@ export default async function searchChannel(terms: string, token?: string, apike
     let items: any = []
     let channels: Channel[] = []
     let didyoumean: string = ''
-    if(!token) {
+    if (!token) {
       const data = await getData('https://m.youtube.com/results?sp=EgIQAg%253D%253D&search_query='+encodeURI(terms))
       apikey = data.apikey
       token = findVal(data, 'token')
@@ -20,7 +20,7 @@ export default async function searchChannel(terms: string, token?: string, apike
       token = data.token
     }
     for(let i = 0; i < items.length; i++) {
-      if(items[i].compactChannelRenderer || items[i].channelRenderer) {
+      if (items[i].compactChannelRenderer || items[i].channelRenderer) {
         const item = (items[i].compactChannelRenderer) ? items[i].compactChannelRenderer : items[i].channelRenderer
         item.name = (items[i].compactChannelRenderer) ? item.title.runs[0].text : item.title.simpleText
         let avatar = item.thumbnail?.thumbnails[0].url || ''
@@ -38,9 +38,9 @@ export default async function searchChannel(terms: string, token?: string, apike
           channel_avatar_large: 'https://yt3.ggpht.com/ytc/'+avatarId+'=s800',
         })
       }
-      else if(items[i].didYouMeanRenderer || items[i].showingResultsForRenderer) {
+      else if (items[i].didYouMeanRenderer || items[i].showingResultsForRenderer) {
         let item: any
-        if(items[i].didYouMeanRenderer) {
+        if (items[i].didYouMeanRenderer) {
           item = items[i].didYouMeanRenderer
         }
         else {

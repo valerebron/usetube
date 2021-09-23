@@ -13,32 +13,22 @@ export default async function getData(urlstring: string) {
   let isDate = false
   let isSubtitles = false
   let body
-  if(url.searchParams.get('token')) {
+  if (url.searchParams.get('token')) {
     isAjax = true
   }
-  if(url.searchParams.get('type') === 'date') {
+  if (url.searchParams.get('type') === 'date') {
     isDate = true
   }
-  if(url.searchParams.get('type') === 'subtitles') {
+  if (url.searchParams.get('type') === 'subtitles') {
     isSubtitles = true
   }
   let headers: any
-  if(isAjax || isSubtitles) {
+  if (isAjax) {
     
     const data = { context: { client: { clientName: 'WEB', clientVersion: '2.20210401.08.00' } }, continuation: url.searchParams.get('token') }
     body = (await axios({ method: 'post', url: urlstring, data: data })).data
     
-    if(isSubtitles) {
-      let raw = playerRegex.exec(body) ?.[0] || '{}'
-      raw = raw.replace(';</script><div id="player"', '').replace('var ytInitialPlayerResponse = ', '')
-      raw = JSON.parse(raw)
-      let  urlSubtitles = findVal(raw, 'captionTracks')
-      urlSubtitles = urlSubtitles[0].baseUrl
-      return await axios({ method: 'post', url: urlSubtitles+'&fmt=json3', data: data })
-    }
-    else {
-      return { items: findVal(body, 'continuationItems'), token: findVal(body, 'token') }
-    }
+    return { items: findVal(body, 'continuationItems'), token: findVal(body, 'token') }
   }
   else {
     headers = {
@@ -50,15 +40,13 @@ export default async function getData(urlstring: string) {
       }
     }
     body = (await axios(urlstring, headers)).data
-    if(isDate) {
+    if (isDate) {
       const raw = dateRegex.exec(body) ?.[1] || '{}'
       return raw
     }
     else {
-      const raw = dataRegex.exec(body) ?.[1] || '{}'
+      const raw = dataRegex.exec(body)?.[1] || '{}'
       const apikey = apiRegex.exec(body)[1] || ''
-      
-      // let fs = require('fs'); fs.writeFile('raw.json', decodeHex(raw), (e)=>{console.log(e)})
 
       let data = JSON.parse(decodeHex(raw))
       data.apikey = apikey
