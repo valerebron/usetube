@@ -5,7 +5,12 @@ import formatVideo from './helpers/formatVideo'
 
 export default async function getPlaylistVideos(id: string, speedDate?: boolean) {
   try {
-    const data: any = await getData('https://m.youtube.com/playlist?list='+id)
+    if(isYoutubePlaylist(id)>-1){
+      const data: any = await getData(id)                         //get data from the url itself
+      id = id.substring(isYoutubePlaylist(id),id.length)        // save the ID in case you need it later if not u can just erase it
+    }else{
+      const data: any = await getData('https://m.youtube.com/playlist?list='+id)
+    }
     const apikey = data.apikey
     const items: any = findVal(data, 'playlistVideoListRenderer').contents
     let token: string = findVal(data, 'token')
@@ -42,4 +47,17 @@ export default async function getPlaylistVideos(id: string, speedDate?: boolean)
     console.log('cannot get playlist '+id+', try again')
     // console.log(e)
   }
+}
+
+function isYoutubePlaylist(str) {                                //Detects if it is a youtube playlist url
+ if (str.toLowerCase().indexOf('?list=') > -1){
+   return (str.toLowerCase().indexOf('?list=')+6)                //returns the index where the playlist ID starts
+ }else{ 
+   if (str.toLowerCase().indexOf('&list=') > -1){
+     return (str.toLowerCase().indexOf('&list=')+6)
+   } else {
+     return -1
+   }
+ 
+ 
 }
