@@ -1,6 +1,8 @@
-[![Usetube](logo.svg)](https://usetube.js.org) .js
-
-#
+<h1 align="center">
+  <picture>
+    <img align="center" alt="Usetube" src="./logo.svg" height="50">
+  </picture>
+</h1>
 
 [![Version](https://img.shields.io/npm/v/usetube.svg)](https://www.npmjs.com/package/usetube)
 [![Downloads](https://img.shields.io/npm/dt/usetube.svg)](https://www.npmjs.com/package/usetube)
