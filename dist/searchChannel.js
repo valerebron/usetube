@@ -51,17 +51,17 @@ function searchChannel(terms, token, apikey) {
                     channels = [];
                     didyoumean = '';
                     if (!!token) return [3 /*break*/, 2];
-                    return [4 /*yield*/, getData_1.default('https://m.youtube.com/results?sp=EgIQAg%253D%253D&search_query=' + encodeURI(terms))];
+                    return [4 /*yield*/, (0, getData_1.default)('https://m.youtube.com/results?sp=EgIQAg%253D%253D&search_query=' + encodeURI(terms))];
                 case 1:
                     data = _e.sent();
                     apikey = data.apikey;
-                    token = findVal_1.default(data, 'token');
-                    items = findVal_1.default(data, 'itemSectionRenderer').contents;
+                    token = (0, findVal_1.default)(data, 'token');
+                    items = (0, findVal_1.default)(data, 'itemSectionRenderer').contents;
                     return [3 /*break*/, 4];
-                case 2: return [4 /*yield*/, getData_1.default('https://www.youtube.com/youtubei/v1/search?key=' + apikey + '&token=' + token)];
+                case 2: return [4 /*yield*/, (0, getData_1.default)('https://www.youtube.com/youtubei/v1/search?key=' + apikey + '&token=' + token)];
                 case 3:
                     data = _e.sent();
-                    items = findVal_1.default(data.items, 'contents');
+                    items = (0, findVal_1.default)(data.items, 'contents');
                     token = data.token;
                     _e.label = 4;
                 case 4:
@@ -71,8 +71,8 @@ function searchChannel(terms, token, apikey) {
                             item.name = (items[i].compactChannelRenderer) ? item.title.runs[0].text : item.title.simpleText;
                             avatar = ((_a = item.thumbnail) === null || _a === void 0 ? void 0 : _a.thumbnails[0].url) || '';
                             avatarId = avatar.substring(avatar.lastIndexOf('ytc/') + 4, avatar.lastIndexOf('=s'));
-                            nbSubscriber = formatYoutubeCount_1.default(((_b = item.subscriberCountText) === null || _b === void 0 ? void 0 : _b.accessibility.accessibilityData.label) || '0');
-                            nbVideo = formatYoutubeCount_1.default(((_d = (_c = item.videoCountText) === null || _c === void 0 ? void 0 : _c.runs[0]) === null || _d === void 0 ? void 0 : _d.text) || '0');
+                            nbSubscriber = (0, formatYoutubeCount_1.default)(((_b = item.subscriberCountText) === null || _b === void 0 ? void 0 : _b.accessibility.accessibilityData.label) || '0');
+                            nbVideo = (0, formatYoutubeCount_1.default)(((_d = (_c = item.videoCountText) === null || _c === void 0 ? void 0 : _c.runs[0]) === null || _d === void 0 ? void 0 : _d.text) || '0');
                             channels.push({
                                 name: item.name,
                                 channel_id: item.channelId,

@@ -48,7 +48,7 @@ function getVideosFromDesc(yt_id) {
                 case 0:
                     _b.trys.push([0, 10, , 11]);
                     videos = [];
-                    return [4 /*yield*/, getVideoDesc_1.default(yt_id)];
+                    return [4 /*yield*/, (0, getVideoDesc_1.default)(yt_id)];
                 case 1:
                     desc = _b.sent();
                     console.log(desc);
@@ -59,10 +59,10 @@ function getVideosFromDesc(yt_id) {
                     if (!(i < desc.length)) return [3 /*break*/, 9];
                     content = desc[i].text;
                     if (!(content.includes('-') && content.length < 100)) return [3 /*break*/, 8];
-                    elt = cleanTitle_1.default(content);
+                    elt = (0, cleanTitle_1.default)(content);
                     title = elt.split('-')[1].trim();
                     artist = elt.split('-')[0].trim();
-                    return [4 /*yield*/, searchVideo_1.default(title + ' ' + artist)];
+                    return [4 /*yield*/, (0, searchVideo_1.default)(title + ' ' + artist)];
                 case 3:
                     videosSearched = _b.sent();
                     y = 0;
@@ -73,7 +73,7 @@ function getVideosFromDesc(yt_id) {
                     original_title_lower = track.original_title.toLowerCase();
                     if (!(original_title_lower.includes(artist.split(' ')[0].toLowerCase()) && original_title_lower.includes(title.split(' ')[0].toLowerCase()))) return [3 /*break*/, 6];
                     _a = track;
-                    return [4 /*yield*/, getVideoDate_1.default(track.id)];
+                    return [4 /*yield*/, (0, getVideoDate_1.default)(track.id)];
                 case 5:
                     _a.publishedAt = _b.sent();
                     videos.push(track);

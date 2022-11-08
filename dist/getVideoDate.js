@@ -44,7 +44,7 @@ function getVideoDate(id) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, getData_1.default('https://m.youtube.com/watch?v=' + id + '&type=date')];
+                    return [4 /*yield*/, (0, getData_1.default)('https://m.youtube.com/watch?v=' + id + '&type=date')];
                 case 1:
                     publishText = _a.sent();
                     publishText.replace('-', '/');

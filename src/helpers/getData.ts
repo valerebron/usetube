@@ -27,7 +27,7 @@ export default async function getData(urlstring: string) {
     
     const data = { context: { client: { clientName: 'WEB', clientVersion: '2.20210401.08.00' } }, continuation: url.searchParams.get('token') }
     body = (await axios({ method: 'post', url: urlstring, data: data })).data
-    
+
     return { items: findVal(body, 'continuationItems'), token: findVal(body, 'token') }
   }
   else {
@@ -49,6 +49,7 @@ export default async function getData(urlstring: string) {
       const apikey = apiRegex.exec(body)[1] || ''
 
       let data = JSON.parse(decodeHex(raw))
+      let fs = require('fs'); fs.writeFile('raw.json', decodeHex(raw), (e)=>{console.log(e)})
       data.apikey = apikey
       return data
     }

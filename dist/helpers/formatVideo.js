@@ -86,17 +86,17 @@ function formatVideo(video, speedDate) {
                     // duration formating
                     if (video.lengthText) {
                         if (durationDatas === undefined) {
-                            findVal_1.default(video.lengthText, 'simpleText');
+                            (0, findVal_1.default)(video.lengthText, 'simpleText');
                         }
                         else {
-                            durationDatas = findVal_1.default(video.lengthText, 'text');
+                            durationDatas = (0, findVal_1.default)(video.lengthText, 'text');
                         }
                         if (durationDatas) {
                             durationDatas = durationDatas.split(':');
                         }
                     }
                     else if (video.thumbnailOverlays) {
-                        durationDatas = findVal_1.default(video, 'lengthText');
+                        durationDatas = (0, findVal_1.default)(video, 'lengthText');
                         if (durationDatas) {
                             durationDatas = durationDatas.split(':');
                         }
@@ -123,13 +123,13 @@ function formatVideo(video, speedDate) {
                     publishedAt = new Date(Date.now());
                     if (!(speedDate && video.publishedTimeText)) return [3 /*break*/, 1];
                     if (video.publishedTimeText.hasOwnProperty('simpleText')) {
-                        publishedAt = getDateFromText_1.default(video.publishedTimeText.simpleText);
+                        publishedAt = (0, getDateFromText_1.default)(video.publishedTimeText.simpleText);
                     }
                     else if (video.publishedTimeText.hasOwnProperty('runs')) {
-                        publishedAt = getDateFromText_1.default(video.publishedTimeText.runs[0].text);
+                        publishedAt = (0, getDateFromText_1.default)(video.publishedTimeText.runs[0].text);
                     }
                     return [3 /*break*/, 3];
-                case 1: return [4 /*yield*/, getVideoDate_1.default(id)];
+                case 1: return [4 /*yield*/, (0, getVideoDate_1.default)(id)];
                 case 2:
                     publishedAt = _b.sent();
                     _b.label = 3;

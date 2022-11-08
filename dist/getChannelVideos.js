@@ -40,52 +40,59 @@ var getData_1 = require("./helpers/getData");
 var formatVideo_1 = require("./helpers/formatVideo");
 var findVal_1 = require("./helpers/findVal");
 function getChannelVideos(id, published_after) {
+    var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var data, apikey, channel, token, videos, i, video, data_1, newVideos, i, video, e_1, e_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var data, apikey, channel, token, videos, i_1, video, i, data_1, newVideos, i_2, video, e_1, e_2;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    _a.trys.push([0, 15, , 16]);
-                    return [4 /*yield*/, getData_1.default('https://m.youtube.com/channel/' + id + '/videos')];
+                    _b.trys.push([0, 16, , 17]);
+                    return [4 /*yield*/, (0, getData_1.default)('https://m.youtube.com/channel/' + id + '/videos')];
                 case 1:
-                    data = _a.sent();
+                    data = _b.sent();
                     apikey = data.apikey;
-                    channel = findVal_1.default(data, 'itemSectionRenderer').contents;
-                    token = findVal_1.default(data, 'token');
+                    channel = data.contents.singleColumnBrowseResultsRenderer.tabs[1].tabRenderer.content.richGridRenderer.contents;
+                    token = (0, findVal_1.default)(data, 'token');
                     videos = [];
-                    i = 0;
-                    _a.label = 2;
+                    i_1 = 0;
+                    _b.label = 2;
                 case 2:
-                    if (!(i < channel.length)) return [3 /*break*/, 5];
-                    return [4 /*yield*/, formatVideo_1.default(channel[i], false)];
+                    if (!(i_1 < channel.length)) return [3 /*break*/, 5];
+                    return [4 /*yield*/, (0, formatVideo_1.default)((_a = channel[i_1].richItemRenderer) === null || _a === void 0 ? void 0 : _a.content, false)];
                 case 3:
-                    video = _a.sent();
+                    video = _b.sent();
                     if (video && video.publishedAt) {
                         if ((published_after && video.publishedAt.getTime() > published_after.getTime()) || !published_after) {
                             videos.push(video);
                         }
                     }
-                    _a.label = 4;
+                    _b.label = 4;
                 case 4:
-                    i++;
+                    i_1++;
                     return [3 /*break*/, 2];
                 case 5:
-                    if (!token) return [3 /*break*/, 14];
-                    _a.label = 6;
-                case 6:
-                    _a.trys.push([6, 12, , 13]);
-                    return [4 /*yield*/, getData_1.default('https://www.youtube.com/youtubei/v1/browse?key=' + apikey + '&token=' + token)];
-                case 7:
-                    data_1 = _a.sent();
-                    newVideos = data_1.items;
-                    token = data_1.token;
                     i = 0;
-                    _a.label = 8;
+                    _b.label = 6;
+                case 6:
+                    if (!token) return [3 /*break*/, 15];
+                    _b.label = 7;
+                case 7:
+                    _b.trys.push([7, 13, , 14]);
+                    return [4 /*yield*/, (0, getData_1.default)('https://www.youtube.com/youtubei/v1/browse?key=' + apikey + '&token=' + token)];
                 case 8:
-                    if (!(i < newVideos.length)) return [3 /*break*/, 11];
-                    return [4 /*yield*/, formatVideo_1.default(newVideos[i], false)];
+                    data_1 = _b.sent();
+                    newVideos = data_1.items;
+                    if (data_1.token === token) {
+                        return [3 /*break*/, 15];
+                    }
+                    token = data_1.token;
+                    i_2 = 0;
+                    _b.label = 9;
                 case 9:
-                    video = _a.sent();
+                    if (!(i_2 < newVideos.length)) return [3 /*break*/, 12];
+                    return [4 /*yield*/, (0, formatVideo_1.default)(newVideos[i_2], false)];
+                case 10:
+                    video = _b.sent();
                     if (video) {
                         if (published_after) {
                             if (video.publishedAt.getTime() > published_after.getTime()) {
@@ -99,23 +106,27 @@ function getChannelVideos(id, published_after) {
                             videos.push(video);
                         }
                     }
-                    _a.label = 10;
-                case 10:
-                    i++;
-                    return [3 /*break*/, 8];
-                case 11: return [3 /*break*/, 13];
-                case 12:
-                    e_1 = _a.sent();
+                    _b.label = 11;
+                case 11:
+                    i_2++;
+                    return [3 /*break*/, 9];
+                case 12: return [3 /*break*/, 14];
+                case 13:
+                    e_1 = _b.sent();
                     console.log('getChannelVideos failed');
+                    // console.log(e)
                     token = '';
-                    return [3 /*break*/, 13];
-                case 13: return [3 /*break*/, 5];
-                case 14: return [2 /*return*/, videos];
+                    return [3 /*break*/, 14];
+                case 14: return [3 /*break*/, 6];
                 case 15:
-                    e_2 = _a.sent();
+                    console.log('enf of while');
+                    return [2 /*return*/, videos];
+                case 16:
+                    e_2 = _b.sent();
                     console.log('cannot get channel videos for id: ' + id + ', try again');
-                    return [3 /*break*/, 16];
-                case 16: return [2 /*return*/];
+                    console.log(e_2);
+                    return [3 /*break*/, 17];
+                case 17: return [2 /*return*/];
             }
         });
     });

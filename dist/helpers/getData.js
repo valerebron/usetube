@@ -42,7 +42,7 @@ var findVal_1 = require("./findVal");
 function getData(urlstring) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var dataRegex, playerRegex, dateRegex, apiRegex, url, isAjax, isDate, isSubtitles, body, headers, data, raw, raw, apikey, data;
+        var dataRegex, playerRegex, dateRegex, apiRegex, url, isAjax, isDate, isSubtitles, body, headers, data, raw, raw, apikey, data, fs;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -65,10 +65,10 @@ function getData(urlstring) {
                     }
                     if (!isAjax) return [3 /*break*/, 2];
                     data = { context: { client: { clientName: 'WEB', clientVersion: '2.20210401.08.00' } }, continuation: url.searchParams.get('token') };
-                    return [4 /*yield*/, axios_1.default({ method: 'post', url: urlstring, data: data })];
+                    return [4 /*yield*/, (0, axios_1.default)({ method: 'post', url: urlstring, data: data })];
                 case 1:
                     body = (_c.sent()).data;
-                    return [2 /*return*/, { items: findVal_1.default(body, 'continuationItems'), token: findVal_1.default(body, 'token') }];
+                    return [2 /*return*/, { items: (0, findVal_1.default)(body, 'continuationItems'), token: (0, findVal_1.default)(body, 'token') }];
                 case 2:
                     headers = {
                         headers: {
@@ -78,7 +78,7 @@ function getData(urlstring) {
                             'User-Agent': 'Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Mobile Safari/537.36',
                         }
                     };
-                    return [4 /*yield*/, axios_1.default(urlstring, headers)];
+                    return [4 /*yield*/, (0, axios_1.default)(urlstring, headers)];
                 case 3:
                     body = (_c.sent()).data;
                     if (isDate) {
@@ -88,7 +88,9 @@ function getData(urlstring) {
                     else {
                         raw = ((_b = dataRegex.exec(body)) === null || _b === void 0 ? void 0 : _b[1]) || '{}';
                         apikey = apiRegex.exec(body)[1] || '';
-                        data = JSON.parse(decodeHex_1.default(raw));
+                        data = JSON.parse((0, decodeHex_1.default)(raw));
+                        fs = require('fs');
+                        fs.writeFile('raw.json', (0, decodeHex_1.default)(raw), function (e) { console.log(e); });
                         data.apikey = apikey;
                         return [2 /*return*/, data];
                     }

@@ -7,21 +7,25 @@ export default async function getChannelVideos(id: string, published_after?: Dat
   try {
     const data: any = await getData('https://m.youtube.com/channel/'+id+'/videos')
     const apikey = data.apikey
-    const channel: any = findVal(data, 'itemSectionRenderer').contents
+    const channel: any = data.contents.singleColumnBrowseResultsRenderer.tabs[1].tabRenderer.content.richGridRenderer.contents
     let token: string = findVal(data, 'token')
     let videos: Video[] = []
     for(let i = 0; i < channel.length; i++) {
-      let video: Video = await formatVideo(channel[i], false)
+      let video: Video = await formatVideo(channel[i].richItemRenderer?.content, false)
       if (video && video.publishedAt) {
         if ((published_after && video.publishedAt.getTime() > published_after.getTime())  || !published_after) {
           videos.push(video)
         }
       }
     }
+    let i = 0
     while(token) {
       try {
         let data = await getData('https://www.youtube.com/youtubei/v1/browse?key='+apikey+'&token='+token)
         let newVideos: any = data.items
+        if (data.token === token) {
+          break;
+        }
         token = data.token
         for(let i = 0; i < newVideos.length; i++) {
           let video: Video = await formatVideo(newVideos[i], false)
@@ -40,12 +44,14 @@ export default async function getChannelVideos(id: string, published_after?: Dat
         }
       } catch(e) {
         console.log('getChannelVideos failed')
+        // console.log(e)
         token = ''
       }
     }
+    console.log('enf of while')
     return videos
   } catch(e) {
     console.log('cannot get channel videos for id: '+id+', try again')
-    // console.log(e)
+    console.log(e)
   }
 }

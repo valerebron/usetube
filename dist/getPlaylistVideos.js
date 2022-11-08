@@ -46,19 +46,19 @@ function getPlaylistVideos(id, speedDate) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 15, , 16]);
-                    return [4 /*yield*/, getData_1.default('https://m.youtube.com/playlist?list=' + id)];
+                    return [4 /*yield*/, (0, getData_1.default)('https://m.youtube.com/playlist?list=' + id)];
                 case 1:
                     data = _a.sent();
                     apikey = data.apikey;
-                    items = findVal_1.default(data, 'playlistVideoListRenderer').contents;
-                    token = findVal_1.default(data, 'token');
+                    items = (0, findVal_1.default)(data, 'playlistVideoListRenderer').contents;
+                    token = (0, findVal_1.default)(data, 'token');
                     videos = [];
                     i = 0;
                     _a.label = 2;
                 case 2:
                     if (!(i < items.length)) return [3 /*break*/, 5];
                     if (!items[i]) return [3 /*break*/, 4];
-                    return [4 /*yield*/, formatVideo_1.default(items[i], speedDate)];
+                    return [4 /*yield*/, (0, formatVideo_1.default)(items[i], speedDate)];
                 case 3:
                     formated = _a.sent();
                     if (formated) {
@@ -73,7 +73,7 @@ function getPlaylistVideos(id, speedDate) {
                     _a.label = 6;
                 case 6:
                     _a.trys.push([6, 12, , 13]);
-                    return [4 /*yield*/, getData_1.default('https://www.youtube.com/youtubei/v1/browse?key=' + apikey + '&token=' + token)];
+                    return [4 /*yield*/, (0, getData_1.default)('https://www.youtube.com/youtubei/v1/browse?key=' + apikey + '&token=' + token)];
                 case 7:
                     nextData = _a.sent();
                     nextVideos = nextData.items;
@@ -83,7 +83,7 @@ function getPlaylistVideos(id, speedDate) {
                 case 8:
                     if (!(i < nextVideos.length)) return [3 /*break*/, 11];
                     if (!nextVideos[i]) return [3 /*break*/, 10];
-                    return [4 /*yield*/, formatVideo_1.default(nextVideos[i], speedDate)];
+                    return [4 /*yield*/, (0, formatVideo_1.default)(nextVideos[i], speedDate)];
                 case 9:
                     formated = _a.sent();
                     if (formated) {

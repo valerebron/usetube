@@ -45,10 +45,10 @@ function getVideoDesc(id) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, getData_1.default('https://m.youtube.com/watch?v=' + id)];
+                    return [4 /*yield*/, (0, getData_1.default)('https://m.youtube.com/watch?v=' + id)];
                 case 1:
                     data = _a.sent();
-                    description = findVal_1.default(data, 'descriptionBodyText').runs || '';
+                    description = (0, findVal_1.default)(data, 'descriptionBodyText').runs[0].text || '';
                     return [2 /*return*/, description];
                 case 2:
                     e_1 = _a.sent();

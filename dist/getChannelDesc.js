@@ -45,7 +45,7 @@ function getChannelDesc(id) {
             switch (_c.label) {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, getData_1.default('https://m.youtube.com/channel/' + id + '/videos')];
+                    return [4 /*yield*/, (0, getData_1.default)('https://m.youtube.com/channel/' + id + '/videos')];
                 case 1:
                     data = _c.sent();
                     description = ((_b = (_a = data.metadata) === null || _a === void 0 ? void 0 : _a.channelMetadataRenderer) === null || _b === void 0 ? void 0 : _b.description) || '';

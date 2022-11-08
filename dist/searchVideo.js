@@ -50,17 +50,17 @@ function searchVideo(terms, token, apikey) {
                     videos = [];
                     didyoumean = '';
                     if (!!token) return [3 /*break*/, 2];
-                    return [4 /*yield*/, getData_1.default('https://m.youtube.com/results?videoEmbeddable=true&search_query=' + encodeURI(terms))];
+                    return [4 /*yield*/, (0, getData_1.default)('https://m.youtube.com/results?videoEmbeddable=true&search_query=' + encodeURI(terms))];
                 case 1:
                     data = _a.sent();
                     apikey = data.apikey;
-                    token = findVal_1.default(data, 'token');
-                    items = findVal_1.default(data, 'itemSectionRenderer').contents;
+                    token = (0, findVal_1.default)(data, 'token');
+                    items = (0, findVal_1.default)(data, 'itemSectionRenderer').contents;
                     return [3 /*break*/, 4];
-                case 2: return [4 /*yield*/, getData_1.default('https://www.youtube.com/youtubei/v1/search?key=' + apikey + '&token=' + token)];
+                case 2: return [4 /*yield*/, (0, getData_1.default)('https://www.youtube.com/youtubei/v1/search?key=' + apikey + '&token=' + token)];
                 case 3:
                     data = _a.sent();
-                    items = findVal_1.default(data.items, 'contents');
+                    items = (0, findVal_1.default)(data.items, 'contents');
                     token = data.token;
                     _a.label = 4;
                 case 4:
@@ -68,7 +68,7 @@ function searchVideo(terms, token, apikey) {
                     _a.label = 5;
                 case 5:
                     if (!(i < items.length)) return [3 /*break*/, 8];
-                    return [4 /*yield*/, formatVideo_1.default(items[i], true)];
+                    return [4 /*yield*/, (0, formatVideo_1.default)(items[i], true)];
                 case 6:
                     formated = _a.sent();
                     if (formated) {
