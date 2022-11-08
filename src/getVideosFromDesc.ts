@@ -9,7 +9,6 @@ export default async function getVideosFromDesc(yt_id) {
   try {
     let videos: Video[] = []
     let desc: any = await getVideoDesc(yt_id)
-    console.log(desc)
     if (desc) {
       loop1:
       for(let i = 0; i < desc.length; i++) {

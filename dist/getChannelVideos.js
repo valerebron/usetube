@@ -118,9 +118,7 @@ function getChannelVideos(id, published_after) {
                     token = '';
                     return [3 /*break*/, 14];
                 case 14: return [3 /*break*/, 6];
-                case 15:
-                    console.log('enf of while');
-                    return [2 /*return*/, videos];
+                case 15: return [2 /*return*/, videos];
                 case 16:
                     e_2 = _b.sent();
                     console.log('cannot get channel videos for id: ' + id + ', try again');
