@@ -42,7 +42,7 @@ var findVal_1 = require("./findVal");
 function getData(urlstring) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var dataRegex, playerRegex, dateRegex, apiRegex, url, isAjax, isDate, isSubtitles, body, headers, data, raw, raw, apikey, data, fs;
+        var dataRegex, playerRegex, dateRegex, apiRegex, url, isAjax, isDate, isSubtitles, body, headers, data, raw, raw, apikey, data;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -89,8 +89,7 @@ function getData(urlstring) {
                         raw = ((_b = dataRegex.exec(body)) === null || _b === void 0 ? void 0 : _b[1]) || '{}';
                         apikey = apiRegex.exec(body)[1] || '';
                         data = JSON.parse((0, decodeHex_1.default)(raw));
-                        fs = require('fs');
-                        fs.writeFile('raw.json', (0, decodeHex_1.default)(raw), function (e) { console.log(e); });
+                        // let fs = require('fs'); fs.writeFile('raw.json', decodeHex(raw), (e)=>{console.log(e)})
                         data.apikey = apikey;
                         return [2 /*return*/, data];
                     }
