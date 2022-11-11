@@ -18,7 +18,6 @@ export default async function getChannelVideos(id: string, published_after?: Dat
         }
       }
     }
-    let i = 0
     while(token) {
       try {
         let data = await getData('https://www.youtube.com/youtubei/v1/browse?key='+apikey+'&token='+token)

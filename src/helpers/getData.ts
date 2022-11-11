@@ -49,7 +49,7 @@ export default async function getData(urlstring: string) {
       const apikey = apiRegex.exec(body)[1] || ''
 
       let data = JSON.parse(decodeHex(raw))
-      let fs = require('fs'); fs.writeFile('raw.json', decodeHex(raw), (e)=>{console.log(e)})
+      // let fs = require('fs'); fs.writeFile('raw.json', decodeHex(raw), (e)=>{console.log(e)})
       data.apikey = apikey
       return data
     }
