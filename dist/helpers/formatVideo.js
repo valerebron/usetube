@@ -14,7 +14,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -36,132 +36,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var getVideoDate_1 = require("../getVideoDate");
-var getDateFromText_1 = require("./getDateFromText");
-var findVal_1 = require("./findVal");
 function formatVideo(video, speedDate) {
-    var _a;
+    var _a, _b, _c, _d, _e, _f;
     if (speedDate === void 0) { speedDate = false; }
     return __awaiter(this, void 0, void 0, function () {
-        var id, durationDatas, splited, hour, minute, second, publishedAt, e_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _b.trys.push([0, 6, , 7]);
-                    if (!(video.compactVideoRenderer || video.gridVideoRenderer || video.videoRenderer || video.playlistVideoRenderer)) return [3 /*break*/, 4];
-                    if (video.compactVideoRenderer) {
-                        video = video.compactVideoRenderer;
-                    }
-                    else if (video.gridVideoRenderer) {
-                        video = video.gridVideoRenderer;
-                    }
-                    else if (video.playlistVideoRenderer) {
-                        video = video.playlistVideoRenderer;
-                    }
-                    else if (video.videoRenderer) {
-                        video = video.videoRenderer;
-                    }
-                    id = video.videoId;
-                    durationDatas = 0;
-                    // get title
-                    if (video.title.simpleText) {
-                        video.title = video.title.simpleText;
-                    }
-                    else if (video.title.runs[0].text) {
-                        video.title = video.title.runs[0].text;
-                    }
-                    else {
-                        video.title = '';
-                    }
-                    // title formating
-                    video.original_title = video.title;
-                    if (video.title.split('-').length === 1) {
-                        video.artist = '';
-                    }
-                    else {
-                        splited = video.original_title.match(/([^,]*)-(.*)/);
-                        video.artist = splited[1];
-                        video.title = splited[2];
-                    }
-                    // duration formating
-                    if (video.lengthText) {
-                        if (durationDatas === undefined) {
-                            (0, findVal_1.default)(video.lengthText, 'simpleText');
-                        }
-                        else {
-                            durationDatas = (0, findVal_1.default)(video.lengthText, 'text');
-                        }
-                        if (durationDatas) {
-                            durationDatas = durationDatas.split(':');
-                        }
-                    }
-                    else if (video.thumbnailOverlays) {
-                        durationDatas = (0, findVal_1.default)(video, 'lengthText');
-                        if (durationDatas) {
-                            durationDatas = durationDatas.split(':');
-                        }
-                    }
-                    hour = 0;
-                    minute = 0;
-                    second = 0;
-                    if (durationDatas) {
-                        switch (durationDatas.length) {
-                            case 3:
-                                hour = parseInt(durationDatas[0]) * 60 * 60;
-                                minute = parseInt(durationDatas[1]) * 60;
-                                second = parseInt(durationDatas[2]);
-                                break;
-                            case 2:
-                                minute = parseInt(durationDatas[0]) * 60;
-                                second = parseInt(durationDatas[1]);
-                                break;
-                            case 1:
-                                second = parseInt(durationDatas[0]);
-                                break;
-                        }
-                    }
-                    publishedAt = new Date(Date.now());
-                    if (!(speedDate && video.publishedTimeText)) return [3 /*break*/, 1];
-                    if (video.publishedTimeText.hasOwnProperty('simpleText')) {
-                        publishedAt = (0, getDateFromText_1.default)(video.publishedTimeText.simpleText);
-                    }
-                    else if (video.publishedTimeText.hasOwnProperty('runs')) {
-                        publishedAt = (0, getDateFromText_1.default)(video.publishedTimeText.runs[0].text);
-                    }
-                    return [3 /*break*/, 3];
-                case 1: return [4 /*yield*/, (0, getVideoDate_1.default)(id)];
-                case 2:
-                    publishedAt = _b.sent();
-                    _b.label = 3;
-                case 3: return [2 /*return*/, {
+        var data, id, title, original_title, artist, durationDatas, hour, minute, second;
+        return __generator(this, function (_g) {
+            try {
+                data = video.videoWithContextRenderer;
+                id = (data === null || data === void 0 ? void 0 : data.videoId) || null;
+                title = ((_b = (_a = data === null || data === void 0 ? void 0 : data.headline) === null || _a === void 0 ? void 0 : _a.runs[0]) === null || _b === void 0 ? void 0 : _b.text) || "";
+                original_title = title;
+                artist = ((_d = (_c = data === null || data === void 0 ? void 0 : data.shortBylineText) === null || _c === void 0 ? void 0 : _c.runs[0]) === null || _d === void 0 ? void 0 : _d.text) || "";
+                durationDatas = ((_f = (_e = data === null || data === void 0 ? void 0 : data.lengthText) === null || _e === void 0 ? void 0 : _e.runs[0]) === null || _f === void 0 ? void 0 : _f.text) || "";
+                //TODO: find a way to get publishedAT
+                durationDatas.split(':');
+                hour = durationDatas[0] * 60 * 60 || 0;
+                minute = durationDatas[1] * 60 || 0;
+                second = durationDatas[2] || 0;
+                // let title 
+                // console.log(original_title)
+                return [2 /*return*/, {
                         id: id,
-                        original_title: video.original_title.trim(),
-                        title: video.title.trim(),
-                        artist: video.artist.trim(),
+                        original_title: original_title.trim(),
+                        title: title.trim(),
+                        artist: artist.trim(),
                         duration: hour + minute + second,
-                        publishedAt: publishedAt,
+                        publishedAt: new Date(),
                     }];
-                case 4:
-                    if (video.didYouMeanRenderer || video.showingResultsForRenderer) {
-                        video = video.didYouMeanRenderer ? video.didYouMeanRenderer : video.showingResultsForRenderer;
-                        return [2 /*return*/, {
-                                id: 'didyoumean',
-                                original_title: '',
-                                title: ((_a = video.correctedQuery) === null || _a === void 0 ? void 0 : _a.runs[0].text) || '',
-                                artist: '',
-                                duration: 0,
-                                publishedAt: new Date(Date.now()),
-                                views: 0,
-                            }];
-                    }
-                    _b.label = 5;
-                case 5: return [3 /*break*/, 7];
-                case 6:
-                    e_1 = _b.sent();
-                    console.log('format video failed');
-                    return [3 /*break*/, 7];
-                case 7: return [2 /*return*/];
             }
+            catch (e) {
+                console.log('format video failed');
+            }
+            return [2 /*return*/];
         });
     });
 }

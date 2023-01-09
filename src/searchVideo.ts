@@ -13,13 +13,7 @@ export default async function searchVideo(terms: string, token?: string, apikey?
       let data = await getData('https://m.youtube.com/results?videoEmbeddable=true&search_query='+encodeURI(terms))
       apikey = data.apikey
       token = findVal(data, 'token')
-      items = findVal(data, 'itemSectionRenderer').contents
-    }
-    // more videos
-    else {
-      let data = await getData('https://www.youtube.com/youtubei/v1/search?key='+apikey+'&token='+token)
-      items = findVal(data.items, 'contents')
-      token = data.token
+      items = findVal(data, 'itemSectionRenderer').contents.splice(1)
     }
     for(let i = 0; i < items.length; i++) {
       let formated: Video = await formatVideo(items[i], true)

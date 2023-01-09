@@ -42,7 +42,7 @@ var findVal_1 = require("./findVal");
 function getData(urlstring) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var dataRegex, playerRegex, dateRegex, apiRegex, url, isAjax, isDate, isSubtitles, body, headers, data, raw, raw, apikey, data;
+        var dataRegex, playerRegex, dateRegex, apiRegex, url, isAjax, isDate, isSubtitles, body, headers, data, raw, raw, apikey, data, fs;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -54,42 +54,54 @@ function getData(urlstring) {
                     isAjax = false;
                     isDate = false;
                     isSubtitles = false;
-                    if (url.searchParams.get('token')) {
+                    if (url.searchParams.get("token")) {
                         isAjax = true;
                     }
-                    if (url.searchParams.get('type') === 'date') {
+                    if (url.searchParams.get("type") === "date") {
                         isDate = true;
                     }
-                    if (url.searchParams.get('type') === 'subtitles') {
+                    if (url.searchParams.get("type") === "subtitles") {
                         isSubtitles = true;
                     }
                     if (!isAjax) return [3 /*break*/, 2];
-                    data = { context: { client: { clientName: 'WEB', clientVersion: '2.20210401.08.00' } }, continuation: url.searchParams.get('token') };
-                    return [4 /*yield*/, (0, axios_1.default)({ method: 'post', url: urlstring, data: data })];
+                    data = {
+                        context: {
+                            client: { clientName: "WEB", clientVersion: "2.20210401.08.00" },
+                        },
+                        continuation: url.searchParams.get("token"),
+                    };
+                    return [4 /*yield*/, (0, axios_1.default)({ method: "post", url: urlstring, data: data })];
                 case 1:
                     body = (_c.sent()).data;
-                    return [2 /*return*/, { items: (0, findVal_1.default)(body, 'continuationItems'), token: (0, findVal_1.default)(body, 'token') }];
+                    return [2 /*return*/, {
+                            items: (0, findVal_1.default)(body, "continuationItems"),
+                            token: (0, findVal_1.default)(body, "token"),
+                        }];
                 case 2:
                     headers = {
                         headers: {
-                            'Access-Control-Allow-Origin': '*',
-                            'x-youtube-client-name': 1,
-                            'x-youtube-client-version': '2.20200911.04.00',
-                            'User-Agent': 'Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Mobile Safari/537.36',
-                        }
+                            "Access-Control-Allow-Origin": "*",
+                            "x-youtube-client-name": 1,
+                            "x-youtube-client-version": "2.20200911.04.00",
+                            "User-Agent": "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Mobile Safari/537.36",
+                        },
                     };
                     return [4 /*yield*/, (0, axios_1.default)(urlstring, headers)];
                 case 3:
                     body = (_c.sent()).data;
                     if (isDate) {
-                        raw = ((_a = dateRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || '{}';
+                        raw = ((_a = dateRegex.exec(body)) === null || _a === void 0 ? void 0 : _a[1]) || "{}";
                         return [2 /*return*/, raw];
                     }
                     else {
-                        raw = ((_b = dataRegex.exec(body)) === null || _b === void 0 ? void 0 : _b[1]) || '{}';
-                        apikey = apiRegex.exec(body)[1] || '';
-                        data = JSON.parse((0, decodeHex_1.default)(raw));
-                        // let fs = require('fs'); fs.writeFile('raw.json', decodeHex(raw), (e)=>{console.log(e)})
+                        raw = ((_b = dataRegex.exec(body)) === null || _b === void 0 ? void 0 : _b[1]) || "{}";
+                        apikey = apiRegex.exec(body)[1] || "";
+                        data = JSON.parse((0, decodeHex_1.default)(raw)).contents.sectionListRenderer
+                            .contents[0];
+                        fs = require("fs");
+                        // fs.writeFile("raw.json", decodeHex(raw), (e) => {
+                        //   console.log(e);
+                        // });
                         data.apikey = apikey;
                         return [2 /*return*/, data];
                     }
@@ -100,4 +112,16 @@ function getData(urlstring) {
     });
 }
 exports.default = getData;
+(function () {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, getData("https://www.youtube.com/results?search_query=viva+la+vida")];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+})();
 //# sourceMappingURL=getData.js.map

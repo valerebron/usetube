@@ -41,11 +41,11 @@ var formatVideo_1 = require("./helpers/formatVideo");
 var findVal_1 = require("./helpers/findVal");
 function searchVideo(terms, token, apikey) {
     return __awaiter(this, void 0, void 0, function () {
-        var items, videos, didyoumean, data, data, i, formated, e_1;
+        var items, videos, didyoumean, data, i, formated, e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 9, , 10]);
+                    _a.trys.push([0, 7, , 8]);
                     items = [];
                     videos = [];
                     didyoumean = '';
@@ -55,21 +55,15 @@ function searchVideo(terms, token, apikey) {
                     data = _a.sent();
                     apikey = data.apikey;
                     token = (0, findVal_1.default)(data, 'token');
-                    items = (0, findVal_1.default)(data, 'itemSectionRenderer').contents;
-                    return [3 /*break*/, 4];
-                case 2: return [4 /*yield*/, (0, getData_1.default)('https://www.youtube.com/youtubei/v1/search?key=' + apikey + '&token=' + token)];
-                case 3:
-                    data = _a.sent();
-                    items = (0, findVal_1.default)(data.items, 'contents');
-                    token = data.token;
-                    _a.label = 4;
-                case 4:
+                    items = (0, findVal_1.default)(data, 'itemSectionRenderer').contents.splice(1);
+                    _a.label = 2;
+                case 2:
                     i = 0;
-                    _a.label = 5;
-                case 5:
-                    if (!(i < items.length)) return [3 /*break*/, 8];
+                    _a.label = 3;
+                case 3:
+                    if (!(i < items.length)) return [3 /*break*/, 6];
                     return [4 /*yield*/, (0, formatVideo_1.default)(items[i], true)];
-                case 6:
+                case 4:
                     formated = _a.sent();
                     if (formated) {
                         if (formated.id === 'didyoumean') {
@@ -79,21 +73,21 @@ function searchVideo(terms, token, apikey) {
                             videos.push(formated);
                         }
                     }
-                    _a.label = 7;
-                case 7:
+                    _a.label = 5;
+                case 5:
                     i++;
-                    return [3 /*break*/, 5];
-                case 8: return [2 /*return*/, {
+                    return [3 /*break*/, 3];
+                case 6: return [2 /*return*/, {
                         videos: videos,
                         didyoumean: didyoumean,
                         token: token,
                         apikey: apikey,
                     }];
-                case 9:
+                case 7:
                     e_1 = _a.sent();
                     console.log('search videos error, terms: ' + terms);
-                    return [3 /*break*/, 10];
-                case 10: return [2 /*return*/];
+                    return [3 /*break*/, 8];
+                case 8: return [2 /*return*/];
             }
         });
     });
