@@ -8,8 +8,8 @@ export default async function getPlaylistVideos(id: string, speedDate?: boolean)
     const data: any = await getData('https://m.youtube.com/playlist?list='+id)
     const apikey = data.apikey
     const items: any = findVal(data, 'playlistVideoListRenderer').contents
-    let token: string = findVal(data, 'token')
-    let videos: Video[] = []
+    let token: string
+    let videos: Video[]
     for(let i = 0; i < items.length; i++) {
       if (items[i]) {
         const formated = await formatVideo(items[i], speedDate)

@@ -51,8 +51,8 @@ function getPlaylistVideos(id, speedDate) {
                     data = _a.sent();
                     apikey = data.apikey;
                     items = (0, findVal_1.default)(data, 'playlistVideoListRenderer').contents;
-                    token = (0, findVal_1.default)(data, 'token');
-                    videos = [];
+                    token = void 0;
+                    videos = void 0;
                     i = 0;
                     _a.label = 2;
                 case 2:

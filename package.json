@@ -46,6 +46,8 @@
   },
   "homepage": "https://github.com/valerebron/usetube#readme",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "dayjs": "^1.11.7",
+    "youtubei": "^1.1.2"
   }
 }

@@ -36,40 +36,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var getData_1 = require("./helpers/getData");
+var youtubei_1 = require("youtubei");
 var formatVideo_1 = require("./helpers/formatVideo");
-var findVal_1 = require("./helpers/findVal");
 function searchVideo(terms, token, apikey) {
     return __awaiter(this, void 0, void 0, function () {
-        var items, videos, didyoumean, data, data, i, formated, e_1;
+        var youtube, data, items, videos, didyoumean, i, formated, e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 9, , 10]);
+                    _a.trys.push([0, 6, , 7]);
+                    youtube = new youtubei_1.Client();
+                    return [4 /*yield*/, youtube.search(terms, { type: 'video' })];
+                case 1:
+                    data = _a.sent();
                     items = [];
                     videos = [];
                     didyoumean = '';
-                    if (!!token) return [3 /*break*/, 2];
-                    return [4 /*yield*/, (0, getData_1.default)('https://m.youtube.com/results?videoEmbeddable=true&search_query=' + encodeURI(terms))];
-                case 1:
-                    data = _a.sent();
-                    apikey = data.apikey;
-                    token = (0, findVal_1.default)(data, 'token');
-                    items = (0, findVal_1.default)(data, 'itemSectionRenderer').contents;
-                    return [3 /*break*/, 4];
-                case 2: return [4 /*yield*/, (0, getData_1.default)('https://www.youtube.com/youtubei/v1/search?key=' + apikey + '&token=' + token)];
-                case 3:
-                    data = _a.sent();
-                    items = (0, findVal_1.default)(data.items, 'contents');
-                    token = data.token;
-                    _a.label = 4;
-                case 4:
+                    // initial videos search
+                    if (!token) {
+                        terms;
+                        apikey = '';
+                        token = '';
+                        items = data.items;
+                    }
+                    // more videos
+                    else {
+                        console.log('wip');
+                    }
                     i = 0;
-                    _a.label = 5;
-                case 5:
-                    if (!(i < items.length)) return [3 /*break*/, 8];
+                    _a.label = 2;
+                case 2:
+                    if (!(i < items.length)) return [3 /*break*/, 5];
                     return [4 /*yield*/, (0, formatVideo_1.default)(items[i], true)];
-                case 6:
+                case 3:
                     formated = _a.sent();
                     if (formated) {
                         if (formated.id === 'didyoumean') {
@@ -79,21 +78,21 @@ function searchVideo(terms, token, apikey) {
                             videos.push(formated);
                         }
                     }
-                    _a.label = 7;
-                case 7:
+                    _a.label = 4;
+                case 4:
                     i++;
-                    return [3 /*break*/, 5];
-                case 8: return [2 /*return*/, {
+                    return [3 /*break*/, 2];
+                case 5: return [2 /*return*/, {
                         videos: videos,
                         didyoumean: didyoumean,
-                        token: token,
+                        token: apikey,
                         apikey: apikey,
                     }];
-                case 9:
+                case 6:
                     e_1 = _a.sent();
                     console.log('search videos error, terms: ' + terms);
-                    return [3 /*break*/, 10];
-                case 10: return [2 /*return*/];
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
         });
     });

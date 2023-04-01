@@ -36,76 +36,55 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var getData_1 = require("./helpers/getData");
+var youtubei_1 = require("youtubei");
 var formatYoutubeCount_1 = require("./helpers/formatYoutubeCount");
-var findVal_1 = require("./helpers/findVal");
 function searchChannel(terms, token, apikey) {
-    var _a, _b, _c, _d;
     return __awaiter(this, void 0, void 0, function () {
-        var items, channels, didyoumean, data, data, i, item, avatar, avatarId, nbSubscriber, nbVideo, item, e_1;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
+        var youtube, data, items, channels_1, didyoumean, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _e.trys.push([0, 5, , 6]);
-                    items = [];
-                    channels = [];
-                    didyoumean = '';
-                    if (!!token) return [3 /*break*/, 2];
-                    return [4 /*yield*/, (0, getData_1.default)('https://m.youtube.com/results?sp=EgIQAg%253D%253D&search_query=' + encodeURI(terms))];
+                    _a.trys.push([0, 2, , 3]);
+                    youtube = new youtubei_1.Client();
+                    return [4 /*yield*/, youtube.search(terms, { type: 'channel' })];
                 case 1:
-                    data = _e.sent();
-                    apikey = data.apikey;
-                    token = (0, findVal_1.default)(data, 'token');
-                    items = (0, findVal_1.default)(data, 'itemSectionRenderer').contents;
-                    return [3 /*break*/, 4];
-                case 2: return [4 /*yield*/, (0, getData_1.default)('https://www.youtube.com/youtubei/v1/search?key=' + apikey + '&token=' + token)];
-                case 3:
-                    data = _e.sent();
-                    items = (0, findVal_1.default)(data.items, 'contents');
-                    token = data.token;
-                    _e.label = 4;
-                case 4:
-                    for (i = 0; i < items.length; i++) {
-                        if (items[i].compactChannelRenderer || items[i].channelRenderer) {
-                            item = (items[i].compactChannelRenderer) ? items[i].compactChannelRenderer : items[i].channelRenderer;
-                            item.name = (items[i].compactChannelRenderer) ? item.title.runs[0].text : item.title.simpleText;
-                            avatar = ((_a = item.thumbnail) === null || _a === void 0 ? void 0 : _a.thumbnails[0].url) || '';
-                            avatarId = avatar.substring(avatar.lastIndexOf('ytc/') + 4, avatar.lastIndexOf('=s'));
-                            nbSubscriber = (0, formatYoutubeCount_1.default)(((_b = item.subscriberCountText) === null || _b === void 0 ? void 0 : _b.accessibility.accessibilityData.label) || '0');
-                            nbVideo = (0, formatYoutubeCount_1.default)(((_d = (_c = item.videoCountText) === null || _c === void 0 ? void 0 : _c.runs[0]) === null || _d === void 0 ? void 0 : _d.text) || '0');
-                            channels.push({
-                                name: item.name,
-                                channel_id: item.channelId,
-                                nb_videos: nbVideo,
-                                nb_subscriber: nbSubscriber,
-                                official: (item.ownerBadges ? true : false),
-                                channel_avatar_small: 'https://yt3.ggpht.com/ytc/' + avatarId + '=s80',
-                                channel_avatar_medium: 'https://yt3.ggpht.com/ytc/' + avatarId + '=s200',
-                                channel_avatar_large: 'https://yt3.ggpht.com/ytc/' + avatarId + '=s800',
-                            });
-                        }
-                        else if (items[i].didYouMeanRenderer || items[i].showingResultsForRenderer) {
-                            item = void 0;
-                            if (items[i].didYouMeanRenderer) {
-                                item = items[i].didYouMeanRenderer;
-                            }
-                            else {
-                                item = items[i].showingResultsForRenderer;
-                            }
-                            didyoumean = item.correctedQuery.runs[0].text;
-                        }
+                    data = _a.sent();
+                    items = [];
+                    channels_1 = [];
+                    didyoumean = '';
+                    if (!token) {
+                        apikey = '';
+                        token = '';
+                        items = data.items;
                     }
+                    else {
+                        console.log('wip');
+                    }
+                    items.map(function (item) {
+                        var avatarId = item.thumbnails[0].url.replace('//yt3.ggpht.com/', '');
+                        var nbSubscriber = (0, formatYoutubeCount_1.default)(item.subscriberCount || '0');
+                        channels_1.push({
+                            name: item.name,
+                            channel_id: item.id,
+                            nb_videos: item.videoCount,
+                            nb_subscriber: nbSubscriber,
+                            official: false,
+                            channel_avatar_small: 'https://yt3.ggpht.com/' + avatarId.replace('=s88', '=s80'),
+                            channel_avatar_medium: 'https://yt3.ggpht.com/' + avatarId.replace('=s88', '=s200'),
+                            channel_avatar_large: 'https://yt3.ggpht.com/' + avatarId.replace('=s88', '=s800'),
+                        });
+                    });
                     return [2 /*return*/, {
-                            channels: channels,
+                            channels: channels_1,
                             didyoumean: didyoumean,
                             token: token,
                             apikey: apikey,
                         }];
-                case 5:
-                    e_1 = _e.sent();
+                case 2:
+                    e_1 = _a.sent();
                     console.log('search channel error, terms: ' + terms);
-                    return [3 /*break*/, 6];
-                case 6: return [2 /*return*/];
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
     });

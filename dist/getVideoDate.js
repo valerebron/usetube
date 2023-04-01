@@ -36,20 +36,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var getData_1 = require("./helpers/getData");
+var youtubei_1 = require("youtubei");
+var dayjs = require("dayjs");
 function getVideoDate(id) {
     return __awaiter(this, void 0, void 0, function () {
-        var publishText, e_1;
+        var youtube, data, e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, (0, getData_1.default)('https://m.youtube.com/watch?v=' + id + '&type=date')];
+                    youtube = new youtubei_1.Client();
+                    return [4 /*yield*/, youtube.getVideo(id)];
                 case 1:
-                    publishText = _a.sent();
-                    publishText.replace('-', '/');
-                    publishText += ' ' + Math.floor(Math.random() * 24) + ':' + Math.floor(Math.random() * 60) + ':' + Math.floor(Math.random() * 60);
-                    return [2 /*return*/, new Date(Date.parse(publishText))];
+                    data = _a.sent();
+                    return [2 /*return*/, dayjs(data.uploadDate).toDate()];
                 case 2:
                     e_1 = _a.sent();
                     console.log('cannot get date for ' + id + ', try again');

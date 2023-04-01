@@ -14,12 +14,122 @@
   dependencies:
     "follow-redirects" "^1.14.0"
 
+"b4a@^1.6.0":
+  "integrity" "sha512-aX6/FqpWQve8VN9kyTExy7GlmwNShvxcCWWD5QVR3ZbRlyBGtCrG5Autu95xxSPH4CRs+5PSV4d7PRnWpmqFlA=="
+  "resolved" "https://registry.npmjs.org/b4a/-/b4a-1.6.3.tgz"
+  "version" "1.6.3"
+
+"dayjs@^1.11.7":
+  "integrity" "sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ=="
+  "resolved" "https://registry.npmjs.org/dayjs/-/dayjs-1.11.7.tgz"
+  "version" "1.11.7"
+
 "follow-redirects@^1.14.0":
   "integrity" "sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA=="
   "resolved" "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.2.tgz"
   "version" "1.15.2"
 
+"generate-function@^2.0.0":
+  "integrity" "sha512-eeB5GfMNeevm/GRYq20ShmsaGcmI81kIX2K9XQx5miC8KdHaC6Jm0qQ8ZNeGOi7wYB8OsdxKs+Y2oVuTFuVwKQ=="
+  "resolved" "https://registry.npmjs.org/generate-function/-/generate-function-2.3.1.tgz"
+  "version" "2.3.1"
+  dependencies:
+    "is-property" "^1.0.2"
+
+"generate-object-property@^1.2.0":
+  "integrity" "sha512-TuOwZWgJ2VAMEGJvAyPWvpqxSANF0LDpmyHauMjFYzaACvn+QTT/AZomvPCzVBV7yDN3OmwHQ5OvHaeLKre3JQ=="
+  "resolved" "https://registry.npmjs.org/generate-object-property/-/generate-object-property-1.2.0.tgz"
+  "version" "1.2.0"
+  dependencies:
+    "is-property" "^1.0.0"
+
+"is-property@^1.0.0", "is-property@^1.0.2":
+  "integrity" "sha512-Ks/IoX00TtClbGQr4TWXemAnktAQvYB7HzcCxDGqEZU6oCmb2INHuOoKxbtR+HFkmYWBKv/dOZtGRiAjDhj92g=="
+  "resolved" "https://registry.npmjs.org/is-property/-/is-property-1.0.2.tgz"
+  "version" "1.0.2"
+
+"node-fetch@2.6.7":
+  "integrity" "sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ=="
+  "resolved" "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.7.tgz"
+  "version" "2.6.7"
+  dependencies:
+    "whatwg-url" "^5.0.0"
+
+"protocol-buffers-encodings@^1.1.0":
+  "integrity" "sha512-daeNPuKh1NlLD1uDfbLpD+xyUTc07nEtfHwmBZmt/vH0B7VOM+JOCOpDcx9ZRpqHjAiIkGqyTDi+wfGSl17R9w=="
+  "resolved" "https://registry.npmjs.org/protocol-buffers-encodings/-/protocol-buffers-encodings-1.2.0.tgz"
+  "version" "1.2.0"
+  dependencies:
+    "b4a" "^1.6.0"
+    "signed-varint" "^2.0.1"
+    "varint" "5.0.0"
+
+"protocol-buffers-schema@^3.1.1":
+  "integrity" "sha512-TdDRD+/QNdrCGCE7v8340QyuXd4kIWIgapsE2+n/SaGiSSbomYl4TjHlvIoCWRpE7wFt02EpB35VVA2ImcBVqw=="
+  "resolved" "https://registry.npmjs.org/protocol-buffers-schema/-/protocol-buffers-schema-3.6.0.tgz"
+  "version" "3.6.0"
+
+"protocol-buffers@5.0.0":
+  "integrity" "sha512-ceZAqqc5tKmsy4VXjQpCUbw9CJWHY+wIJitciBB9wyFXmcma8124Ck6LYwKncZgUzTkyCa+IyDrphI8s8DIWbA=="
+  "resolved" "https://registry.npmjs.org/protocol-buffers/-/protocol-buffers-5.0.0.tgz"
+  "version" "5.0.0"
+  dependencies:
+    "generate-function" "^2.0.0"
+    "generate-object-property" "^1.2.0"
+    "protocol-buffers-encodings" "^1.1.0"
+    "protocol-buffers-schema" "^3.1.1"
+    "signed-varint" "^2.0.0"
+    "varint" "^6.0.0"
+
+"signed-varint@^2.0.0", "signed-varint@^2.0.1":
+  "integrity" "sha512-abgDPg1106vuZZOvw7cFwdCABddfJRz5akcCcchzTbhyhYnsG31y4AlZEgp315T7W3nQq5P4xeOm186ZiPVFzw=="
+  "resolved" "https://registry.npmjs.org/signed-varint/-/signed-varint-2.0.1.tgz"
+  "version" "2.0.1"
+  dependencies:
+    "varint" "~5.0.0"
+
+"tr46@~0.0.3":
+  "integrity" "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="
+  "resolved" "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz"
+  "version" "0.0.3"
+
 "typescript@^4.0.3":
   "integrity" "sha512-QCh+85mCy+h0IGff8r5XWzOVSbBO+KfeYrMQh7NJ58QujwcE22u+NUSmUxqF+un70P9GXKxa2HCNiTTMJknyjQ=="
   "resolved" "https://registry.npmjs.org/typescript/-/typescript-4.8.4.tgz"
   "version" "4.8.4"
+
+"varint@^6.0.0":
+  "integrity" "sha512-cXEIW6cfr15lFv563k4GuVuW/fiwjknytD37jIOLSdSWuOI6WnO/oKwmP2FQTU2l01LP8/M5TSAJpzUaGe3uWg=="
+  "resolved" "https://registry.npmjs.org/varint/-/varint-6.0.0.tgz"
+  "version" "6.0.0"
+
+"varint@~5.0.0":
+  "integrity" "sha512-lKxKYG6H03yCZUpAGOPOsMcGxd1RHCu1iKvEHYDPmTyq2HueGhD73ssNBqqQWfvYs04G9iUFRvmAVLW20Jw6ow=="
+  "resolved" "https://registry.npmjs.org/varint/-/varint-5.0.2.tgz"
+  "version" "5.0.2"
+
+"varint@5.0.0":
+  "integrity" "sha512-gC13b/bWrqQoKY2EmROCZ+AR0jitc6DnDGaQ6Ls9QpKmuSgJB1eQ7H3KETtQm7qSdMWMKCmsshyCmUwMLh3OAA=="
+  "resolved" "https://registry.npmjs.org/varint/-/varint-5.0.0.tgz"
+  "version" "5.0.0"
+
+"webidl-conversions@^3.0.0":
+  "integrity" "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ=="
+  "resolved" "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz"
+  "version" "3.0.1"
+
+"whatwg-url@^5.0.0":
+  "integrity" "sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw=="
+  "resolved" "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz"
+  "version" "5.0.0"
+  dependencies:
+    "tr46" "~0.0.3"
+    "webidl-conversions" "^3.0.0"
+
+"youtubei@^1.1.2":
+  "integrity" "sha512-aYwJvMBswenT2MNg9vl/Mvvl3jRx3INmQHEaill2QJSqZU+0ikmP8fWbvfLBvcJNcKCGbzMPndlQqsI/2JyXJw=="
+  "resolved" "https://registry.npmjs.org/youtubei/-/youtubei-1.1.2.tgz"
+  "version" "1.1.2"
+  dependencies:
+    "node-fetch" "2.6.7"
+    "protocol-buffers" "5.0.0"

@@ -1,26 +1,27 @@
 import Video from './types/video'
-import getData from './helpers/getData'
+import { Client } from 'youtubei'
 import formatVideo from './helpers/formatVideo'
-import findVal from './helpers/findVal'
 
 export default async function searchVideo(terms: string, token?: string, apikey?: string) {
   try {
+    const youtube = new Client()
+    const data = await youtube.search(terms, { type: 'video' })
+
     let items: any = []
     let videos: Video[] = []
     let didyoumean: string = ''
     // initial videos search
     if (!token) {
-      let data = await getData('https://m.youtube.com/results?videoEmbeddable=true&search_query='+encodeURI(terms))
-      apikey = data.apikey
-      token = findVal(data, 'token')
-      items = findVal(data, 'itemSectionRenderer').contents
+      terms
+      apikey = ''
+      token = ''
+      items = data.items
     }
     // more videos
     else {
-      let data = await getData('https://www.youtube.com/youtubei/v1/search?key='+apikey+'&token='+token)
-      items = findVal(data.items, 'contents')
-      token = data.token
+      console.log('wip')
     }
+
     for(let i = 0; i < items.length; i++) {
       let formated: Video = await formatVideo(items[i], true)
       if (formated) {
@@ -35,7 +36,7 @@ export default async function searchVideo(terms: string, token?: string, apikey?
     return {
       videos: videos,
       didyoumean: didyoumean,
-      token: token,
+      token: apikey,
       apikey: apikey,
     }
   } catch(e) {

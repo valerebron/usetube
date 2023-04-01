@@ -1,11 +1,11 @@
-import getData from './helpers/getData'
+import { Client } from 'youtubei'
+import * as dayjs from 'dayjs'
 
 export default async function getVideoDate(id: string) {
   try {
-    let publishText: string = await getData('https://m.youtube.com/watch?v='+id+'&type=date')
-    publishText.replace('-', '/')
-    publishText += ' '+Math.floor(Math.random() * 24)+':'+Math.floor(Math.random() * 60)+':'+Math.floor(Math.random() * 60)
-    return new Date(Date.parse(publishText))
+    const youtube = new Client()
+    const data = await youtube.getVideo(id)
+    return dayjs(data.uploadDate).toDate()
   } catch(e) {
     console.log('cannot get date for '+id+', try again')
     // console.log(e)
