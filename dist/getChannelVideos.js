@@ -46,15 +46,16 @@ function getChannelVideos(id, published_after) {
                 case 0:
                     _a.trys.push([0, 7, , 8]);
                     youtube = new youtubei_1.Client();
-                    return [4 /*yield*/, youtube.getChannel(id)];
+                    return [4 /*yield*/, youtube.findOne(id, { type: 'channel' })];
                 case 1:
                     data = _a.sent();
                     return [4 /*yield*/, data.videos.next()];
                 case 2:
-                    channelsVideos = _a.sent();
+                    _a.sent();
+                    channelsVideos = data.videos.items;
                     apikey = '';
-                    token = void 0;
-                    videos = void 0;
+                    token = '';
+                    videos = [];
                     i = 0;
                     _a.label = 3;
                 case 3:
@@ -62,7 +63,7 @@ function getChannelVideos(id, published_after) {
                     return [4 /*yield*/, (0, formatVideo_1.default)(channelsVideos[i], false)];
                 case 4:
                     video = _a.sent();
-                    if (video && video.publishedAt) {
+                    if (video && video !== undefined && video.publishedAt) {
                         if ((published_after && video.publishedAt.getTime() > published_after.getTime()) || !published_after) {
                             videos.push(video);
                         }

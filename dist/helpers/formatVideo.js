@@ -75,6 +75,7 @@ function formatVideo(video, speedDate) {
                 case 4:
                     e_1 = _a.sent();
                     console.log('format video failed');
+                    console.log(e_1);
                     return [3 /*break*/, 5];
                 case 5: return [2 /*return*/];
             }

@@ -32,6 +32,6 @@ export default async function formatVideo(video: any, speedDate: boolean = false
     }
   } catch (e) {
     console.log('format video failed')
-    // console.log(e)
+    console.log(e)
   }
 }

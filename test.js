@@ -2,9 +2,8 @@ const usetube = require('./dist/usetube.js')
 let test
 
 let launchTest = async function() {
-  // test = await usetube.getChannelVideos('UC0EXZm7W7F7px2rcqecyC6w', new Date(Date.now() - 7*24*60*60*1000))
-  // test = await usetube.getChannelVideos('UC2_OG1L8DLTzQ7UrZVOk7OA') // +50 videos
-  test = await usetube.getChannelVideos('UCkJGRPw2yeGOwpNIRXrbOvA') // 10 videos
+  // test = await usetube.getChannelVideos('noisia', new Date(Date.now() - 7*24*60*60*1000))
+  // test = await usetube.getChannelVideos('noisia') // 10 videos
   // test = await usetube.getVideoDesc('7meUp9JAQyw')
   // test = await usetube.getChannelDesc('UCp5KUL1Mb7Kpfw10SGyPumQ')
   // test = await usetube.searchChannel('vision radio')
@@ -15,7 +14,7 @@ let launchTest = async function() {
   // test = await usetube.getPlaylistVideos('PLhrglt2nmIGgQdb_L8Ri5bOfBr86qZZgq')  // 21 videos
   // test = await usetube.getPlaylistVideos('PL4cUxeGkcC9gZD-Tvwfod2gaISzfRiP9d')  // 21 videos
   // test = await usetube.getPlaylistVideos('PLiNVoBckLqLnEPv9c7QVk_ctJjaaOK-Q0')
-  // test = await usetube.getPlaylistVideos('PL4dX1IHww9p1D3ZzW8J2fX6q1FP5av2No')  // 6 videos
+  test = await usetube.getPlaylistVideos('Igq3d6XA75Y&list=PL4dX1IHww9p1D3ZzW8J2fX6q1FP5av2No')  // 6 videos
   // test = await usetube.getVideosFromDesc('u5G6BFYYw20')  // 18 videos
   if (test) {
     console.log(test)

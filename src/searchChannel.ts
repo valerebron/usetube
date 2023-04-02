@@ -23,7 +23,7 @@ export default async function searchChannel(terms: string, token?: string, apike
       const nbSubscriber: number = formatYoutubeCount(item.subscriberCount || '0')
       channels.push({
         name:                  item.name,
-        channel_id:            item.id,
+        channel_id:            item.subscriberCount,
         nb_videos:             item.videoCount,
         nb_subscriber:         nbSubscriber,
         official:              false,

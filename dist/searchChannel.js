@@ -65,7 +65,7 @@ function searchChannel(terms, token, apikey) {
                         var nbSubscriber = (0, formatYoutubeCount_1.default)(item.subscriberCount || '0');
                         channels_1.push({
                             name: item.name,
-                            channel_id: item.id,
+                            channel_id: item.subscriberCount,
                             nb_videos: item.videoCount,
                             nb_subscriber: nbSubscriber,
                             official: false,
