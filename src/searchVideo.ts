@@ -12,8 +12,10 @@ export default async function searchVideo(terms: string, token?: number, apikey?
     let videos: Video[] = []
     let didyoumean: string = ''
 
-    for(let i = 0; i < token; i++  ) {
-      data.next()
+    if(token) {
+      for(let i = 0; i < token; i++  ) {
+        data.next()
+      }
     }
 
     items = data.items
