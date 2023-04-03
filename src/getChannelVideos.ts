@@ -9,7 +9,7 @@ export default async function getChannelVideos(id: string, published_after?: Dat
     await data.videos.next()
     const channelsVideos = data.videos.items
     const apikey: String = ''
-    let token: string  = ''
+    let token: number  = 0
     let videos: Video[] = []
     for(let i = 0; i < channelsVideos.length; i++) {
       let video: Video = await formatVideo(channelsVideos[i], false)

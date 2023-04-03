@@ -9,7 +9,7 @@ export default async function getPlaylistVideos(id: string, speedDate?: boolean)
     const items = data
     return data
     // const apikey = ''
-    // let token: string = ''
+    // let token: number = ''
     // let videos: Video[] = []
     // for(let i = 0; i < items.length; i++) {
     //   if (items[i]) {

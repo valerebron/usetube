@@ -54,7 +54,7 @@ function getChannelVideos(id, published_after) {
                     _a.sent();
                     channelsVideos = data.videos.items;
                     apikey = '';
-                    token = '';
+                    token = 0;
                     videos = [];
                     i = 0;
                     _a.label = 3;

@@ -1,8 +1,9 @@
 import Video from './types/video'
 import { Client } from 'youtubei'
 import formatVideo from './helpers/formatVideo'
+import { CancelToken } from 'axios'
 
-export default async function searchVideo(terms: string, token?: string, apikey?: string) {
+export default async function searchVideo(terms: string, token?: number, apikey?: string) {
   try {
     const youtube = new Client()
     const data = await youtube.search(terms, { type: 'video' })
@@ -10,17 +11,12 @@ export default async function searchVideo(terms: string, token?: string, apikey?
     let items: any = []
     let videos: Video[] = []
     let didyoumean: string = ''
-    // initial videos search
-    if (!token) {
-      terms
-      apikey = ''
-      token = ''
-      items = data.items
+
+    for(let i = 0; i < token; i++  ) {
+      data.next()
     }
-    // more videos
-    else {
-      console.log('wip')
-    }
+
+    items = data.items
 
     for(let i = 0; i < items.length; i++) {
       let formated: Video = await formatVideo(items[i], true)

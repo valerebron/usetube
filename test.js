@@ -2,8 +2,8 @@ const usetube = require('./dist/usetube.js')
 let test
 
 let launchTest = async function() {
-  test = await usetube.getChannelVideos('noisia', new Date(Date.now() - 7*24*60*60*1000))
-  // test = await usetube.getChannelVideos('noisia') // 10 videos
+  // test = await usetube.getChannelVideos('noisia', new Date(Date.now() - 7*24*60*60*1000))
+  test = await usetube.getChannelVideos('noisia') // 30 videos
   // test = await usetube.getVideoDesc('7meUp9JAQyw')
   // test = await usetube.getChannelDesc('UCp5KUL1Mb7Kpfw10SGyPumQ')
   // test = await usetube.searchChannel('vision radio')

@@ -40,7 +40,7 @@ var youtubei_1 = require("youtubei");
 var formatVideo_1 = require("./helpers/formatVideo");
 function searchVideo(terms, token, apikey) {
     return __awaiter(this, void 0, void 0, function () {
-        var youtube, data, items, videos, didyoumean, i, formated, e_1;
+        var youtube, data, items, videos, didyoumean, i, i, formated, e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -52,17 +52,10 @@ function searchVideo(terms, token, apikey) {
                     items = [];
                     videos = [];
                     didyoumean = '';
-                    // initial videos search
-                    if (!token) {
-                        terms;
-                        apikey = '';
-                        token = '';
-                        items = data.items;
+                    for (i = 0; i < token; i++) {
+                        data.next();
                     }
-                    // more videos
-                    else {
-                        console.log('wip');
-                    }
+                    items = data.items;
                     i = 0;
                     _a.label = 2;
                 case 2:
