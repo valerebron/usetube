@@ -2,7 +2,7 @@ import Channel from './types/channel'
 import { Client } from 'youtubei'
 import formatYoutubeCount from './helpers/formatYoutubeCount'
 
-export default async function searchChannel(terms: string, token?: string, apikey?: string) {
+export default async function searchChannel(terms: string, token?: number, apikey?: string) {
   try {
     const youtube = new Client()
     const data = await youtube.search(terms, { type: 'channel' })
@@ -10,14 +10,15 @@ export default async function searchChannel(terms: string, token?: string, apike
     let items: any = []
     let channels: Channel[] = []
     let didyoumean: string = ''
-    if (!token) {
-      apikey = ''
-      token = ''
-      items = data.items
+
+    if(token) {
+      for(let i = 0; i < token; i++  ) {
+        data.next()
+      }
     }
-    else {
-      console.log('wip')
-    }
+
+    items = data.items
+    
     items.map(item => {
       const avatarId = item.thumbnails[0].url.replace('//yt3.ggpht.com/', '')
       const nbSubscriber: number = formatYoutubeCount(item.subscriberCount || '0')

@@ -54,7 +54,7 @@ function searchChannel(terms, token, apikey) {
                     didyoumean = '';
                     if (!token) {
                         apikey = '';
-                        token = '';
+                        token = 0;
                         items = data.items;
                     }
                     else {

@@ -40,7 +40,7 @@ var youtubei_1 = require("youtubei");
 var dayjs = require("dayjs");
 function getVideoDate(id) {
     return __awaiter(this, void 0, void 0, function () {
-        var youtube, data, e_1;
+        var youtube, data, stringDate, finalDate, e_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -49,7 +49,11 @@ function getVideoDate(id) {
                     return [4 /*yield*/, youtube.getVideo(id)];
                 case 1:
                     data = _a.sent();
-                    return [2 /*return*/, dayjs(data.uploadDate).toDate()];
+                    stringDate = data.uploadDate.replace(/^\D+/, '');
+                    stringDate = stringDate.replace('janv.', 'jan').replace('févr.', 'feb').replace('mars', 'mar').replace('avr.', 'apr').replace('mai', 'may').replace('juin', 'jun').replace('juil.', 'jul').replace('août', 'aug').replace('déc.', 'dec');
+                    finalDate = dayjs(stringDate).toDate();
+                    console.log(stringDate + ': ' + finalDate);
+                    return [2 /*return*/, finalDate];
                 case 2:
                     e_1 = _a.sent();
                     console.log('cannot get date for ' + id + ', try again');

@@ -2,15 +2,21 @@ import Video from './types/video'
 import { Client } from 'youtubei'
 import formatVideo from './helpers/formatVideo'
 
-export default async function getChannelVideos(id: string, published_after?: Date) {
+export default async function getChannelVideos(id: string, published_after?: Date, token?: number) {
   try {
     const youtube = new Client()
     const data = await youtube.findOne(id, {type: 'channel'})
     await data.videos.next()
     const channelsVideos = data.videos.items
     const apikey: String = ''
-    let token: string  = ''
     let videos: Video[] = []
+
+    if(token) {
+      for(let i = 0; i < token; i++  ) {
+        data.videos.next()
+      }
+    }
+
     for(let i = 0; i < channelsVideos.length; i++) {
       let video: Video = await formatVideo(channelsVideos[i], false)
       if (video && video !== undefined && video.publishedAt) {
